@@ -2,3 +2,11 @@
 *.pyc
 __pycache__/
 .claude/
+
+# Asset images (large binaries, not tracked in git)
+assets/leaders/*/*.png
+assets/civilizations/*/background.png
+assets/generated/
+
+# Track the manifest (source of truth for asset status)
+!assets/manifest.json
