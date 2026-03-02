@@ -43,13 +43,14 @@
       </Actions>
     </ActionGroup>
 
-    <!-- Game scope: loading screen images + in-game icons -->
+    <!-- Game scope: loading screen images + in-game icons + JS sort fix -->
     <ActionGroup id="authentic-leaders-game" scope="game" criteria="always">
       <Properties>
         <LoadOrder>200</LoadOrder>
       </Properties>
       <Actions>
         <ImportFiles>
+          <!-- Leader icons -->
           <Item>icons/augustus/lp_circ_augustus_128.png</Item>
           <Item>icons/augustus/lp_circ_augustus_256.png</Item>
           <Item>icons/augustus/lp_circ_augustus_64.png</Item>
@@ -58,10 +59,27 @@
           <Item>icons/augustus/lp_hex_augustus_128_h.png</Item>
           <Item>icons/augustus/lp_hex_augustus_256.png</Item>
           <Item>icons/augustus/lp_hex_augustus_64.png</Item>
+          <!-- Loading screen images: default + civ-specific -->
           <Item>images/loading/lsl_augustus.png</Item>
+          <Item>images/loading/lsl_augustus_aksum.png</Item>
+          <Item>images/loading/lsl_augustus_assyria.png</Item>
+          <Item>images/loading/lsl_augustus_carthage.png</Item>
+          <Item>images/loading/lsl_augustus_egypt.png</Item>
+          <Item>images/loading/lsl_augustus_greece.png</Item>
+          <Item>images/loading/lsl_augustus_han.png</Item>
+          <Item>images/loading/lsl_augustus_khmer.png</Item>
+          <Item>images/loading/lsl_augustus_maurya.png</Item>
+          <Item>images/loading/lsl_augustus_maya.png</Item>
+          <Item>images/loading/lsl_augustus_mississippian.png</Item>
+          <Item>images/loading/lsl_augustus_persia.png</Item>
+          <Item>images/loading/lsl_augustus_rome.png</Item>
+          <Item>images/loading/lsl_augustus_silla.png</Item>
+          <Item>images/loading/lsl_augustus_tonga.png</Item>
+          <!-- JS override: fix sort order so civ-specific entries win over generic -->
+          <Item>ui-next/screens/load-screen/load-screen-model.chunk.js</Item>
         </ImportFiles>
         <UpdateDatabase>
-          <Item>data/loading-info-override.xml</Item>
+          <Item>data/loading-info-override.sql</Item>
         </UpdateDatabase>
         <UpdateIcons>
           <Item>icons/leader-icons-override.xml</Item>
