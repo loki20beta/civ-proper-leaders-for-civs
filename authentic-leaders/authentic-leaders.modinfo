@@ -50,7 +50,7 @@
       </Properties>
       <Actions>
         <ImportFiles>
-          <!-- Leader icons -->
+          <!-- Leader icons (default) -->
           <Item>icons/augustus/lp_circ_augustus_128.png</Item>
           <Item>icons/augustus/lp_circ_augustus_256.png</Item>
           <Item>icons/augustus/lp_circ_augustus_64.png</Item>
@@ -59,6 +59,132 @@
           <Item>icons/augustus/lp_hex_augustus_128_h.png</Item>
           <Item>icons/augustus/lp_hex_augustus_256.png</Item>
           <Item>icons/augustus/lp_hex_augustus_64.png</Item>
+          <!-- Leader icons (civ-specific: aksum) -->
+          <Item>icons/augustus/aksum/lp_circ_augustus_aksum_128.png</Item>
+          <Item>icons/augustus/aksum/lp_circ_augustus_aksum_256.png</Item>
+          <Item>icons/augustus/aksum/lp_circ_augustus_aksum_64.png</Item>
+          <Item>icons/augustus/aksum/lp_hex_augustus_aksum_128.png</Item>
+          <Item>icons/augustus/aksum/lp_hex_augustus_aksum_128_a.png</Item>
+          <Item>icons/augustus/aksum/lp_hex_augustus_aksum_128_h.png</Item>
+          <Item>icons/augustus/aksum/lp_hex_augustus_aksum_256.png</Item>
+          <Item>icons/augustus/aksum/lp_hex_augustus_aksum_64.png</Item>
+          <!-- Leader icons (civ-specific: assyria) -->
+          <Item>icons/augustus/assyria/lp_circ_augustus_assyria_128.png</Item>
+          <Item>icons/augustus/assyria/lp_circ_augustus_assyria_256.png</Item>
+          <Item>icons/augustus/assyria/lp_circ_augustus_assyria_64.png</Item>
+          <Item>icons/augustus/assyria/lp_hex_augustus_assyria_128.png</Item>
+          <Item>icons/augustus/assyria/lp_hex_augustus_assyria_128_a.png</Item>
+          <Item>icons/augustus/assyria/lp_hex_augustus_assyria_128_h.png</Item>
+          <Item>icons/augustus/assyria/lp_hex_augustus_assyria_256.png</Item>
+          <Item>icons/augustus/assyria/lp_hex_augustus_assyria_64.png</Item>
+          <!-- Leader icons (civ-specific: carthage) -->
+          <Item>icons/augustus/carthage/lp_circ_augustus_carthage_128.png</Item>
+          <Item>icons/augustus/carthage/lp_circ_augustus_carthage_256.png</Item>
+          <Item>icons/augustus/carthage/lp_circ_augustus_carthage_64.png</Item>
+          <Item>icons/augustus/carthage/lp_hex_augustus_carthage_128.png</Item>
+          <Item>icons/augustus/carthage/lp_hex_augustus_carthage_128_a.png</Item>
+          <Item>icons/augustus/carthage/lp_hex_augustus_carthage_128_h.png</Item>
+          <Item>icons/augustus/carthage/lp_hex_augustus_carthage_256.png</Item>
+          <Item>icons/augustus/carthage/lp_hex_augustus_carthage_64.png</Item>
+          <!-- Leader icons (civ-specific: egypt) -->
+          <Item>icons/augustus/egypt/lp_circ_augustus_egypt_128.png</Item>
+          <Item>icons/augustus/egypt/lp_circ_augustus_egypt_256.png</Item>
+          <Item>icons/augustus/egypt/lp_circ_augustus_egypt_64.png</Item>
+          <Item>icons/augustus/egypt/lp_hex_augustus_egypt_128.png</Item>
+          <Item>icons/augustus/egypt/lp_hex_augustus_egypt_128_a.png</Item>
+          <Item>icons/augustus/egypt/lp_hex_augustus_egypt_128_h.png</Item>
+          <Item>icons/augustus/egypt/lp_hex_augustus_egypt_256.png</Item>
+          <Item>icons/augustus/egypt/lp_hex_augustus_egypt_64.png</Item>
+          <!-- Leader icons (civ-specific: greece) -->
+          <Item>icons/augustus/greece/lp_circ_augustus_greece_128.png</Item>
+          <Item>icons/augustus/greece/lp_circ_augustus_greece_256.png</Item>
+          <Item>icons/augustus/greece/lp_circ_augustus_greece_64.png</Item>
+          <Item>icons/augustus/greece/lp_hex_augustus_greece_128.png</Item>
+          <Item>icons/augustus/greece/lp_hex_augustus_greece_128_a.png</Item>
+          <Item>icons/augustus/greece/lp_hex_augustus_greece_128_h.png</Item>
+          <Item>icons/augustus/greece/lp_hex_augustus_greece_256.png</Item>
+          <Item>icons/augustus/greece/lp_hex_augustus_greece_64.png</Item>
+          <!-- Leader icons (civ-specific: han) -->
+          <Item>icons/augustus/han/lp_circ_augustus_han_128.png</Item>
+          <Item>icons/augustus/han/lp_circ_augustus_han_256.png</Item>
+          <Item>icons/augustus/han/lp_circ_augustus_han_64.png</Item>
+          <Item>icons/augustus/han/lp_hex_augustus_han_128.png</Item>
+          <Item>icons/augustus/han/lp_hex_augustus_han_128_a.png</Item>
+          <Item>icons/augustus/han/lp_hex_augustus_han_128_h.png</Item>
+          <Item>icons/augustus/han/lp_hex_augustus_han_256.png</Item>
+          <Item>icons/augustus/han/lp_hex_augustus_han_64.png</Item>
+          <!-- Leader icons (civ-specific: khmer) -->
+          <Item>icons/augustus/khmer/lp_circ_augustus_khmer_128.png</Item>
+          <Item>icons/augustus/khmer/lp_circ_augustus_khmer_256.png</Item>
+          <Item>icons/augustus/khmer/lp_circ_augustus_khmer_64.png</Item>
+          <Item>icons/augustus/khmer/lp_hex_augustus_khmer_128.png</Item>
+          <Item>icons/augustus/khmer/lp_hex_augustus_khmer_128_a.png</Item>
+          <Item>icons/augustus/khmer/lp_hex_augustus_khmer_128_h.png</Item>
+          <Item>icons/augustus/khmer/lp_hex_augustus_khmer_256.png</Item>
+          <Item>icons/augustus/khmer/lp_hex_augustus_khmer_64.png</Item>
+          <!-- Leader icons (civ-specific: maurya) -->
+          <Item>icons/augustus/maurya/lp_circ_augustus_maurya_128.png</Item>
+          <Item>icons/augustus/maurya/lp_circ_augustus_maurya_256.png</Item>
+          <Item>icons/augustus/maurya/lp_circ_augustus_maurya_64.png</Item>
+          <Item>icons/augustus/maurya/lp_hex_augustus_maurya_128.png</Item>
+          <Item>icons/augustus/maurya/lp_hex_augustus_maurya_128_a.png</Item>
+          <Item>icons/augustus/maurya/lp_hex_augustus_maurya_128_h.png</Item>
+          <Item>icons/augustus/maurya/lp_hex_augustus_maurya_256.png</Item>
+          <Item>icons/augustus/maurya/lp_hex_augustus_maurya_64.png</Item>
+          <!-- Leader icons (civ-specific: maya) -->
+          <Item>icons/augustus/maya/lp_circ_augustus_maya_128.png</Item>
+          <Item>icons/augustus/maya/lp_circ_augustus_maya_256.png</Item>
+          <Item>icons/augustus/maya/lp_circ_augustus_maya_64.png</Item>
+          <Item>icons/augustus/maya/lp_hex_augustus_maya_128.png</Item>
+          <Item>icons/augustus/maya/lp_hex_augustus_maya_128_a.png</Item>
+          <Item>icons/augustus/maya/lp_hex_augustus_maya_128_h.png</Item>
+          <Item>icons/augustus/maya/lp_hex_augustus_maya_256.png</Item>
+          <Item>icons/augustus/maya/lp_hex_augustus_maya_64.png</Item>
+          <!-- Leader icons (civ-specific: mississippian) -->
+          <Item>icons/augustus/mississippian/lp_circ_augustus_mississippian_128.png</Item>
+          <Item>icons/augustus/mississippian/lp_circ_augustus_mississippian_256.png</Item>
+          <Item>icons/augustus/mississippian/lp_circ_augustus_mississippian_64.png</Item>
+          <Item>icons/augustus/mississippian/lp_hex_augustus_mississippian_128.png</Item>
+          <Item>icons/augustus/mississippian/lp_hex_augustus_mississippian_128_a.png</Item>
+          <Item>icons/augustus/mississippian/lp_hex_augustus_mississippian_128_h.png</Item>
+          <Item>icons/augustus/mississippian/lp_hex_augustus_mississippian_256.png</Item>
+          <Item>icons/augustus/mississippian/lp_hex_augustus_mississippian_64.png</Item>
+          <!-- Leader icons (civ-specific: persia) -->
+          <Item>icons/augustus/persia/lp_circ_augustus_persia_128.png</Item>
+          <Item>icons/augustus/persia/lp_circ_augustus_persia_256.png</Item>
+          <Item>icons/augustus/persia/lp_circ_augustus_persia_64.png</Item>
+          <Item>icons/augustus/persia/lp_hex_augustus_persia_128.png</Item>
+          <Item>icons/augustus/persia/lp_hex_augustus_persia_128_a.png</Item>
+          <Item>icons/augustus/persia/lp_hex_augustus_persia_128_h.png</Item>
+          <Item>icons/augustus/persia/lp_hex_augustus_persia_256.png</Item>
+          <Item>icons/augustus/persia/lp_hex_augustus_persia_64.png</Item>
+          <!-- Leader icons (civ-specific: rome) -->
+          <Item>icons/augustus/rome/lp_circ_augustus_rome_128.png</Item>
+          <Item>icons/augustus/rome/lp_circ_augustus_rome_256.png</Item>
+          <Item>icons/augustus/rome/lp_circ_augustus_rome_64.png</Item>
+          <Item>icons/augustus/rome/lp_hex_augustus_rome_128.png</Item>
+          <Item>icons/augustus/rome/lp_hex_augustus_rome_128_a.png</Item>
+          <Item>icons/augustus/rome/lp_hex_augustus_rome_128_h.png</Item>
+          <Item>icons/augustus/rome/lp_hex_augustus_rome_256.png</Item>
+          <Item>icons/augustus/rome/lp_hex_augustus_rome_64.png</Item>
+          <!-- Leader icons (civ-specific: silla) -->
+          <Item>icons/augustus/silla/lp_circ_augustus_silla_128.png</Item>
+          <Item>icons/augustus/silla/lp_circ_augustus_silla_256.png</Item>
+          <Item>icons/augustus/silla/lp_circ_augustus_silla_64.png</Item>
+          <Item>icons/augustus/silla/lp_hex_augustus_silla_128.png</Item>
+          <Item>icons/augustus/silla/lp_hex_augustus_silla_128_a.png</Item>
+          <Item>icons/augustus/silla/lp_hex_augustus_silla_128_h.png</Item>
+          <Item>icons/augustus/silla/lp_hex_augustus_silla_256.png</Item>
+          <Item>icons/augustus/silla/lp_hex_augustus_silla_64.png</Item>
+          <!-- Leader icons (civ-specific: tonga) -->
+          <Item>icons/augustus/tonga/lp_circ_augustus_tonga_128.png</Item>
+          <Item>icons/augustus/tonga/lp_circ_augustus_tonga_256.png</Item>
+          <Item>icons/augustus/tonga/lp_circ_augustus_tonga_64.png</Item>
+          <Item>icons/augustus/tonga/lp_hex_augustus_tonga_128.png</Item>
+          <Item>icons/augustus/tonga/lp_hex_augustus_tonga_128_a.png</Item>
+          <Item>icons/augustus/tonga/lp_hex_augustus_tonga_128_h.png</Item>
+          <Item>icons/augustus/tonga/lp_hex_augustus_tonga_256.png</Item>
+          <Item>icons/augustus/tonga/lp_hex_augustus_tonga_64.png</Item>
           <!-- Loading screen images: default + civ-specific -->
           <Item>images/loading/lsl_augustus.png</Item>
           <Item>images/loading/lsl_augustus_aksum.png</Item>
@@ -77,13 +203,19 @@
           <Item>images/loading/lsl_augustus_tonga.png</Item>
           <!-- JS override: fix sort order so civ-specific entries win over generic -->
           <Item>ui-next/screens/load-screen/load-screen-model.chunk.js</Item>
+          <!-- UIScript for civ-specific icon swapping -->
+          <Item>scripts/authentic-leaders-icons.js</Item>
         </ImportFiles>
         <UpdateDatabase>
           <Item>data/loading-info-override.sql</Item>
         </UpdateDatabase>
         <UpdateIcons>
           <Item>icons/leader-icons-override.xml</Item>
+          <Item>icons/leader-icons-civ-override.xml</Item>
         </UpdateIcons>
+        <UIScripts>
+          <Item>scripts/authentic-leaders-icons.js</Item>
+        </UIScripts>
       </Actions>
     </ActionGroup>
   </ActionGroups>

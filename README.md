@@ -2,18 +2,18 @@
 
 A Civilization VII mod that replaces leader loading screen images and icons with civilization-specific artwork for a more historically authentic experience.
 
-## Current Status: Phase 1 (POC) - In Progress
+## Current Status: Phase 1 (POC) - Working
 
 **Working:**
 - Leader icon replacement (Augustus icons in leader select and menus)
 - Loading screen image replacement (Augustus three-quarter portrait replaces default)
+- Civilization-specific loading screens for Augustus across all 14 antiquity civilizations
+- Civilization-specific in-game icons for all players (local + AI) via runtime UIScript
 - Mod loads without errors, game fully functional
 
-**In Testing:**
-- Civilization-specific loading screens for Augustus across all 14 antiquity civilizations
-  - SQL table restructure: composite PK `(LeaderType, CivilizationTypeOverride)` to allow multiple rows per leader
-  - JS sort fix: override `load-screen-model.chunk.js` to pick the most specific match instead of least specific
-  - Placeholder images with civilization name labels (to be replaced with proper art)
+**How civ-specific features work:**
+- **Loading screens**: SQL table restructure (composite PK) + JS sort fix so civ-specific entries win over generic
+- **Icons**: Civ-specific icon IDs registered in database (e.g., `LEADER_AUGUSTUS_ROME`), swapped at runtime by a UIScript that reads each player's civilization via `Players.getAlive()` + `GameInfo` lookups and overrides `fxs-icon` background images via MutationObserver
 
 ## How It Works
 
@@ -47,13 +47,17 @@ authentic-leaders/          # The mod (this folder goes into Mods/)
   data/
     loading-info-override.sql  # Table restructure + civ-specific entries
   icons/
-    leader-icons-override.xml  # Icon definition overrides
-    augustus/                   # Augustus icon PNGs (8 variants)
+    leader-icons-override.xml  # Default icon overrides (shell + game scope)
+    leader-icons-civ-override.xml  # Civ-specific icon definitions (game scope)
+    augustus/                   # Default Augustus icon PNGs (8 variants)
+    augustus/{civ}/             # Civ-specific icon PNGs (8 variants × 14 civs)
   images/
     loading/                   # Loading screen portraits (1230x1520)
       lsl_augustus.png          # Default (fallback for non-antiquity civs)
       lsl_augustus_rome.png     # Civ-specific (14 antiquity civs)
       ...
+  scripts/
+    authentic-leaders-icons.js # UIScript: runtime icon swapping per player civ
   ui-next/
     screens/
       load-screen/
@@ -64,6 +68,7 @@ config/
 
 scripts/
   process-images.py            # Create icon + loading variants from source portrait
+  generate-civ-icons.py        # Generate civ-specific icon PNGs with text overlay
   generate-prompts.py          # Generate AI image prompts per leader+civ
   generate-mod-data.py         # Generate modinfo + XML from config
 ```
@@ -89,14 +94,15 @@ Non-antiquity civilizations fall back to the default Augustus portrait.
 
 ## Development Phases
 
-### Phase 1: Proof of Concept (current)
+### Phase 1: Proof of Concept (complete)
 - [x] Mod structure and manifest
 - [x] Icon replacement for Augustus (8 variants: hex/circle at multiple sizes)
 - [x] Loading screen image replacement for Augustus (default)
 - [x] SQL table restructure for civ-specific overrides
 - [x] JS sort fix for civ-specific image selection
-- [x] Placeholder images for all 14 antiquity civilizations
-- [ ] Verify civ-specific images display in-game
+- [x] Civ-specific loading screen images for all 14 antiquity civilizations
+- [x] Civ-specific in-game icons for all players (UIScript + MutationObserver)
+- [x] Verified working in-game (loading screens + icons)
 
 ### Phase 2: All Leaders
 - [ ] Download/generate three-quarter portraits for all leaders
@@ -139,6 +145,12 @@ Non-antiquity civilizations fall back to the default Augustus portrait.
 - **Image format**: Loading screen uses CSS `background-size: cover` on a ~1230x1520px area. Three-quarter length portraits work best.
 
 - **File references**: Mods use `fs://game/<mod-id>/<path>` for imported files, base game uses `blp:<name>` for packed assets.
+
+- **Icon system has no civ awareness**: `IconDefinitions` table has no `CivilizationTypeOverride` column. Civ-specific icons require registering new IDs (e.g., `LEADER_AUGUSTUS_ROME`) and a UIScript to swap them at runtime.
+
+- **Players API returns internal IDs**: `Players.get(id).leaderType` and `.civilizationType` are internal hashes, not strings. Must use `GameInfo.Leaders.lookup()` and `GameInfo.Civilizations.lookup()` to get string IDs like `LEADER_AUGUSTUS` and `CIVILIZATION_ROME`.
+
+- **fxs-icon rendering**: The `fxs-icon` web component calls `UI.getIconCSS(id, context)` in its `render()` method via a queued microtask. To override, use `setTimeout(fn, 0)` after attribute changes to run after the component's render completes.
 
 ## License
 
