@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+	<LoadingInfo_Leaders>
+		<Replace>
+			<LeaderType>LEADER_AUGUSTUS</LeaderType>
+			<LeaderText>LOC_LOADING_LEADER_INTRO_TEXT_AUGUSTUS</LeaderText>
+			<LeaderImage>fs://game/authentic-leaders/images/loading/lsl_augustus.png</LeaderImage>
+			<Audio>VO_Loading2_AUGUSTUS</Audio>
+		</Replace>
+	</LoadingInfo_Leaders>
+</Database>

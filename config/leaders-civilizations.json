@@ -1,0 +1,446 @@
+{
+  "_comment": "Civ7 Authentic Leaders Mod - Leader and Civilization Configuration",
+  "_version": "1.0.0",
+  "_last_updated": "2026-03-01",
+  "_notes": "Leader types and civilization types match game database IDs. Guaranteed civs are those unlocked by leader choice during age transitions.",
+
+  "ages": {
+    "AGE_ANTIQUITY": {
+      "name": "Antiquity",
+      "civilizations": [
+        { "type": "CIVILIZATION_AKSUMITE", "name": "Aksumite", "attributes": ["Economic"], "dlc": null },
+        { "type": "CIVILIZATION_EGYPTIAN", "name": "Egyptian", "attributes": ["Cultural", "Economic"], "dlc": null },
+        { "type": "CIVILIZATION_GREEK", "name": "Greek", "attributes": ["Cultural", "Diplomatic"], "dlc": null },
+        { "type": "CIVILIZATION_HAN", "name": "Han", "attributes": ["Expansionist", "Scientific"], "dlc": null },
+        { "type": "CIVILIZATION_KHMER", "name": "Khmer", "attributes": ["Expansionist"], "dlc": null },
+        { "type": "CIVILIZATION_MAURYA", "name": "Maurya", "attributes": ["Diplomatic"], "dlc": null },
+        { "type": "CIVILIZATION_MAYA", "name": "Maya", "attributes": ["Scientific"], "dlc": null },
+        { "type": "CIVILIZATION_MISSISSIPPIAN", "name": "Mississippian", "attributes": ["Cultural"], "dlc": null },
+        { "type": "CIVILIZATION_ACHAEMENID", "name": "Achaemenid Persia", "attributes": ["Militaristic"], "dlc": null },
+        { "type": "CIVILIZATION_ROMAN", "name": "Roman", "attributes": ["Militaristic", "Expansionist"], "dlc": null },
+        { "type": "CIVILIZATION_ASSYRIAN", "name": "Assyrian", "attributes": ["Militaristic"], "dlc": "right-to-rule" },
+        { "type": "CIVILIZATION_CARTHAGINIAN", "name": "Carthaginian", "attributes": ["Militaristic", "Economic"], "dlc": "crossroads-of-the-world" },
+        { "type": "CIVILIZATION_SILLA", "name": "Silla", "attributes": [], "dlc": "right-to-rule" },
+        { "type": "CIVILIZATION_TONGAN", "name": "Tongan", "attributes": [], "dlc": "tides-of-power" }
+      ]
+    },
+    "AGE_EXPLORATION": {
+      "name": "Exploration",
+      "civilizations": [
+        { "type": "CIVILIZATION_ABBASID", "name": "Abbasid", "attributes": ["Economic"], "dlc": null },
+        { "type": "CIVILIZATION_CHOLA", "name": "Chola", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_HAWAIIAN", "name": "Hawaiian", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_INCA", "name": "Incan", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_MAJAPAHIT", "name": "Majapahit", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_MING", "name": "Ming", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_MONGOLIAN", "name": "Mongolian", "attributes": ["Militaristic"], "dlc": null },
+        { "type": "CIVILIZATION_NORMAN", "name": "Norman", "attributes": ["Militaristic"], "dlc": null },
+        { "type": "CIVILIZATION_SONGHAI", "name": "Songhai", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_SPANISH", "name": "Spanish", "attributes": ["Economic", "Expansionist"], "dlc": null },
+        { "type": "CIVILIZATION_BULGARIAN", "name": "Bulgarian", "attributes": ["Militaristic", "Expansionist"], "dlc": "crossroads-of-the-world" },
+        { "type": "CIVILIZATION_DAI_VIET", "name": "Dai Viet", "attributes": [], "dlc": "right-to-rule" },
+        { "type": "CIVILIZATION_ICELANDIC", "name": "Icelandic", "attributes": [], "dlc": "tides-of-power" },
+        { "type": "CIVILIZATION_REPUBLIC_OF_PIRATES", "name": "Republic of Pirates", "attributes": [], "dlc": "tides-of-power" },
+        { "type": "CIVILIZATION_SHAWNEE", "name": "Shawnee", "attributes": [], "dlc": "tecumseh-shawnee-pack" }
+      ]
+    },
+    "AGE_MODERN": {
+      "name": "Modern",
+      "civilizations": [
+        { "type": "CIVILIZATION_AMERICAN", "name": "American", "attributes": ["Economic", "Expansionist"], "dlc": null },
+        { "type": "CIVILIZATION_BUGANDAN", "name": "Bugandan", "attributes": ["Cultural", "Expansionist"], "dlc": null },
+        { "type": "CIVILIZATION_FRENCH_EMPIRE", "name": "French Empire", "attributes": ["Cultural", "Diplomatic"], "dlc": null },
+        { "type": "CIVILIZATION_MEIJI", "name": "Meiji Japan", "attributes": ["Militaristic", "Scientific"], "dlc": null },
+        { "type": "CIVILIZATION_MEXICAN", "name": "Mexican", "attributes": ["Cultural", "Diplomatic"], "dlc": null },
+        { "type": "CIVILIZATION_MUGHAL", "name": "Mughal", "attributes": ["Economic", "Expansionist"], "dlc": null },
+        { "type": "CIVILIZATION_PRUSSIAN", "name": "Prussian", "attributes": ["Militaristic"], "dlc": null },
+        { "type": "CIVILIZATION_QING", "name": "Qing China", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_RUSSIAN", "name": "Russian", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_SIAMESE", "name": "Siamese", "attributes": [], "dlc": null },
+        { "type": "CIVILIZATION_BRITISH", "name": "British", "attributes": ["Economic", "Expansionist"], "dlc": "crossroads-of-the-world" },
+        { "type": "CIVILIZATION_NEPALESE", "name": "Nepalese", "attributes": ["Diplomatic", "Cultural"], "dlc": "crossroads-of-the-world" },
+        { "type": "CIVILIZATION_OTTOMAN", "name": "Ottoman", "attributes": [], "dlc": "tides-of-power" },
+        { "type": "CIVILIZATION_QAJAR", "name": "Qajar", "attributes": [], "dlc": "right-to-rule" }
+      ]
+    }
+  },
+
+  "leaders": [
+    {
+      "type": "LEADER_AMINA",
+      "name": "Amina",
+      "icon_key": "amina",
+      "attributes": ["Militaristic", "Economic"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_SONGHAI", "CIVILIZATION_ABBASID"],
+        "AGE_MODERN": ["CIVILIZATION_MEXICAN", "CIVILIZATION_BUGANDAN"]
+      }
+    },
+    {
+      "type": "LEADER_ASHOKA",
+      "name": "Ashoka",
+      "icon_key": "ashoka",
+      "attributes": ["Diplomatic", "Expansionist"],
+      "dlc": null,
+      "personas": [
+        { "type": "LEADER_ASHOKA_WORLD_RENOUNCER", "name": "Ashoka, World Renouncer", "dlc": null },
+        { "type": "LEADER_ASHOKA_WORLD_CONQUEROR", "name": "Ashoka, World Conqueror", "dlc": "founders-pack" }
+      ],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_CHOLA"],
+        "AGE_MODERN": ["CIVILIZATION_MUGHAL", "CIVILIZATION_SIAMESE"]
+      }
+    },
+    {
+      "type": "LEADER_AUGUSTUS",
+      "name": "Augustus",
+      "icon_key": "augustus",
+      "attributes": ["Cultural", "Expansionist"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_ABBASID", "CIVILIZATION_SPANISH"],
+        "AGE_MODERN": ["CIVILIZATION_FRENCH_EMPIRE", "CIVILIZATION_PRUSSIAN"]
+      }
+    },
+    {
+      "type": "LEADER_BENJAMIN_FRANKLIN",
+      "name": "Benjamin Franklin",
+      "icon_key": "benjamin_franklin",
+      "attributes": ["Expansionist", "Scientific"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN", "CIVILIZATION_SPANISH"],
+        "AGE_MODERN": ["CIVILIZATION_FRENCH_EMPIRE", "CIVILIZATION_AMERICAN"]
+      }
+    },
+    {
+      "type": "LEADER_CATHERINE",
+      "name": "Catherine the Great",
+      "icon_key": "catherine",
+      "attributes": ["Cultural", "Diplomatic"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN", "CIVILIZATION_MONGOLIAN"],
+        "AGE_MODERN": ["CIVILIZATION_PRUSSIAN", "CIVILIZATION_RUSSIAN"]
+      }
+    },
+    {
+      "type": "LEADER_CHARLEMAGNE",
+      "name": "Charlemagne",
+      "icon_key": "charlemagne",
+      "attributes": ["Militaristic", "Cultural"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN", "CIVILIZATION_SPANISH"],
+        "AGE_MODERN": ["CIVILIZATION_PRUSSIAN", "CIVILIZATION_FRENCH_EMPIRE"]
+      }
+    },
+    {
+      "type": "LEADER_CONFUCIUS",
+      "name": "Confucius",
+      "icon_key": "confucius",
+      "attributes": ["Expansionist", "Scientific"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_MING", "CIVILIZATION_MONGOLIAN"],
+        "AGE_MODERN": ["CIVILIZATION_QING"]
+      }
+    },
+    {
+      "type": "LEADER_FRIEDRICH",
+      "name": "Friedrich",
+      "icon_key": "friedrich",
+      "attributes": ["Militaristic", "Scientific"],
+      "dlc": "deluxe-pack",
+      "personas": [
+        { "type": "LEADER_FRIEDRICH_OBLIQUE", "name": "Friedrich, Oblique", "dlc": "deluxe-pack" },
+        { "type": "LEADER_FRIEDRICH_BAROQUE", "name": "Friedrich, Baroque", "dlc": "deluxe-pack" }
+      ],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN"],
+        "AGE_MODERN": ["CIVILIZATION_PRUSSIAN"]
+      }
+    },
+    {
+      "type": "LEADER_HARRIET_TUBMAN",
+      "name": "Harriet Tubman",
+      "icon_key": "harriet_tubman",
+      "attributes": ["Diplomatic", "Militaristic"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_INCA", "CIVILIZATION_SONGHAI"],
+        "AGE_MODERN": ["CIVILIZATION_AMERICAN", "CIVILIZATION_BUGANDAN"]
+      }
+    },
+    {
+      "type": "LEADER_HATSHEPSUT",
+      "name": "Hatshepsut",
+      "icon_key": "hatshepsut",
+      "attributes": ["Cultural", "Economic"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_SONGHAI", "CIVILIZATION_ABBASID"],
+        "AGE_MODERN": ["CIVILIZATION_MUGHAL"]
+      }
+    },
+    {
+      "type": "LEADER_HIMIKO",
+      "name": "Himiko",
+      "icon_key": "himiko",
+      "attributes": ["Diplomatic", "Scientific"],
+      "dlc": null,
+      "personas": [
+        { "type": "LEADER_HIMIKO_QUEEN", "name": "Himiko, Queen of Wa", "dlc": null },
+        { "type": "LEADER_HIMIKO_SHAMAN", "name": "Himiko, High Shaman", "dlc": "founders-pack" }
+      ],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_MAJAPAHIT", "CIVILIZATION_HAWAIIAN"],
+        "AGE_MODERN": ["CIVILIZATION_MEIJI", "CIVILIZATION_SIAMESE"]
+      }
+    },
+    {
+      "type": "LEADER_IBN_BATTUTA",
+      "name": "Ibn Battuta",
+      "icon_key": "ibn_battuta",
+      "attributes": ["Diplomatic", "Economic"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_ABBASID", "CIVILIZATION_SONGHAI"],
+        "AGE_MODERN": ["CIVILIZATION_MUGHAL"]
+      }
+    },
+    {
+      "type": "LEADER_ISABELLA",
+      "name": "Isabella",
+      "icon_key": "isabella",
+      "attributes": ["Economic", "Expansionist"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_SPANISH"],
+        "AGE_MODERN": ["CIVILIZATION_MEXICAN", "CIVILIZATION_FRENCH_EMPIRE"]
+      }
+    },
+    {
+      "type": "LEADER_JOSE_RIZAL",
+      "name": "Jose Rizal",
+      "icon_key": "jose_rizal",
+      "attributes": ["Cultural", "Diplomatic"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_HAWAIIAN", "CIVILIZATION_MAJAPAHIT"],
+        "AGE_MODERN": ["CIVILIZATION_SIAMESE"]
+      }
+    },
+    {
+      "type": "LEADER_LAFAYETTE",
+      "name": "Lafayette",
+      "icon_key": "lafayette",
+      "attributes": ["Diplomatic", "Cultural"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN"],
+        "AGE_MODERN": ["CIVILIZATION_FRENCH_EMPIRE"]
+      }
+    },
+    {
+      "type": "LEADER_MACHIAVELLI",
+      "name": "Machiavelli",
+      "icon_key": "machiavelli",
+      "attributes": ["Diplomatic", "Economic"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN", "CIVILIZATION_SPANISH"],
+        "AGE_MODERN": ["CIVILIZATION_RUSSIAN"]
+      }
+    },
+    {
+      "type": "LEADER_NAPOLEON",
+      "name": "Napoleon",
+      "icon_key": "napoleon",
+      "attributes": ["Militaristic"],
+      "dlc": "napoleon-pack",
+      "personas": [
+        { "type": "LEADER_NAPOLEON_EMPEROR", "name": "Napoleon, Emperor", "dlc": "napoleon-pack" },
+        { "type": "LEADER_NAPOLEON_REVOLUTIONARY", "name": "Napoleon, Revolutionary", "dlc": "napoleon-pack" }
+      ],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN", "CIVILIZATION_SPANISH"],
+        "AGE_MODERN": ["CIVILIZATION_FRENCH_EMPIRE", "CIVILIZATION_PRUSSIAN"]
+      }
+    },
+    {
+      "type": "LEADER_PACHACUTI",
+      "name": "Pachacuti",
+      "icon_key": "pachacuti",
+      "attributes": ["Expansionist", "Scientific"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_INCA"],
+        "AGE_MODERN": []
+      }
+    },
+    {
+      "type": "LEADER_TECUMSEH",
+      "name": "Tecumseh",
+      "icon_key": "tecumseh",
+      "attributes": ["Diplomatic", "Economic"],
+      "dlc": "tecumseh-shawnee-pack",
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_SHAWNEE"],
+        "AGE_MODERN": ["CIVILIZATION_AMERICAN"]
+      }
+    },
+    {
+      "type": "LEADER_TRUNG_TRAC",
+      "name": "Trung Trac",
+      "icon_key": "trung_trac",
+      "attributes": ["Militaristic", "Scientific"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_MAJAPAHIT", "CIVILIZATION_CHOLA"],
+        "AGE_MODERN": ["CIVILIZATION_MEIJI"]
+      }
+    },
+    {
+      "type": "LEADER_XERXES",
+      "name": "Xerxes",
+      "icon_key": "xerxes",
+      "attributes": ["Economic", "Militaristic"],
+      "dlc": null,
+      "personas": [
+        { "type": "LEADER_XERXES_KING", "name": "Xerxes, King of Kings", "dlc": null },
+        { "type": "LEADER_XERXES_ACHAEMENID", "name": "Xerxes, the Achaemenid", "dlc": "deluxe-pack" }
+      ],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_ABBASID", "CIVILIZATION_MONGOLIAN"],
+        "AGE_MODERN": ["CIVILIZATION_RUSSIAN"]
+      }
+    },
+    {
+      "type": "LEADER_ADA_LOVELACE",
+      "name": "Ada Lovelace",
+      "icon_key": "ada_lovelace",
+      "attributes": ["Scientific", "Cultural"],
+      "dlc": "crossroads-of-the-world",
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN", "CIVILIZATION_ABBASID"],
+        "AGE_MODERN": ["CIVILIZATION_BRITISH", "CIVILIZATION_RUSSIAN"]
+      }
+    },
+    {
+      "type": "LEADER_SIMON_BOLIVAR",
+      "name": "Simon Bolivar",
+      "icon_key": "simon_bolivar",
+      "attributes": ["Militaristic", "Diplomatic"],
+      "dlc": "crossroads-of-the-world",
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_SPANISH"],
+        "AGE_MODERN": ["CIVILIZATION_MEXICAN"]
+      }
+    },
+    {
+      "type": "LEADER_GENGHIS_KHAN",
+      "name": "Genghis Khan",
+      "icon_key": "genghis_khan",
+      "attributes": ["Militaristic"],
+      "dlc": "right-to-rule",
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_MONGOLIAN"],
+        "AGE_MODERN": ["CIVILIZATION_PRUSSIAN"]
+      }
+    },
+    {
+      "type": "LEADER_LAKSHMIBAI",
+      "name": "Lakshmibai",
+      "icon_key": "lakshmibai",
+      "attributes": ["Militaristic", "Diplomatic"],
+      "dlc": "right-to-rule",
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_CHOLA"],
+        "AGE_MODERN": ["CIVILIZATION_MUGHAL"]
+      }
+    },
+    {
+      "type": "LEADER_EDWARD_TEACH",
+      "name": "Edward Teach",
+      "icon_key": "edward_teach",
+      "attributes": ["Economic", "Militaristic"],
+      "dlc": "tides-of-power",
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_REPUBLIC_OF_PIRATES", "CIVILIZATION_ICELANDIC"],
+        "AGE_MODERN": ["CIVILIZATION_BRITISH"]
+      }
+    },
+    {
+      "type": "LEADER_SAYYIDA_AL_HURRA",
+      "name": "Sayyida al Hurra",
+      "icon_key": "sayyida_al_hurra",
+      "attributes": ["Diplomatic", "Militaristic"],
+      "dlc": "tides-of-power",
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_REPUBLIC_OF_PIRATES", "CIVILIZATION_ABBASID"],
+        "AGE_MODERN": ["CIVILIZATION_OTTOMAN", "CIVILIZATION_MUGHAL"]
+      }
+    },
+    {
+      "type": "LEADER_GILGAMESH",
+      "name": "Gilgamesh",
+      "icon_key": "gilgamesh",
+      "attributes": ["Militaristic", "Diplomatic"],
+      "dlc": null,
+      "personas": [],
+      "guaranteed_civs": {
+        "AGE_EXPLORATION": ["CIVILIZATION_NORMAN", "CIVILIZATION_ABBASID", "CIVILIZATION_CHOLA"],
+        "AGE_MODERN": ["CIVILIZATION_OTTOMAN"]
+      }
+    }
+  ],
+
+  "image_specs": {
+    "loading_screen": {
+      "width": 1024,
+      "height": 1400,
+      "format": "PNG",
+      "notes": "Portrait orientation, leader character, transparent or dark background"
+    },
+    "icon_hex_256": { "width": 256, "height": 256, "format": "PNG", "context": "DEFAULT" },
+    "icon_hex_128": { "width": 128, "height": 128, "format": "PNG", "context": "DEFAULT" },
+    "icon_hex_128_happy": { "width": 128, "height": 128, "format": "PNG", "context": "LEADER_HAPPY" },
+    "icon_hex_128_angry": { "width": 128, "height": 128, "format": "PNG", "context": "LEADER_ANGRY" },
+    "icon_hex_64": { "width": 64, "height": 64, "format": "PNG", "context": "DEFAULT" },
+    "icon_circ_256": { "width": 256, "height": 256, "format": "PNG", "context": "CIRCLE_MASK" },
+    "icon_circ_128": { "width": 128, "height": 128, "format": "PNG", "context": "CIRCLE_MASK" },
+    "icon_circ_64": { "width": 64, "height": 64, "format": "PNG", "context": "CIRCLE_MASK" }
+  },
+
+  "mod_metadata": {
+    "mod_id": "authentic-leaders",
+    "mod_name": "Authentic Leaders",
+    "description": "Replaces leader loading screen images and icons with civilization-specific artwork for a more historically authentic experience.",
+    "authors": "Custom",
+    "fs_prefix": "fs://game/authentic-leaders"
+  }
+}
