@@ -8,6 +8,17 @@
  * Runs in game scope only — civ isn't known during leader select (shell scope).
  */
 (function authenticLeadersIcons() {
+    // Persona types → base leader type (for civ-specific icon ID construction)
+    // Civ icons are registered under base types (e.g., LEADER_ASHOKA_ROME),
+    // so persona types must map back to base before appending civ suffix.
+    var PERSONA_TO_BASE = {
+        "LEADER_ASHOKA_ALT": "LEADER_ASHOKA",
+        "LEADER_FRIEDRICH_ALT": "LEADER_FRIEDRICH",
+        "LEADER_HIMIKO_ALT": "LEADER_HIMIKO",
+        "LEADER_NAPOLEON_ALT": "LEADER_NAPOLEON",
+        "LEADER_XERXES_ALT": "LEADER_XERXES"
+    };
+
     // Cache: playerId → { leaderType, civIconId } or null
     var playerIconCache = {};
     var localLeaderType = null;
@@ -25,7 +36,8 @@
             var civType = playerConfig.civilizationTypeName;
             if (!localLeaderType || !civType) return false;
             var civSuffix = civType.replace("CIVILIZATION_", "");
-            localCivIconId = localLeaderType + "_" + civSuffix;
+            var baseType = PERSONA_TO_BASE[localLeaderType] || localLeaderType;
+            localCivIconId = baseType + "_" + civSuffix;
             var testUrl = UI.getIconCSS(localCivIconId);
             if (!testUrl) {
                 console.warn("[AuthenticLeaders] No civ-specific icon for " + localCivIconId);
@@ -74,7 +86,8 @@
                         continue;
                     }
                     var civSuffix = civType.replace("CIVILIZATION_", "");
-                    var civIconId = leaderType + "_" + civSuffix;
+                    var baseType = PERSONA_TO_BASE[leaderType] || leaderType;
+                    var civIconId = baseType + "_" + civSuffix;
                     var testUrl = UI.getIconCSS(civIconId);
                     if (!testUrl) {
                         console.log("[AuthenticLeaders] Player " + p.id + ": no icon for " + civIconId + ", skipping");
@@ -121,7 +134,10 @@
         }
 
         if (!info) return;
-        if (id !== info.leaderType) return;
+        // Match icon if it uses the player's leader type OR the base type
+        // (persona icons may use either the persona type or the base type)
+        var baseForPlayer = PERSONA_TO_BASE[info.leaderType] || info.leaderType;
+        if (id !== info.leaderType && id !== baseForPlayer) return;
 
         var context = el.getAttribute("data-icon-context");
         var iconUrl = UI.getIconCSS(info.civIconId, context ? context : undefined);

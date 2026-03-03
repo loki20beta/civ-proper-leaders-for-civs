@@ -29,7 +29,7 @@ CONFIG_PATH = os.path.join(PROJECT_ROOT, "config", "leaders-civilizations.json")
 ASSETS_DIR = os.path.join(PROJECT_ROOT, "assets")
 MOD_DIR = os.path.join(PROJECT_ROOT, "authentic-leaders")
 
-LOADING_SCREEN_SIZE = (1230, 1520)
+LOADING_SCREEN_SIZE = (800, 1060)
 
 ICON_VARIANTS = [
     {"shape": "hex",  "size": 256, "suffix": ""},
@@ -70,15 +70,13 @@ def get_font(size):
 
 
 def make_base_loading(reference_img):
-    """Scale/crop reference image to loading screen dimensions (1230×1520).
+    """Scale/crop reference image to loading screen dimensions (800×1060).
 
-    The game CSS clips the top 100px of the image (margin-top: -5.56rem).
-    We place the reference image below that clip zone so the head is visible,
-    and crop excess from the bottom (lower body/legs).
+    Original game loading screens are 800×1060 RGBA with transparent background.
+    The game composites them over the civ scene via CSS background-image.
+    We match this: scale to fit width, top-align, transparent background.
     """
     target_w, target_h = LOADING_SCREEN_SIZE
-    # Game clips top ~100px. Place image below that with a small margin.
-    GAME_TOP_CLIP = 120  # px of padding above the reference image
 
     src_w, src_h = reference_img.size
 
@@ -89,14 +87,14 @@ def make_base_loading(reference_img):
 
     resized = reference_img.resize((new_w, new_h), Image.LANCZOS)
 
-    # Create canvas with dark background matching game color (#161c23)
-    canvas = Image.new("RGBA", (target_w, target_h), (22, 28, 35, 255))
+    # Create transparent canvas (matching game's RGBA format)
+    canvas = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
 
-    # Center horizontally (already fills width), place below clip zone vertically
+    # Place portrait at top; bottom excess is cropped by canvas boundary
     if resized.mode == "RGBA":
-        canvas.paste(resized, (0, GAME_TOP_CLIP), resized)
+        canvas.paste(resized, (0, 0), resized)
     else:
-        canvas.paste(resized, (0, GAME_TOP_CLIP))
+        canvas.paste(resized, (0, 0))
 
     return canvas
 
@@ -106,14 +104,14 @@ def overlay_loading_text(base_img, text):
     img = base_img.copy()
     w, h = img.size
 
-    font = get_font(48)
+    font = get_font(31)
     draw = ImageDraw.Draw(img)
     bbox = draw.textbbox((0, 0), text, font=font)
     text_w = bbox[2] - bbox[0]
     text_h = bbox[3] - bbox[1]
 
     # Banner at ~47% from top (waist area, matching existing Augustus stubs)
-    padding = 16
+    padding = 10
     banner_h = text_h + padding * 2
     banner_y = int(h * 0.47) - banner_h // 2
 
@@ -258,6 +256,9 @@ def load_portrait_sources(icon_key, fallback_img):
 
     Returns dict mapping mood → PIL Image. Falls back to the reference
     image (with tint for happy/angry) when portrait files aren't available.
+
+    If portrait_neutral is missing, all portraits are set to None so icons
+    use the reference consistently (avoids body-shot vs head-shot mismatch).
     """
     sources = {}
     for mood in ("neutral", "happy", "angry"):
@@ -266,6 +267,13 @@ def load_portrait_sources(icon_key, fallback_img):
             sources[mood] = Image.open(portrait_path).convert("RGBA")
         else:
             sources[mood] = None
+
+    # If neutral is missing, don't use happy/angry either — the framing
+    # mismatch between reference (body) and portraits (head) looks wrong.
+    if sources["neutral"] is None:
+        sources["happy"] = None
+        sources["angry"] = None
+
     return sources
 
 
@@ -282,7 +290,13 @@ def generate_leader_stubs(leader, civs, dry_run=False, force=False):
         return 0, 0, 0
 
     reference = Image.open(ref_path).convert("RGBA")
-    base_loading = make_base_loading(reference)
+
+    # Prefer extracted original loading screen (already 800x1060 RGBA)
+    loading_original_path = os.path.join(ASSETS_DIR, "leaders", icon_key, "loading_original.png")
+    if os.path.isfile(loading_original_path):
+        base_loading = Image.open(loading_original_path).convert("RGBA")
+    else:
+        base_loading = make_base_loading(reference)
 
     # Load portrait images for icons (proper game portraits, not three-quarter refs)
     portraits = load_portrait_sources(icon_key, reference)
@@ -421,8 +435,14 @@ def generate_base_loading(leader, dry_run=False, force=False):
     if dry_run:
         return 1
 
-    reference = Image.open(ref_path).convert("RGBA")
-    base_loading = make_base_loading(reference)
+    # Prefer extracted original loading screen (already 800x1060 RGBA)
+    loading_original_path = os.path.join(ASSETS_DIR, "leaders", icon_key, "loading_original.png")
+    if os.path.isfile(loading_original_path):
+        base_loading = Image.open(loading_original_path).convert("RGBA")
+    else:
+        reference = Image.open(ref_path).convert("RGBA")
+        base_loading = make_base_loading(reference)
+
     os.makedirs(os.path.dirname(loading_path), exist_ok=True)
     base_loading.save(loading_path, "PNG")
     return 1

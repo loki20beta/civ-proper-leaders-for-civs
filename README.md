@@ -52,7 +52,7 @@ authentic-leaders/          # The mod (this folder goes into Mods/)
     augustus/                   # Default Augustus icon PNGs (8 variants)
     augustus/{civ}/             # Civ-specific icon PNGs (8 variants × 14 civs)
   images/
-    loading/                   # Loading screen portraits (1230x1520)
+    loading/                   # Loading screen portraits (800x1060 RGBA transparent)
       lsl_augustus.png          # Default (fallback for non-antiquity civs)
       lsl_augustus_rome.png     # Civ-specific (14 antiquity civs)
       ...
@@ -142,7 +142,7 @@ Non-antiquity civilizations fall back to the default Augustus portrait.
 
 - **Correct civilization type IDs**: `CIVILIZATION_ROME` (not ROMAN), `CIVILIZATION_SPAIN` (not SPANISH), `CIVILIZATION_PRUSSIA` (not PRUSSIAN)
 
-- **Image format**: Loading screen uses CSS `background-size: cover` on a ~1230x1520px area. Three-quarter length portraits work best.
+- **Image format**: Loading screens are 800×1060 RGBA transparent PNGs. The game composites them over the civ scene via CSS `background-size: cover`.
 
 - **File references**: Mods use `fs://game/<mod-id>/<path>` for imported files, base game uses `blp:<name>` for packed assets.
 

@@ -27,8 +27,10 @@
 #### Loading Screen System
 - Base game images referenced as `blp:lsl_<name>.png` (packed in BLP archives)
 - Mods use `fs://game/<mod-id>/<path>.png` for PNG files
-- CSS displays image in a div ~1230x1520px with `background-size: cover`
-- Three-quarter length portrait source available from wiki at 800x1200
+- CSS composites image over civ scene via `background-size: cover`
+- Original loading screens: 800×1060 RGBA transparent PNGs (BC7-compressed in CIVBIG containers)
+- CIVBIG format: 144-byte header + BC7 data (BGRA channel order), 1,132,544 bytes total
+- Extracted via `scripts/fetch-wiki-assets.py --loading-originals` (28 leaders + 5 persona alts)
 
 #### CivilizationTypeOverride Sort Bug
 - `getLeaderLoadingInfo()` in `load-screen-model.chunk.js` (line 50-54) sorts ascending by specificity score and picks `loadingInfos[0]` (least specific)
@@ -74,7 +76,7 @@ authentic-leaders/
     augustus/                            # 8 icon PNGs (working)
   images/
     loading/
-      lsl_augustus.png                   # 1230x1520 default portrait (no label)
+      lsl_augustus.png                   # 800x1060 default portrait (no label)
       lsl_augustus_aksum.png             # With "AKSUM" label
       lsl_augustus_assyria.png           # With "ASSYRIA" label
       lsl_augustus_carthage.png          # With "CARTHAGE" label

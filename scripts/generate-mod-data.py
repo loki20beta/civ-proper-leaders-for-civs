@@ -117,9 +117,13 @@ def scan_leaders(config):
                 if os.path.isdir(os.path.join(leader_icon_dir, d)):
                     icon_civs.append(d)
 
+        # Collect persona types from config
+        persona_types = [p["type"] for p in leader.get("personas", [])]
+
         leaders.append({
             "key": key,
             "type": leader_type,
+            "persona_types": persona_types,
             "civ_keys": civ_keys,
             "has_base_icons": has_base_icons,
             "icon_civs": icon_civs,
@@ -167,34 +171,39 @@ def generate_sql(leaders, civ_db_types):
     for leader in leaders:
         key = leader["key"]
         ltype = leader["type"]
-        ltype_short = ltype.replace("LEADER_", "")
 
-        lines.append("")
-        lines.append(f"-- === {leader['type']} ===")
-        lines.append("")
+        # All leader types that need entries: base + personas
+        all_types = [ltype] + leader.get("persona_types", [])
 
-        # Update default loading screen
-        lines.append(f"-- Default loading screen for {key}")
-        lines.append(f"UPDATE LoadingInfo_Leaders")
-        lines.append(f"SET LeaderImage = '{FS_PREFIX}/images/loading/lsl_{key}.png'")
-        lines.append(f"WHERE LeaderType = '{ltype}' AND CivilizationTypeOverride IS NULL;")
+        for lt in all_types:
+            lt_short = lt.replace("LEADER_", "")
 
-        if leader["civ_keys"]:
             lines.append("")
-            lines.append(f"-- Civ-specific loading screens for {key}")
-            for civ_key in leader["civ_keys"]:
-                db_type = civ_db_types.get(civ_key)
-                if not db_type:
-                    lines.append(f"-- WARNING: unknown civ_key '{civ_key}', skipping")
-                    continue
-                lines.append(
-                    f"INSERT OR IGNORE INTO LoadingInfo_Leaders "
-                    f"(LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES "
-                    f"('{ltype}', '{db_type}', "
-                    f"'LOC_LOADING_LEADER_INTRO_TEXT_{ltype_short}', "
-                    f"'{FS_PREFIX}/images/loading/lsl_{key}_{civ_key}.png', "
-                    f"'VO_Loading2_{ltype_short}');"
-                )
+            lines.append(f"-- === {lt} ===")
+            lines.append("")
+
+            # Update default loading screen
+            lines.append(f"-- Default loading screen for {key} ({lt})")
+            lines.append(f"UPDATE LoadingInfo_Leaders")
+            lines.append(f"SET LeaderImage = '{FS_PREFIX}/images/loading/lsl_{key}.png'")
+            lines.append(f"WHERE LeaderType = '{lt}' AND CivilizationTypeOverride IS NULL;")
+
+            if leader["civ_keys"]:
+                lines.append("")
+                lines.append(f"-- Civ-specific loading screens for {key} ({lt})")
+                for civ_key in leader["civ_keys"]:
+                    db_type = civ_db_types.get(civ_key)
+                    if not db_type:
+                        lines.append(f"-- WARNING: unknown civ_key '{civ_key}', skipping")
+                        continue
+                    lines.append(
+                        f"INSERT OR IGNORE INTO LoadingInfo_Leaders "
+                        f"(LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES "
+                        f"('{lt}', '{db_type}', "
+                        f"'LOC_LOADING_LEADER_INTRO_TEXT_{lt_short}', "
+                        f"'{FS_PREFIX}/images/loading/lsl_{key}_{civ_key}.png', "
+                        f"'VO_Loading2_{lt_short}');"
+                    )
 
     lines.append("")
     return "\n".join(lines)
@@ -208,17 +217,20 @@ def generate_default_icons_xml(leaders):
         if not leader["has_base_icons"]:
             continue
         key = leader["key"]
-        ltype = leader["type"]
 
-        for v in ICON_VARIANTS:
-            fname = f"lp_{v['shape']}_{key}_{v['size']}{v['suffix']}.png"
-            lines.append("\t\t<Replace>")
-            lines.append(f"\t\t\t<ID>{ltype}</ID>")
-            lines.append(f"\t\t\t<Path>{FS_PREFIX}/icons/{key}/{fname}</Path>")
-            lines.append(f"\t\t\t<IconSize>{v['size']}</IconSize>")
-            if v["context"]:
-                lines.append(f"\t\t\t<Context>{v['context']}</Context>")
-            lines.append("\t\t</Replace>")
+        # All leader types that need icon entries: base + personas
+        all_types = [leader["type"]] + leader.get("persona_types", [])
+
+        for ltype in all_types:
+            for v in ICON_VARIANTS:
+                fname = f"lp_{v['shape']}_{key}_{v['size']}{v['suffix']}.png"
+                lines.append("\t\t<Replace>")
+                lines.append(f"\t\t\t<ID>{ltype}</ID>")
+                lines.append(f"\t\t\t<Path>{FS_PREFIX}/icons/{key}/{fname}</Path>")
+                lines.append(f"\t\t\t<IconSize>{v['size']}</IconSize>")
+                if v["context"]:
+                    lines.append(f"\t\t\t<Context>{v['context']}</Context>")
+                lines.append("\t\t</Replace>")
 
     lines.append("\t</IconDefinitions>")
     lines.append("</Database>")

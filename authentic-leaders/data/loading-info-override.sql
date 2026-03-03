@@ -32,12 +32,12 @@ DROP TABLE _LIL_Backup;
 
 -- === LEADER_AMINA ===
 
--- Default loading screen for amina
+-- Default loading screen for amina (LEADER_AMINA)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_amina.png'
 WHERE LeaderType = 'LEADER_AMINA' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for amina
+-- Civ-specific loading screens for amina (LEADER_AMINA)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_AMINA', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_AMINA', 'fs://game/authentic-leaders/images/loading/lsl_amina_abbasid.png', 'VO_Loading2_AMINA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_AMINA', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_AMINA', 'fs://game/authentic-leaders/images/loading/lsl_amina_aksum.png', 'VO_Loading2_AMINA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_AMINA', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_AMINA', 'fs://game/authentic-leaders/images/loading/lsl_amina_america.png', 'VO_Loading2_AMINA');
@@ -84,12 +84,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_ASHOKA ===
 
--- Default loading screen for ashoka
+-- Default loading screen for ashoka (LEADER_ASHOKA)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_ashoka.png'
 WHERE LeaderType = 'LEADER_ASHOKA' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for ashoka
+-- Civ-specific loading screens for ashoka (LEADER_ASHOKA)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_abbasid.png', 'VO_Loading2_ASHOKA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_aksum.png', 'VO_Loading2_ASHOKA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_america.png', 'VO_Loading2_ASHOKA');
@@ -134,14 +134,66 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_spain.png', 'VO_Loading2_ASHOKA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_tonga.png', 'VO_Loading2_ASHOKA');
 
+-- === LEADER_ASHOKA_ALT ===
+
+-- Default loading screen for ashoka (LEADER_ASHOKA_ALT)
+UPDATE LoadingInfo_Leaders
+SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_ashoka.png'
+WHERE LeaderType = 'LEADER_ASHOKA_ALT' AND CivilizationTypeOverride IS NULL;
+
+-- Civ-specific loading screens for ashoka (LEADER_ASHOKA_ALT)
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_abbasid.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_aksum.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_america.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_ASSYRIA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_assyria.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_GREAT_BRITAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_britain.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_BUGANDA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_buganda.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_BULGARIA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_bulgaria.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_CARTHAGE', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_carthage.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_CHOLA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_chola.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_DAI_VIET', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_dai_viet.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_EGYPT', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_egypt.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_FRENCH_EMPIRE', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_french_empire.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_GREECE', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_greece.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_HAN', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_han.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_HAWAII', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_hawaii.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_ICELAND', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_iceland.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_INCA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_inca.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_KHMER', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_khmer.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MAJAPAHIT', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_majapahit.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MAURYA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_maurya.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MAYA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_maya.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MEIJI', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_meiji.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MEXICO', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_mexico.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MING', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_ming.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MISSISSIPPIAN', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_mississippian.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MONGOLIA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_mongolia.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_MUGHAL', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_mughal.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_NEPAL', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_nepal.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_NORMAN', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_normandy.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_OTTOMANS', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_ottoman.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_PERSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_persia.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_PIRATE_REPUBLIC', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_pirates.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_PRUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_prussia.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_QAJAR', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_qajar.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_QING', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_qing.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_ROME', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_rome.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_RUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_russia.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_SHAWNEE', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_shawnee.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_SIAM', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_siam.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_SILLA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_silla.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_SONGHAI', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_songhai.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_spain.png', 'VO_Loading2_ASHOKA_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ASHOKA_ALT', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_ASHOKA_ALT', 'fs://game/authentic-leaders/images/loading/lsl_ashoka_tonga.png', 'VO_Loading2_ASHOKA_ALT');
+
 -- === LEADER_AUGUSTUS ===
 
--- Default loading screen for augustus
+-- Default loading screen for augustus (LEADER_AUGUSTUS)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_augustus.png'
 WHERE LeaderType = 'LEADER_AUGUSTUS' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for augustus
+-- Civ-specific loading screens for augustus (LEADER_AUGUSTUS)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_AUGUSTUS', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_AUGUSTUS', 'fs://game/authentic-leaders/images/loading/lsl_augustus_abbasid.png', 'VO_Loading2_AUGUSTUS');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_AUGUSTUS', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_AUGUSTUS', 'fs://game/authentic-leaders/images/loading/lsl_augustus_aksum.png', 'VO_Loading2_AUGUSTUS');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_AUGUSTUS', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_AUGUSTUS', 'fs://game/authentic-leaders/images/loading/lsl_augustus_america.png', 'VO_Loading2_AUGUSTUS');
@@ -188,12 +240,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_BENJAMIN_FRANKLIN ===
 
--- Default loading screen for benjamin_franklin
+-- Default loading screen for benjamin_franklin (LEADER_BENJAMIN_FRANKLIN)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_benjamin_franklin.png'
 WHERE LeaderType = 'LEADER_BENJAMIN_FRANKLIN' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for benjamin_franklin
+-- Civ-specific loading screens for benjamin_franklin (LEADER_BENJAMIN_FRANKLIN)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_BENJAMIN_FRANKLIN', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_BENJAMIN_FRANKLIN', 'fs://game/authentic-leaders/images/loading/lsl_benjamin_franklin_abbasid.png', 'VO_Loading2_BENJAMIN_FRANKLIN');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_BENJAMIN_FRANKLIN', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_BENJAMIN_FRANKLIN', 'fs://game/authentic-leaders/images/loading/lsl_benjamin_franklin_aksum.png', 'VO_Loading2_BENJAMIN_FRANKLIN');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_BENJAMIN_FRANKLIN', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_BENJAMIN_FRANKLIN', 'fs://game/authentic-leaders/images/loading/lsl_benjamin_franklin_america.png', 'VO_Loading2_BENJAMIN_FRANKLIN');
@@ -240,12 +292,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_CATHERINE ===
 
--- Default loading screen for catherine
+-- Default loading screen for catherine (LEADER_CATHERINE)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_catherine.png'
 WHERE LeaderType = 'LEADER_CATHERINE' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for catherine
+-- Civ-specific loading screens for catherine (LEADER_CATHERINE)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CATHERINE', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_CATHERINE', 'fs://game/authentic-leaders/images/loading/lsl_catherine_abbasid.png', 'VO_Loading2_CATHERINE');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CATHERINE', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_CATHERINE', 'fs://game/authentic-leaders/images/loading/lsl_catherine_aksum.png', 'VO_Loading2_CATHERINE');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CATHERINE', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_CATHERINE', 'fs://game/authentic-leaders/images/loading/lsl_catherine_america.png', 'VO_Loading2_CATHERINE');
@@ -292,12 +344,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_CHARLEMAGNE ===
 
--- Default loading screen for charlemagne
+-- Default loading screen for charlemagne (LEADER_CHARLEMAGNE)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_charlemagne.png'
 WHERE LeaderType = 'LEADER_CHARLEMAGNE' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for charlemagne
+-- Civ-specific loading screens for charlemagne (LEADER_CHARLEMAGNE)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CHARLEMAGNE', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_CHARLEMAGNE', 'fs://game/authentic-leaders/images/loading/lsl_charlemagne_abbasid.png', 'VO_Loading2_CHARLEMAGNE');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CHARLEMAGNE', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_CHARLEMAGNE', 'fs://game/authentic-leaders/images/loading/lsl_charlemagne_aksum.png', 'VO_Loading2_CHARLEMAGNE');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CHARLEMAGNE', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_CHARLEMAGNE', 'fs://game/authentic-leaders/images/loading/lsl_charlemagne_america.png', 'VO_Loading2_CHARLEMAGNE');
@@ -344,12 +396,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_CONFUCIUS ===
 
--- Default loading screen for confucius
+-- Default loading screen for confucius (LEADER_CONFUCIUS)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_confucius.png'
 WHERE LeaderType = 'LEADER_CONFUCIUS' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for confucius
+-- Civ-specific loading screens for confucius (LEADER_CONFUCIUS)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CONFUCIUS', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_CONFUCIUS', 'fs://game/authentic-leaders/images/loading/lsl_confucius_abbasid.png', 'VO_Loading2_CONFUCIUS');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CONFUCIUS', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_CONFUCIUS', 'fs://game/authentic-leaders/images/loading/lsl_confucius_aksum.png', 'VO_Loading2_CONFUCIUS');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_CONFUCIUS', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_CONFUCIUS', 'fs://game/authentic-leaders/images/loading/lsl_confucius_america.png', 'VO_Loading2_CONFUCIUS');
@@ -396,12 +448,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_FRIEDRICH ===
 
--- Default loading screen for friedrich
+-- Default loading screen for friedrich (LEADER_FRIEDRICH)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_friedrich.png'
 WHERE LeaderType = 'LEADER_FRIEDRICH' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for friedrich
+-- Civ-specific loading screens for friedrich (LEADER_FRIEDRICH)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_abbasid.png', 'VO_Loading2_FRIEDRICH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_aksum.png', 'VO_Loading2_FRIEDRICH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_america.png', 'VO_Loading2_FRIEDRICH');
@@ -446,14 +498,66 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_spain.png', 'VO_Loading2_FRIEDRICH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_tonga.png', 'VO_Loading2_FRIEDRICH');
 
+-- === LEADER_FRIEDRICH_ALT ===
+
+-- Default loading screen for friedrich (LEADER_FRIEDRICH_ALT)
+UPDATE LoadingInfo_Leaders
+SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_friedrich.png'
+WHERE LeaderType = 'LEADER_FRIEDRICH_ALT' AND CivilizationTypeOverride IS NULL;
+
+-- Civ-specific loading screens for friedrich (LEADER_FRIEDRICH_ALT)
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_abbasid.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_aksum.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_america.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_ASSYRIA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_assyria.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_GREAT_BRITAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_britain.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_BUGANDA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_buganda.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_BULGARIA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_bulgaria.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_CARTHAGE', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_carthage.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_CHOLA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_chola.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_DAI_VIET', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_dai_viet.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_EGYPT', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_egypt.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_FRENCH_EMPIRE', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_french_empire.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_GREECE', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_greece.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_HAN', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_han.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_HAWAII', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_hawaii.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_ICELAND', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_iceland.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_INCA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_inca.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_KHMER', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_khmer.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MAJAPAHIT', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_majapahit.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MAURYA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_maurya.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MAYA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_maya.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MEIJI', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_meiji.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MEXICO', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_mexico.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MING', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_ming.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MISSISSIPPIAN', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_mississippian.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MONGOLIA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_mongolia.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_MUGHAL', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_mughal.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_NEPAL', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_nepal.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_NORMAN', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_normandy.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_OTTOMANS', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_ottoman.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_PERSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_persia.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_PIRATE_REPUBLIC', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_pirates.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_PRUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_prussia.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_QAJAR', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_qajar.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_QING', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_qing.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_ROME', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_rome.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_RUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_russia.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_SHAWNEE', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_shawnee.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_SIAM', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_siam.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_SILLA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_silla.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_SONGHAI', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_songhai.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_spain.png', 'VO_Loading2_FRIEDRICH_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_FRIEDRICH_ALT', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_FRIEDRICH_ALT', 'fs://game/authentic-leaders/images/loading/lsl_friedrich_tonga.png', 'VO_Loading2_FRIEDRICH_ALT');
+
 -- === LEADER_HARRIET_TUBMAN ===
 
--- Default loading screen for harriet_tubman
+-- Default loading screen for harriet_tubman (LEADER_HARRIET_TUBMAN)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_harriet_tubman.png'
 WHERE LeaderType = 'LEADER_HARRIET_TUBMAN' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for harriet_tubman
+-- Civ-specific loading screens for harriet_tubman (LEADER_HARRIET_TUBMAN)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HARRIET_TUBMAN', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_HARRIET_TUBMAN', 'fs://game/authentic-leaders/images/loading/lsl_harriet_tubman_abbasid.png', 'VO_Loading2_HARRIET_TUBMAN');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HARRIET_TUBMAN', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_HARRIET_TUBMAN', 'fs://game/authentic-leaders/images/loading/lsl_harriet_tubman_aksum.png', 'VO_Loading2_HARRIET_TUBMAN');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HARRIET_TUBMAN', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_HARRIET_TUBMAN', 'fs://game/authentic-leaders/images/loading/lsl_harriet_tubman_america.png', 'VO_Loading2_HARRIET_TUBMAN');
@@ -500,12 +604,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_HATSHEPSUT ===
 
--- Default loading screen for hatshepsut
+-- Default loading screen for hatshepsut (LEADER_HATSHEPSUT)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_hatshepsut.png'
 WHERE LeaderType = 'LEADER_HATSHEPSUT' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for hatshepsut
+-- Civ-specific loading screens for hatshepsut (LEADER_HATSHEPSUT)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HATSHEPSUT', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_HATSHEPSUT', 'fs://game/authentic-leaders/images/loading/lsl_hatshepsut_abbasid.png', 'VO_Loading2_HATSHEPSUT');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HATSHEPSUT', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_HATSHEPSUT', 'fs://game/authentic-leaders/images/loading/lsl_hatshepsut_aksum.png', 'VO_Loading2_HATSHEPSUT');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HATSHEPSUT', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_HATSHEPSUT', 'fs://game/authentic-leaders/images/loading/lsl_hatshepsut_america.png', 'VO_Loading2_HATSHEPSUT');
@@ -552,12 +656,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_HIMIKO ===
 
--- Default loading screen for himiko
+-- Default loading screen for himiko (LEADER_HIMIKO)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_himiko.png'
 WHERE LeaderType = 'LEADER_HIMIKO' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for himiko
+-- Civ-specific loading screens for himiko (LEADER_HIMIKO)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO', 'fs://game/authentic-leaders/images/loading/lsl_himiko_abbasid.png', 'VO_Loading2_HIMIKO');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO', 'fs://game/authentic-leaders/images/loading/lsl_himiko_aksum.png', 'VO_Loading2_HIMIKO');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO', 'fs://game/authentic-leaders/images/loading/lsl_himiko_america.png', 'VO_Loading2_HIMIKO');
@@ -602,14 +706,66 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO', 'fs://game/authentic-leaders/images/loading/lsl_himiko_spain.png', 'VO_Loading2_HIMIKO');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO', 'fs://game/authentic-leaders/images/loading/lsl_himiko_tonga.png', 'VO_Loading2_HIMIKO');
 
+-- === LEADER_HIMIKO_ALT ===
+
+-- Default loading screen for himiko (LEADER_HIMIKO_ALT)
+UPDATE LoadingInfo_Leaders
+SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_himiko.png'
+WHERE LeaderType = 'LEADER_HIMIKO_ALT' AND CivilizationTypeOverride IS NULL;
+
+-- Civ-specific loading screens for himiko (LEADER_HIMIKO_ALT)
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_abbasid.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_aksum.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_america.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_ASSYRIA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_assyria.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_GREAT_BRITAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_britain.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_BUGANDA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_buganda.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_BULGARIA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_bulgaria.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_CARTHAGE', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_carthage.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_CHOLA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_chola.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_DAI_VIET', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_dai_viet.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_EGYPT', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_egypt.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_FRENCH_EMPIRE', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_french_empire.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_GREECE', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_greece.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_HAN', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_han.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_HAWAII', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_hawaii.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_ICELAND', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_iceland.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_INCA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_inca.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_KHMER', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_khmer.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MAJAPAHIT', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_majapahit.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MAURYA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_maurya.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MAYA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_maya.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MEIJI', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_meiji.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MEXICO', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_mexico.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MING', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_ming.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MISSISSIPPIAN', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_mississippian.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MONGOLIA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_mongolia.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_MUGHAL', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_mughal.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_NEPAL', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_nepal.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_NORMAN', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_normandy.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_OTTOMANS', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_ottoman.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_PERSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_persia.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_PIRATE_REPUBLIC', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_pirates.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_PRUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_prussia.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_QAJAR', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_qajar.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_QING', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_qing.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_ROME', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_rome.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_RUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_russia.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_SHAWNEE', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_shawnee.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_SIAM', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_siam.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_SILLA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_silla.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_SONGHAI', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_songhai.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_spain.png', 'VO_Loading2_HIMIKO_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_HIMIKO_ALT', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_HIMIKO_ALT', 'fs://game/authentic-leaders/images/loading/lsl_himiko_tonga.png', 'VO_Loading2_HIMIKO_ALT');
+
 -- === LEADER_IBN_BATTUTA ===
 
--- Default loading screen for ibn_battuta
+-- Default loading screen for ibn_battuta (LEADER_IBN_BATTUTA)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_ibn_battuta.png'
 WHERE LeaderType = 'LEADER_IBN_BATTUTA' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for ibn_battuta
+-- Civ-specific loading screens for ibn_battuta (LEADER_IBN_BATTUTA)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_IBN_BATTUTA', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_IBN_BATTUTA', 'fs://game/authentic-leaders/images/loading/lsl_ibn_battuta_abbasid.png', 'VO_Loading2_IBN_BATTUTA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_IBN_BATTUTA', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_IBN_BATTUTA', 'fs://game/authentic-leaders/images/loading/lsl_ibn_battuta_aksum.png', 'VO_Loading2_IBN_BATTUTA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_IBN_BATTUTA', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_IBN_BATTUTA', 'fs://game/authentic-leaders/images/loading/lsl_ibn_battuta_america.png', 'VO_Loading2_IBN_BATTUTA');
@@ -656,12 +812,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_ISABELLA ===
 
--- Default loading screen for isabella
+-- Default loading screen for isabella (LEADER_ISABELLA)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_isabella.png'
 WHERE LeaderType = 'LEADER_ISABELLA' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for isabella
+-- Civ-specific loading screens for isabella (LEADER_ISABELLA)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ISABELLA', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_ISABELLA', 'fs://game/authentic-leaders/images/loading/lsl_isabella_abbasid.png', 'VO_Loading2_ISABELLA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ISABELLA', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_ISABELLA', 'fs://game/authentic-leaders/images/loading/lsl_isabella_aksum.png', 'VO_Loading2_ISABELLA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ISABELLA', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_ISABELLA', 'fs://game/authentic-leaders/images/loading/lsl_isabella_america.png', 'VO_Loading2_ISABELLA');
@@ -708,12 +864,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_JOSE_RIZAL ===
 
--- Default loading screen for jose_rizal
+-- Default loading screen for jose_rizal (LEADER_JOSE_RIZAL)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_jose_rizal.png'
 WHERE LeaderType = 'LEADER_JOSE_RIZAL' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for jose_rizal
+-- Civ-specific loading screens for jose_rizal (LEADER_JOSE_RIZAL)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_JOSE_RIZAL', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_JOSE_RIZAL', 'fs://game/authentic-leaders/images/loading/lsl_jose_rizal_abbasid.png', 'VO_Loading2_JOSE_RIZAL');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_JOSE_RIZAL', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_JOSE_RIZAL', 'fs://game/authentic-leaders/images/loading/lsl_jose_rizal_aksum.png', 'VO_Loading2_JOSE_RIZAL');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_JOSE_RIZAL', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_JOSE_RIZAL', 'fs://game/authentic-leaders/images/loading/lsl_jose_rizal_america.png', 'VO_Loading2_JOSE_RIZAL');
@@ -760,12 +916,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_LAFAYETTE ===
 
--- Default loading screen for lafayette
+-- Default loading screen for lafayette (LEADER_LAFAYETTE)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_lafayette.png'
 WHERE LeaderType = 'LEADER_LAFAYETTE' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for lafayette
+-- Civ-specific loading screens for lafayette (LEADER_LAFAYETTE)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_LAFAYETTE', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_LAFAYETTE', 'fs://game/authentic-leaders/images/loading/lsl_lafayette_abbasid.png', 'VO_Loading2_LAFAYETTE');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_LAFAYETTE', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_LAFAYETTE', 'fs://game/authentic-leaders/images/loading/lsl_lafayette_aksum.png', 'VO_Loading2_LAFAYETTE');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_LAFAYETTE', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_LAFAYETTE', 'fs://game/authentic-leaders/images/loading/lsl_lafayette_america.png', 'VO_Loading2_LAFAYETTE');
@@ -812,12 +968,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_MACHIAVELLI ===
 
--- Default loading screen for machiavelli
+-- Default loading screen for machiavelli (LEADER_MACHIAVELLI)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_machiavelli.png'
 WHERE LeaderType = 'LEADER_MACHIAVELLI' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for machiavelli
+-- Civ-specific loading screens for machiavelli (LEADER_MACHIAVELLI)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_MACHIAVELLI', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_MACHIAVELLI', 'fs://game/authentic-leaders/images/loading/lsl_machiavelli_abbasid.png', 'VO_Loading2_MACHIAVELLI');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_MACHIAVELLI', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_MACHIAVELLI', 'fs://game/authentic-leaders/images/loading/lsl_machiavelli_aksum.png', 'VO_Loading2_MACHIAVELLI');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_MACHIAVELLI', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_MACHIAVELLI', 'fs://game/authentic-leaders/images/loading/lsl_machiavelli_america.png', 'VO_Loading2_MACHIAVELLI');
@@ -864,12 +1020,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_NAPOLEON ===
 
--- Default loading screen for napoleon
+-- Default loading screen for napoleon (LEADER_NAPOLEON)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_napoleon.png'
 WHERE LeaderType = 'LEADER_NAPOLEON' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for napoleon
+-- Civ-specific loading screens for napoleon (LEADER_NAPOLEON)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_abbasid.png', 'VO_Loading2_NAPOLEON');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_aksum.png', 'VO_Loading2_NAPOLEON');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_america.png', 'VO_Loading2_NAPOLEON');
@@ -914,14 +1070,66 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_spain.png', 'VO_Loading2_NAPOLEON');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_tonga.png', 'VO_Loading2_NAPOLEON');
 
+-- === LEADER_NAPOLEON_ALT ===
+
+-- Default loading screen for napoleon (LEADER_NAPOLEON_ALT)
+UPDATE LoadingInfo_Leaders
+SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_napoleon.png'
+WHERE LeaderType = 'LEADER_NAPOLEON_ALT' AND CivilizationTypeOverride IS NULL;
+
+-- Civ-specific loading screens for napoleon (LEADER_NAPOLEON_ALT)
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_abbasid.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_aksum.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_america.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_ASSYRIA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_assyria.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_GREAT_BRITAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_britain.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_BUGANDA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_buganda.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_BULGARIA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_bulgaria.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_CARTHAGE', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_carthage.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_CHOLA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_chola.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_DAI_VIET', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_dai_viet.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_EGYPT', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_egypt.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_FRENCH_EMPIRE', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_french_empire.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_GREECE', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_greece.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_HAN', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_han.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_HAWAII', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_hawaii.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_ICELAND', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_iceland.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_INCA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_inca.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_KHMER', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_khmer.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MAJAPAHIT', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_majapahit.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MAURYA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_maurya.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MAYA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_maya.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MEIJI', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_meiji.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MEXICO', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_mexico.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MING', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_ming.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MISSISSIPPIAN', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_mississippian.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MONGOLIA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_mongolia.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_MUGHAL', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_mughal.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_NEPAL', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_nepal.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_NORMAN', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_normandy.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_OTTOMANS', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_ottoman.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_PERSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_persia.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_PIRATE_REPUBLIC', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_pirates.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_PRUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_prussia.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_QAJAR', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_qajar.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_QING', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_qing.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_ROME', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_rome.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_RUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_russia.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_SHAWNEE', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_shawnee.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_SIAM', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_siam.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_SILLA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_silla.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_SONGHAI', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_songhai.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_spain.png', 'VO_Loading2_NAPOLEON_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_NAPOLEON_ALT', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_NAPOLEON_ALT', 'fs://game/authentic-leaders/images/loading/lsl_napoleon_tonga.png', 'VO_Loading2_NAPOLEON_ALT');
+
 -- === LEADER_PACHACUTI ===
 
--- Default loading screen for pachacuti
+-- Default loading screen for pachacuti (LEADER_PACHACUTI)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_pachacuti.png'
 WHERE LeaderType = 'LEADER_PACHACUTI' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for pachacuti
+-- Civ-specific loading screens for pachacuti (LEADER_PACHACUTI)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_PACHACUTI', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_PACHACUTI', 'fs://game/authentic-leaders/images/loading/lsl_pachacuti_abbasid.png', 'VO_Loading2_PACHACUTI');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_PACHACUTI', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_PACHACUTI', 'fs://game/authentic-leaders/images/loading/lsl_pachacuti_aksum.png', 'VO_Loading2_PACHACUTI');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_PACHACUTI', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_PACHACUTI', 'fs://game/authentic-leaders/images/loading/lsl_pachacuti_america.png', 'VO_Loading2_PACHACUTI');
@@ -968,12 +1176,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_TECUMSEH ===
 
--- Default loading screen for tecumseh
+-- Default loading screen for tecumseh (LEADER_TECUMSEH)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_tecumseh.png'
 WHERE LeaderType = 'LEADER_TECUMSEH' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for tecumseh
+-- Civ-specific loading screens for tecumseh (LEADER_TECUMSEH)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_TECUMSEH', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_TECUMSEH', 'fs://game/authentic-leaders/images/loading/lsl_tecumseh_abbasid.png', 'VO_Loading2_TECUMSEH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_TECUMSEH', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_TECUMSEH', 'fs://game/authentic-leaders/images/loading/lsl_tecumseh_aksum.png', 'VO_Loading2_TECUMSEH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_TECUMSEH', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_TECUMSEH', 'fs://game/authentic-leaders/images/loading/lsl_tecumseh_america.png', 'VO_Loading2_TECUMSEH');
@@ -1020,12 +1228,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_TRUNG_TRAC ===
 
--- Default loading screen for trung_trac
+-- Default loading screen for trung_trac (LEADER_TRUNG_TRAC)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_trung_trac.png'
 WHERE LeaderType = 'LEADER_TRUNG_TRAC' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for trung_trac
+-- Civ-specific loading screens for trung_trac (LEADER_TRUNG_TRAC)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_TRUNG_TRAC', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_TRUNG_TRAC', 'fs://game/authentic-leaders/images/loading/lsl_trung_trac_abbasid.png', 'VO_Loading2_TRUNG_TRAC');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_TRUNG_TRAC', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_TRUNG_TRAC', 'fs://game/authentic-leaders/images/loading/lsl_trung_trac_aksum.png', 'VO_Loading2_TRUNG_TRAC');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_TRUNG_TRAC', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_TRUNG_TRAC', 'fs://game/authentic-leaders/images/loading/lsl_trung_trac_america.png', 'VO_Loading2_TRUNG_TRAC');
@@ -1072,12 +1280,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_XERXES ===
 
--- Default loading screen for xerxes
+-- Default loading screen for xerxes (LEADER_XERXES)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_xerxes.png'
 WHERE LeaderType = 'LEADER_XERXES' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for xerxes
+-- Civ-specific loading screens for xerxes (LEADER_XERXES)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_abbasid.png', 'VO_Loading2_XERXES');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_aksum.png', 'VO_Loading2_XERXES');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_america.png', 'VO_Loading2_XERXES');
@@ -1122,14 +1330,66 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_spain.png', 'VO_Loading2_XERXES');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_tonga.png', 'VO_Loading2_XERXES');
 
+-- === LEADER_XERXES_ALT ===
+
+-- Default loading screen for xerxes (LEADER_XERXES_ALT)
+UPDATE LoadingInfo_Leaders
+SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_xerxes.png'
+WHERE LeaderType = 'LEADER_XERXES_ALT' AND CivilizationTypeOverride IS NULL;
+
+-- Civ-specific loading screens for xerxes (LEADER_XERXES_ALT)
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_abbasid.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_aksum.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_america.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_ASSYRIA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_assyria.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_GREAT_BRITAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_britain.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_BUGANDA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_buganda.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_BULGARIA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_bulgaria.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_CARTHAGE', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_carthage.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_CHOLA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_chola.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_DAI_VIET', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_dai_viet.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_EGYPT', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_egypt.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_FRENCH_EMPIRE', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_french_empire.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_GREECE', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_greece.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_HAN', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_han.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_HAWAII', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_hawaii.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_ICELAND', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_iceland.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_INCA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_inca.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_KHMER', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_khmer.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MAJAPAHIT', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_majapahit.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MAURYA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_maurya.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MAYA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_maya.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MEIJI', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_meiji.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MEXICO', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_mexico.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MING', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_ming.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MISSISSIPPIAN', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_mississippian.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MONGOLIA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_mongolia.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_MUGHAL', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_mughal.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_NEPAL', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_nepal.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_NORMAN', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_normandy.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_OTTOMANS', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_ottoman.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_PERSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_persia.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_PIRATE_REPUBLIC', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_pirates.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_PRUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_prussia.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_QAJAR', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_qajar.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_QING', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_qing.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_ROME', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_rome.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_RUSSIA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_russia.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_SHAWNEE', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_shawnee.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_SIAM', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_siam.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_SILLA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_silla.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_SONGHAI', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_songhai.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_SPAIN', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_spain.png', 'VO_Loading2_XERXES_ALT');
+INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_XERXES_ALT', 'CIVILIZATION_TONGA', 'LOC_LOADING_LEADER_INTRO_TEXT_XERXES_ALT', 'fs://game/authentic-leaders/images/loading/lsl_xerxes_tonga.png', 'VO_Loading2_XERXES_ALT');
+
 -- === LEADER_ADA_LOVELACE ===
 
--- Default loading screen for ada_lovelace
+-- Default loading screen for ada_lovelace (LEADER_ADA_LOVELACE)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_ada_lovelace.png'
 WHERE LeaderType = 'LEADER_ADA_LOVELACE' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for ada_lovelace
+-- Civ-specific loading screens for ada_lovelace (LEADER_ADA_LOVELACE)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ADA_LOVELACE', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_ADA_LOVELACE', 'fs://game/authentic-leaders/images/loading/lsl_ada_lovelace_abbasid.png', 'VO_Loading2_ADA_LOVELACE');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ADA_LOVELACE', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_ADA_LOVELACE', 'fs://game/authentic-leaders/images/loading/lsl_ada_lovelace_aksum.png', 'VO_Loading2_ADA_LOVELACE');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_ADA_LOVELACE', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_ADA_LOVELACE', 'fs://game/authentic-leaders/images/loading/lsl_ada_lovelace_america.png', 'VO_Loading2_ADA_LOVELACE');
@@ -1176,12 +1436,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_BOLIVAR ===
 
--- Default loading screen for simon_bolivar
+-- Default loading screen for simon_bolivar (LEADER_BOLIVAR)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_simon_bolivar.png'
 WHERE LeaderType = 'LEADER_BOLIVAR' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for simon_bolivar
+-- Civ-specific loading screens for simon_bolivar (LEADER_BOLIVAR)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_BOLIVAR', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_BOLIVAR', 'fs://game/authentic-leaders/images/loading/lsl_simon_bolivar_abbasid.png', 'VO_Loading2_BOLIVAR');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_BOLIVAR', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_BOLIVAR', 'fs://game/authentic-leaders/images/loading/lsl_simon_bolivar_aksum.png', 'VO_Loading2_BOLIVAR');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_BOLIVAR', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_BOLIVAR', 'fs://game/authentic-leaders/images/loading/lsl_simon_bolivar_america.png', 'VO_Loading2_BOLIVAR');
@@ -1228,12 +1488,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_GENGHIS_KHAN ===
 
--- Default loading screen for genghis_khan
+-- Default loading screen for genghis_khan (LEADER_GENGHIS_KHAN)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_genghis_khan.png'
 WHERE LeaderType = 'LEADER_GENGHIS_KHAN' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for genghis_khan
+-- Civ-specific loading screens for genghis_khan (LEADER_GENGHIS_KHAN)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_GENGHIS_KHAN', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_GENGHIS_KHAN', 'fs://game/authentic-leaders/images/loading/lsl_genghis_khan_abbasid.png', 'VO_Loading2_GENGHIS_KHAN');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_GENGHIS_KHAN', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_GENGHIS_KHAN', 'fs://game/authentic-leaders/images/loading/lsl_genghis_khan_aksum.png', 'VO_Loading2_GENGHIS_KHAN');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_GENGHIS_KHAN', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_GENGHIS_KHAN', 'fs://game/authentic-leaders/images/loading/lsl_genghis_khan_america.png', 'VO_Loading2_GENGHIS_KHAN');
@@ -1280,12 +1540,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_LAKSHMIBAI ===
 
--- Default loading screen for lakshmibai
+-- Default loading screen for lakshmibai (LEADER_LAKSHMIBAI)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_lakshmibai.png'
 WHERE LeaderType = 'LEADER_LAKSHMIBAI' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for lakshmibai
+-- Civ-specific loading screens for lakshmibai (LEADER_LAKSHMIBAI)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_LAKSHMIBAI', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_LAKSHMIBAI', 'fs://game/authentic-leaders/images/loading/lsl_lakshmibai_abbasid.png', 'VO_Loading2_LAKSHMIBAI');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_LAKSHMIBAI', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_LAKSHMIBAI', 'fs://game/authentic-leaders/images/loading/lsl_lakshmibai_aksum.png', 'VO_Loading2_LAKSHMIBAI');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_LAKSHMIBAI', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_LAKSHMIBAI', 'fs://game/authentic-leaders/images/loading/lsl_lakshmibai_america.png', 'VO_Loading2_LAKSHMIBAI');
@@ -1332,12 +1592,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_EDWARD_TEACH ===
 
--- Default loading screen for edward_teach
+-- Default loading screen for edward_teach (LEADER_EDWARD_TEACH)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_edward_teach.png'
 WHERE LeaderType = 'LEADER_EDWARD_TEACH' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for edward_teach
+-- Civ-specific loading screens for edward_teach (LEADER_EDWARD_TEACH)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_EDWARD_TEACH', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_EDWARD_TEACH', 'fs://game/authentic-leaders/images/loading/lsl_edward_teach_abbasid.png', 'VO_Loading2_EDWARD_TEACH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_EDWARD_TEACH', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_EDWARD_TEACH', 'fs://game/authentic-leaders/images/loading/lsl_edward_teach_aksum.png', 'VO_Loading2_EDWARD_TEACH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_EDWARD_TEACH', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_EDWARD_TEACH', 'fs://game/authentic-leaders/images/loading/lsl_edward_teach_america.png', 'VO_Loading2_EDWARD_TEACH');
@@ -1384,12 +1644,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_SAYYIDA_AL_HURRA ===
 
--- Default loading screen for sayyida_al_hurra
+-- Default loading screen for sayyida_al_hurra (LEADER_SAYYIDA_AL_HURRA)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_sayyida_al_hurra.png'
 WHERE LeaderType = 'LEADER_SAYYIDA_AL_HURRA' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for sayyida_al_hurra
+-- Civ-specific loading screens for sayyida_al_hurra (LEADER_SAYYIDA_AL_HURRA)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_SAYYIDA_AL_HURRA', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_SAYYIDA_AL_HURRA', 'fs://game/authentic-leaders/images/loading/lsl_sayyida_al_hurra_abbasid.png', 'VO_Loading2_SAYYIDA_AL_HURRA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_SAYYIDA_AL_HURRA', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_SAYYIDA_AL_HURRA', 'fs://game/authentic-leaders/images/loading/lsl_sayyida_al_hurra_aksum.png', 'VO_Loading2_SAYYIDA_AL_HURRA');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_SAYYIDA_AL_HURRA', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_SAYYIDA_AL_HURRA', 'fs://game/authentic-leaders/images/loading/lsl_sayyida_al_hurra_america.png', 'VO_Loading2_SAYYIDA_AL_HURRA');
@@ -1436,12 +1696,12 @@ INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride,
 
 -- === LEADER_GILGAMESH ===
 
--- Default loading screen for gilgamesh
+-- Default loading screen for gilgamesh (LEADER_GILGAMESH)
 UPDATE LoadingInfo_Leaders
 SET LeaderImage = 'fs://game/authentic-leaders/images/loading/lsl_gilgamesh.png'
 WHERE LeaderType = 'LEADER_GILGAMESH' AND CivilizationTypeOverride IS NULL;
 
--- Civ-specific loading screens for gilgamesh
+-- Civ-specific loading screens for gilgamesh (LEADER_GILGAMESH)
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_GILGAMESH', 'CIVILIZATION_ABBASID', 'LOC_LOADING_LEADER_INTRO_TEXT_GILGAMESH', 'fs://game/authentic-leaders/images/loading/lsl_gilgamesh_abbasid.png', 'VO_Loading2_GILGAMESH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_GILGAMESH', 'CIVILIZATION_AKSUM', 'LOC_LOADING_LEADER_INTRO_TEXT_GILGAMESH', 'fs://game/authentic-leaders/images/loading/lsl_gilgamesh_aksum.png', 'VO_Loading2_GILGAMESH');
 INSERT OR IGNORE INTO LoadingInfo_Leaders (LeaderType, CivilizationTypeOverride, LeaderText, LeaderImage, Audio) VALUES ('LEADER_GILGAMESH', 'CIVILIZATION_AMERICA', 'LOC_LOADING_LEADER_INTRO_TEXT_GILGAMESH', 'fs://game/authentic-leaders/images/loading/lsl_gilgamesh_america.png', 'VO_Loading2_GILGAMESH');

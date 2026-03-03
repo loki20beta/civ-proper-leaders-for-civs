@@ -10,8 +10,10 @@ Uses the MediaWiki API at civilization.fandom.com to resolve image URLs.
 """
 
 import argparse
+import glob
 import json
 import os
+import struct
 import sys
 import time
 import urllib.parse
@@ -24,6 +26,37 @@ ASSETS_DIR = os.path.join(PROJECT_ROOT, "assets")
 
 WIKI_API = "https://civilization.fandom.com/api.php"
 USER_AGENT = "Civ7AuthenticLeadersMod/1.0 (asset-fetcher)"
+
+# Game install path for BLP texture extraction (macOS)
+GAME_DLC_DIR = os.path.expanduser(
+    "~/Library/Application Support/Steam/steamapps/common/"
+    "Sid Meier's Civilization VII/CivilizationVII.app/"
+    "Contents/Resources/DLC"
+)
+
+# CIVBIG format: 144-byte header + BC7-compressed texture data
+CIVBIG_HEADER_SIZE = 144
+LOADING_SCREEN_WIDTH = 800
+LOADING_SCREEN_HEIGHT = 1060
+# BC7: 4x4 pixel blocks, 16 bytes each
+BC7_DATA_SIZE = (LOADING_SCREEN_WIDTH // 4) * (LOADING_SCREEN_HEIGHT // 4) * 16  # 848000
+
+# Expected total file size (CIVBIG has mipmaps etc. after the main texture)
+CIVBIG_EXPECTED_SIZE = 1132544
+
+# Texture names that differ from icon_key
+TEXTURE_NAME_OVERRIDES = {
+    "simon_bolivar": "bolivar",
+}
+
+# Persona alt texture names: persona_type → texture suffix (after TEXTURE_lsl_)
+PERSONA_ALT_TEXTURES = {
+    "LEADER_ASHOKA_ALT": "ashoka_alt",
+    "LEADER_HIMIKO_ALT": "himiko_alt",
+    "LEADER_FRIEDRICH_ALT": "friedrich_alt",
+    "LEADER_XERXES_ALT": "xerxes_alt",
+    "LEADER_NAPOLEON_ALT": "napoleon_alt",
+}
 
 # Wiki filenames that don't follow the standard "{config_name} Background (Civ7)" pattern.
 CIV_WIKI_NAMES = {
@@ -51,16 +84,11 @@ LEADER_WIKI_NAMES = {
 # Wiki filenames for persona variants. Maps persona type → wiki filename.
 # These get saved as assets/leaders/{icon_key}/{persona_key}.png alongside reference.png.
 PERSONA_WIKI_NAMES = {
-    "LEADER_ASHOKA_WORLD_RENOUNCER": "Ashoka, World Renouncer three-quarter length (Civ7).png",
-    "LEADER_ASHOKA_WORLD_CONQUEROR": "Ashoka, World Conqueror three-quarter length (Civ7).png",
-    "LEADER_FRIEDRICH_OBLIQUE": "Oblique three-quarter length (Civ7).png",
-    "LEADER_FRIEDRICH_BAROQUE": "Baroque three-quarter length (Civ7).png",
-    "LEADER_HIMIKO_QUEEN": "Wa three-quarter length (Civ7).png",
-    "LEADER_HIMIKO_SHAMAN": "Shaman three-quarter length (Civ7).png",
-    "LEADER_NAPOLEON_EMPEROR": "Napoleon (Emperor) three-quarter length (Civ7).png",
-    "LEADER_NAPOLEON_REVOLUTIONARY": "Napoleon (Revolutionary) three-quarter length (Civ7).png",
-    "LEADER_XERXES_KING": "Xerxes King three-quarter length (Civ7).png",
-    "LEADER_XERXES_ACHAEMENID": "Xerxes Achaemenid three-quarter length (Civ7).png",
+    "LEADER_ASHOKA_ALT": "Ashoka, World Conqueror three-quarter length (Civ7).png",
+    "LEADER_FRIEDRICH_ALT": "Baroque three-quarter length (Civ7).png",
+    "LEADER_HIMIKO_ALT": "Shaman three-quarter length (Civ7).png",
+    "LEADER_NAPOLEON_ALT": "Napoleon (Revolutionary) three-quarter length (Civ7).png",
+    "LEADER_XERXES_ALT": "Xerxes King three-quarter length (Civ7).png",
 }
 
 # Portrait icon overrides for non-standard wiki naming.
@@ -349,6 +377,121 @@ def fetch_assets(candidates, asset_type, dry_run=False, force=False):
     return downloaded, skipped, failed
 
 
+def find_texture_files():
+    """Scan DLC directories for TEXTURE_lsl_* files of the expected size.
+
+    Returns dict mapping texture suffix → full file path.
+    E.g. {"augustus": "/path/to/TEXTURE_lsl_augustus", ...}
+    """
+    pattern = os.path.join(
+        GAME_DLC_DIR, "*-shell", "Platforms", "Mac", "BLPs",
+        "SHARED_DATA", "TEXTURE_lsl_*"
+    )
+    found = {}
+    for path in glob.glob(pattern):
+        size = os.path.getsize(path)
+        if size != CIVBIG_EXPECTED_SIZE:
+            continue
+        name = os.path.basename(path)  # TEXTURE_lsl_augustus
+        suffix = name[len("TEXTURE_lsl_"):]  # augustus
+        found[suffix] = path
+    return found
+
+
+def decode_civbig(file_path):
+    """Decode a CIVBIG file to an RGBA PIL Image.
+
+    Format: 144-byte header + BC7-compressed texture data.
+    BC7 decodes to BGRA; we swap to RGBA.
+    """
+    import texture2ddecoder
+    from PIL import Image
+
+    with open(file_path, "rb") as f:
+        f.seek(CIVBIG_HEADER_SIZE)
+        bc7_data = f.read(BC7_DATA_SIZE)
+
+    decoded = texture2ddecoder.decode_bc7(
+        bc7_data, LOADING_SCREEN_WIDTH, LOADING_SCREEN_HEIGHT
+    )
+    img = Image.frombytes(
+        "RGBA", (LOADING_SCREEN_WIDTH, LOADING_SCREEN_HEIGHT), decoded
+    )
+    # BC7 decodes as BGRA — swap R and B channels
+    r, g, b, a = img.split()
+    return Image.merge("RGBA", (b, g, r, a))
+
+
+def extract_loading_originals(config, force=False):
+    """Extract original loading screen images from game BLP files.
+
+    Saves to assets/leaders/{icon_key}/loading_original.png
+    and assets/leaders/{icon_key}/{persona_key}_loading_original.png for alts.
+    """
+    textures = find_texture_files()
+    if not textures:
+        print(f"ERROR: No texture files found in {GAME_DLC_DIR}")
+        print("  Make sure the game is installed.")
+        return
+
+    print(f"Found {len(textures)} loading screen textures in game files\n")
+
+    extracted = 0
+    skipped = 0
+    missing = []
+
+    for leader in config["leaders"]:
+        icon_key = leader["icon_key"]
+        tex_name = TEXTURE_NAME_OVERRIDES.get(icon_key, icon_key)
+
+        # Base loading screen
+        dest = os.path.join(ASSETS_DIR, "leaders", icon_key, "loading_original.png")
+        if os.path.isfile(dest) and not force:
+            print(f"  SKIP  {icon_key} (already exists)")
+            skipped += 1
+        elif tex_name in textures:
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            img = decode_civbig(textures[tex_name])
+            img.save(dest, "PNG")
+            size_kb = os.path.getsize(dest) / 1024
+            print(f"  OK    {icon_key} ({size_kb:.0f} KB)")
+            extracted += 1
+        else:
+            print(f"  MISS  {icon_key} (no TEXTURE_lsl_{tex_name})")
+            missing.append(icon_key)
+
+        # Persona alt loading screens
+        for persona in leader.get("personas", []):
+            ptype = persona["type"]
+            if ptype not in PERSONA_ALT_TEXTURES:
+                continue
+            alt_tex = PERSONA_ALT_TEXTURES[ptype]
+            pkey = persona_key(leader["type"], ptype)
+            dest = os.path.join(
+                ASSETS_DIR, "leaders", icon_key,
+                f"{pkey}_loading_original.png"
+            )
+            display = f"{icon_key}/{pkey}"
+            if os.path.isfile(dest) and not force:
+                print(f"  SKIP  {display} (already exists)")
+                skipped += 1
+            elif alt_tex in textures:
+                os.makedirs(os.path.dirname(dest), exist_ok=True)
+                img = decode_civbig(textures[alt_tex])
+                img.save(dest, "PNG")
+                size_kb = os.path.getsize(dest) / 1024
+                print(f"  OK    {display} ({size_kb:.0f} KB)")
+                extracted += 1
+            else:
+                print(f"  MISS  {display} (no TEXTURE_lsl_{alt_tex})")
+                missing.append(display)
+
+    print(f"\nLoading originals: extracted {extracted}, skipped {skipped}, "
+          f"missing {len(missing)}")
+    if missing:
+        print(f"  Not found: {', '.join(missing)}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Fetch reference assets from the Civ7 wiki"
@@ -356,11 +499,13 @@ def main():
     parser.add_argument("--civs", action="store_true", help="Download civ backgrounds only")
     parser.add_argument("--leaders", action="store_true", help="Download leader portraits only")
     parser.add_argument("--portraits", action="store_true", help="Download leader portrait icons only")
+    parser.add_argument("--loading-originals", action="store_true",
+                        help="Extract original loading screens from game BLP files")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be downloaded")
     parser.add_argument("--force", action="store_true", help="Re-download existing files")
     args = parser.parse_args()
 
-    if not args.civs and not args.leaders and not args.portraits:
+    if not args.civs and not args.leaders and not args.portraits and not args.loading_originals:
         args.civs = True
         args.leaders = True
         args.portraits = True
@@ -382,6 +527,9 @@ def main():
     if args.portraits:
         portrait_candidates = build_portrait_candidates(config)
         fetch_assets(portrait_candidates, "Portrait icons", args.dry_run, args.force)
+
+    if args.loading_originals:
+        extract_loading_originals(config, force=args.force)
 
     if not args.dry_run:
         print("\nRun 'python3 scripts/generate-manifest.py' to update the manifest.")

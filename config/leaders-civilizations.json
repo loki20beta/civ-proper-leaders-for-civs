@@ -85,8 +85,7 @@
       "attributes": ["Diplomatic", "Expansionist"],
       "dlc": null,
       "personas": [
-        { "type": "LEADER_ASHOKA_WORLD_RENOUNCER", "name": "Ashoka, World Renouncer", "dlc": null },
-        { "type": "LEADER_ASHOKA_WORLD_CONQUEROR", "name": "Ashoka, World Conqueror", "dlc": "founders-pack" }
+        { "type": "LEADER_ASHOKA_ALT", "name": "Ashoka Alt", "dlc": "founders-pack" }
       ],
       "guaranteed_civs": {
         "AGE_EXPLORATION": ["CIVILIZATION_CHOLA"],
@@ -160,8 +159,7 @@
       "attributes": ["Militaristic", "Scientific"],
       "dlc": "deluxe-pack",
       "personas": [
-        { "type": "LEADER_FRIEDRICH_OBLIQUE", "name": "Friedrich, Oblique", "dlc": "deluxe-pack" },
-        { "type": "LEADER_FRIEDRICH_BAROQUE", "name": "Friedrich, Baroque", "dlc": "deluxe-pack" }
+        { "type": "LEADER_FRIEDRICH_ALT", "name": "Friedrich Alt", "dlc": "deluxe-pack" }
       ],
       "guaranteed_civs": {
         "AGE_EXPLORATION": ["CIVILIZATION_NORMAN"],
@@ -199,8 +197,7 @@
       "attributes": ["Diplomatic", "Scientific"],
       "dlc": null,
       "personas": [
-        { "type": "LEADER_HIMIKO_QUEEN", "name": "Himiko, Queen of Wa", "dlc": null },
-        { "type": "LEADER_HIMIKO_SHAMAN", "name": "Himiko, High Shaman", "dlc": "founders-pack" }
+        { "type": "LEADER_HIMIKO_ALT", "name": "Himiko Alt", "dlc": "founders-pack" }
       ],
       "guaranteed_civs": {
         "AGE_EXPLORATION": ["CIVILIZATION_MAJAPAHIT", "CIVILIZATION_HAWAIIAN"],
@@ -274,8 +271,7 @@
       "attributes": ["Militaristic"],
       "dlc": "napoleon-pack",
       "personas": [
-        { "type": "LEADER_NAPOLEON_EMPEROR", "name": "Napoleon, Emperor", "dlc": "napoleon-pack" },
-        { "type": "LEADER_NAPOLEON_REVOLUTIONARY", "name": "Napoleon, Revolutionary", "dlc": "napoleon-pack" }
+        { "type": "LEADER_NAPOLEON_ALT", "name": "Napoleon Alt", "dlc": "napoleon-pack" }
       ],
       "guaranteed_civs": {
         "AGE_EXPLORATION": ["CIVILIZATION_NORMAN", "CIVILIZATION_SPANISH"],
@@ -325,8 +321,7 @@
       "attributes": ["Economic", "Militaristic"],
       "dlc": null,
       "personas": [
-        { "type": "LEADER_XERXES_KING", "name": "Xerxes, King of Kings", "dlc": null },
-        { "type": "LEADER_XERXES_ACHAEMENID", "name": "Xerxes, the Achaemenid", "dlc": "deluxe-pack" }
+        { "type": "LEADER_XERXES_ALT", "name": "Xerxes Alt", "dlc": "deluxe-pack" }
       ],
       "guaranteed_civs": {
         "AGE_EXPLORATION": ["CIVILIZATION_ABBASID", "CIVILIZATION_MONGOLIAN"],
