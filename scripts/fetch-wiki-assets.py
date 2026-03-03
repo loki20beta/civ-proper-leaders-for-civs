@@ -4,6 +4,7 @@
 Downloads:
   - Civilization backgrounds → assets/civilizations/{civ_key}/background.png
   - Leader three-quarter portraits → assets/leaders/{icon_key}/reference.png
+  - Leader portrait icons → assets/leaders/{icon_key}/portrait_{mood}.png
 
 Uses the MediaWiki API at civilization.fandom.com to resolve image URLs.
 """
@@ -61,6 +62,70 @@ PERSONA_WIKI_NAMES = {
     "LEADER_XERXES_KING": "Xerxes King three-quarter length (Civ7).png",
     "LEADER_XERXES_ACHAEMENID": "Xerxes Achaemenid three-quarter length (Civ7).png",
 }
+
+# Portrait icon overrides for non-standard wiki naming.
+# Maps icon_key → {mood: [candidate_filenames]}.
+# Leaders not in this dict use standard: "{config_name} portrait {mood} (Civ7).png"
+PORTRAIT_WIKI_NAMES = {
+    "ada_lovelace": {
+        "neutral": ["Ada portrait neutral 256 (Civ7).png", "Ada portrait neutral (Civ7).png"],
+        "happy": ["Ada portrait happy (Civ7).png"],
+        "angry": ["Ada portrait angry (Civ7).png"],
+    },
+    "catherine": {
+        "neutral": ["Catherine head portrait (neutral) (Civ7).png"],
+        "happy": ["Catherine head portrait (happy) (Civ7).png"],
+        "angry": ["Catherine head portrait (angry) (Civ7).png"],
+    },
+    "genghis_khan": {
+        "neutral": ["Genghis portrait neutral (Civ7).png"],
+        "happy": ["Genghis portrait happy (Civ7).png"],
+        "angry": ["Genghis portrait angry (Civ7).png"],
+    },
+    "harriet_tubman": {
+        "neutral": ["Harriet portrait neutral (Civ7).png"],
+        "happy": ["Harriet portrait happy (Civ7).png"],
+        "angry": ["Harriet portrait angry (Civ7).png"],
+    },
+    "jose_rizal": {
+        "neutral": ["José portrait neutral (Civ7).png"],
+        "happy": ["José portrait happy (Civ7).png"],
+        "angry": ["José portrait angry (Civ7).png"],
+    },
+    "simon_bolivar": {
+        "neutral": ["Simón portrait neutral (Civ7).png"],
+        "happy": ["Simón portrait happy (Civ7).png"],
+        "angry": ["Simón portrait angry (Civ7).png"],
+    },
+    # Persona-only leaders: use first persona's portrait as base
+    "ashoka": {
+        "neutral": ["Ashoka, World Conqueror portrait neutral (Civ7).png"],
+        "happy": ["Ashoka, World Conqueror portrait happy (Civ7).png"],
+        "angry": ["Ashoka, World Conqueror portrait angry (Civ7).png"],
+    },
+    "friedrich": {
+        "neutral": ["Friedrich (Oblique) portrait neutral (Civ7).png"],
+        "happy": ["Friedrich (Oblique) portrait happy (Civ7).png"],
+        "angry": ["Friedrich (Oblique) portrait angry (Civ7).png"],
+    },
+    "himiko": {
+        "neutral": ["Himiko Queen portrait neutral (Civ7).png"],
+        "happy": ["Himiko Queen portrait happy (Civ7).png"],
+        "angry": ["Himiko Queen portrait angry (Civ7).png"],
+    },
+    "napoleon": {
+        "neutral": ["Napoleon Emperor portrait neutral (Civ7).png"],
+        "happy": ["Napoleon Emperor portrait happy (Civ7).png"],
+        "angry": ["Napoleon Emperor portrait angry (Civ7).png"],
+    },
+    "xerxes": {
+        "neutral": ["Xerxes Achaemenid portrait neutral (Civ7).png"],
+        "happy": ["Xerxes Achaemenid portrait happy (Civ7).png"],
+        "angry": ["Xerxes Achaemenid portrait angry (Civ7).png"],
+    },
+}
+
+PORTRAIT_MOODS = ["neutral", "happy", "angry"]
 
 
 def load_config():
@@ -190,6 +255,34 @@ def build_persona_candidates(config):
     return candidates
 
 
+def build_portrait_candidates(config):
+    """Build candidate wiki filenames for leader portrait icons.
+
+    Downloads neutral, happy, and angry portrait icons used for in-game icons.
+    Returns list of (display_key, dest_path, [candidate_filenames]).
+    """
+    candidates = []
+    for leader in config["leaders"]:
+        icon_key = leader["icon_key"]
+        name = leader["name"]
+        overrides = PORTRAIT_WIKI_NAMES.get(icon_key, {})
+
+        for mood in PORTRAIT_MOODS:
+            dest = os.path.join(ASSETS_DIR, "leaders", icon_key, f"portrait_{mood}.png")
+            display = f"{icon_key}/portrait_{mood}"
+
+            # Start with override filenames if any
+            filenames = list(overrides.get(mood, []))
+
+            # For neutral, try 256 variant first, then standard
+            if mood == "neutral":
+                filenames.append(f"{name} portrait neutral 256 (Civ7).png")
+            filenames.append(f"{name} portrait {mood} (Civ7).png")
+
+            candidates.append((display, dest, filenames))
+    return candidates
+
+
 def fetch_assets(candidates, asset_type, dry_run=False, force=False):
     """Resolve wiki URLs and download assets for a list of candidates.
 
@@ -262,13 +355,15 @@ def main():
     )
     parser.add_argument("--civs", action="store_true", help="Download civ backgrounds only")
     parser.add_argument("--leaders", action="store_true", help="Download leader portraits only")
+    parser.add_argument("--portraits", action="store_true", help="Download leader portrait icons only")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be downloaded")
     parser.add_argument("--force", action="store_true", help="Re-download existing files")
     args = parser.parse_args()
 
-    if not args.civs and not args.leaders:
+    if not args.civs and not args.leaders and not args.portraits:
         args.civs = True
         args.leaders = True
+        args.portraits = True
 
     config = load_config()
 
@@ -283,6 +378,10 @@ def main():
         persona_candidates = build_persona_candidates(config)
         if persona_candidates:
             fetch_assets(persona_candidates, "Persona variants", args.dry_run, args.force)
+
+    if args.portraits:
+        portrait_candidates = build_portrait_candidates(config)
+        fetch_assets(portrait_candidates, "Portrait icons", args.dry_run, args.force)
 
     if not args.dry_run:
         print("\nRun 'python3 scripts/generate-manifest.py' to update the manifest.")

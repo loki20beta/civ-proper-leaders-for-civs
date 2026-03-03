@@ -346,7 +346,7 @@
       }
     },
     {
-      "type": "LEADER_SIMON_BOLIVAR",
+      "type": "LEADER_BOLIVAR",
       "name": "Simon Bolivar",
       "icon_key": "simon_bolivar",
       "attributes": ["Militaristic", "Diplomatic"],
