@@ -4,7 +4,7 @@
   <Properties>
     <Name>Authentic Leaders</Name>
     <Description>Replaces leader loading screen images and icons with civilization-specific artwork for a more historically authentic experience.</Description>
-    <Authors>Custom</Authors>
+    <Authors>loki20beta</Authors>
     <AffectsSavedGames>0</AffectsSavedGames>
     <ShowInBrowser>1</ShowInBrowser>
     <EnabledByDefault>1</EnabledByDefault>
@@ -47,11 +47,19 @@
           <Item>icons/ashoka/lp_circ_ashoka_128.png</Item>
           <Item>icons/ashoka/lp_circ_ashoka_256.png</Item>
           <Item>icons/ashoka/lp_circ_ashoka_64.png</Item>
+          <Item>icons/ashoka/lp_circ_ashoka_alt_128.png</Item>
+          <Item>icons/ashoka/lp_circ_ashoka_alt_256.png</Item>
+          <Item>icons/ashoka/lp_circ_ashoka_alt_64.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_128.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_128_a.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_128_h.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_256.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_64.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_128.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_128_a.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_128_h.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_256.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_64.png</Item>
           <Item>icons/augustus/lp_circ_augustus_128.png</Item>
           <Item>icons/augustus/lp_circ_augustus_256.png</Item>
           <Item>icons/augustus/lp_circ_augustus_64.png</Item>
@@ -103,11 +111,19 @@
           <Item>icons/friedrich/lp_circ_friedrich_128.png</Item>
           <Item>icons/friedrich/lp_circ_friedrich_256.png</Item>
           <Item>icons/friedrich/lp_circ_friedrich_64.png</Item>
+          <Item>icons/friedrich/lp_circ_friedrich_alt_128.png</Item>
+          <Item>icons/friedrich/lp_circ_friedrich_alt_256.png</Item>
+          <Item>icons/friedrich/lp_circ_friedrich_alt_64.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_128.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_128_a.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_128_h.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_256.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_64.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_128.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_128_a.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_128_h.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_256.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_64.png</Item>
           <Item>icons/genghis_khan/lp_circ_genghis_khan_128.png</Item>
           <Item>icons/genghis_khan/lp_circ_genghis_khan_256.png</Item>
           <Item>icons/genghis_khan/lp_circ_genghis_khan_64.png</Item>
@@ -143,11 +159,19 @@
           <Item>icons/himiko/lp_circ_himiko_128.png</Item>
           <Item>icons/himiko/lp_circ_himiko_256.png</Item>
           <Item>icons/himiko/lp_circ_himiko_64.png</Item>
+          <Item>icons/himiko/lp_circ_himiko_alt_128.png</Item>
+          <Item>icons/himiko/lp_circ_himiko_alt_256.png</Item>
+          <Item>icons/himiko/lp_circ_himiko_alt_64.png</Item>
           <Item>icons/himiko/lp_hex_himiko_128.png</Item>
           <Item>icons/himiko/lp_hex_himiko_128_a.png</Item>
           <Item>icons/himiko/lp_hex_himiko_128_h.png</Item>
           <Item>icons/himiko/lp_hex_himiko_256.png</Item>
           <Item>icons/himiko/lp_hex_himiko_64.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_128.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_128_a.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_128_h.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_256.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_64.png</Item>
           <Item>icons/ibn_battuta/lp_circ_ibn_battuta_128.png</Item>
           <Item>icons/ibn_battuta/lp_circ_ibn_battuta_256.png</Item>
           <Item>icons/ibn_battuta/lp_circ_ibn_battuta_64.png</Item>
@@ -199,11 +223,19 @@
           <Item>icons/napoleon/lp_circ_napoleon_128.png</Item>
           <Item>icons/napoleon/lp_circ_napoleon_256.png</Item>
           <Item>icons/napoleon/lp_circ_napoleon_64.png</Item>
+          <Item>icons/napoleon/lp_circ_napoleon_alt_128.png</Item>
+          <Item>icons/napoleon/lp_circ_napoleon_alt_256.png</Item>
+          <Item>icons/napoleon/lp_circ_napoleon_alt_64.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_128.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_128_a.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_128_h.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_256.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_64.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_128.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_128_a.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_128_h.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_256.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_64.png</Item>
           <Item>icons/pachacuti/lp_circ_pachacuti_128.png</Item>
           <Item>icons/pachacuti/lp_circ_pachacuti_256.png</Item>
           <Item>icons/pachacuti/lp_circ_pachacuti_64.png</Item>
@@ -247,11 +279,19 @@
           <Item>icons/xerxes/lp_circ_xerxes_128.png</Item>
           <Item>icons/xerxes/lp_circ_xerxes_256.png</Item>
           <Item>icons/xerxes/lp_circ_xerxes_64.png</Item>
+          <Item>icons/xerxes/lp_circ_xerxes_alt_128.png</Item>
+          <Item>icons/xerxes/lp_circ_xerxes_alt_256.png</Item>
+          <Item>icons/xerxes/lp_circ_xerxes_alt_64.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_128.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_128_a.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_128_h.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_256.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_64.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_128.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_128_a.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_128_h.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_256.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_64.png</Item>
         </ImportFiles>
         <UpdateIcons>
           <Item>icons/leader-icons-override.xml</Item>
@@ -1117,11 +1157,19 @@
           <Item>icons/ashoka/lp_circ_ashoka_128.png</Item>
           <Item>icons/ashoka/lp_circ_ashoka_256.png</Item>
           <Item>icons/ashoka/lp_circ_ashoka_64.png</Item>
+          <Item>icons/ashoka/lp_circ_ashoka_alt_128.png</Item>
+          <Item>icons/ashoka/lp_circ_ashoka_alt_256.png</Item>
+          <Item>icons/ashoka/lp_circ_ashoka_alt_64.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_128.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_128_a.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_128_h.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_256.png</Item>
           <Item>icons/ashoka/lp_hex_ashoka_64.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_128.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_128_a.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_128_h.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_256.png</Item>
+          <Item>icons/ashoka/lp_hex_ashoka_alt_64.png</Item>
           <Item>icons/ashoka/majapahit/lp_circ_ashoka_majapahit_128.png</Item>
           <Item>icons/ashoka/majapahit/lp_circ_ashoka_majapahit_256.png</Item>
           <Item>icons/ashoka/majapahit/lp_circ_ashoka_majapahit_64.png</Item>
@@ -3581,11 +3629,19 @@
           <Item>icons/friedrich/lp_circ_friedrich_128.png</Item>
           <Item>icons/friedrich/lp_circ_friedrich_256.png</Item>
           <Item>icons/friedrich/lp_circ_friedrich_64.png</Item>
+          <Item>icons/friedrich/lp_circ_friedrich_alt_128.png</Item>
+          <Item>icons/friedrich/lp_circ_friedrich_alt_256.png</Item>
+          <Item>icons/friedrich/lp_circ_friedrich_alt_64.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_128.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_128_a.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_128_h.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_256.png</Item>
           <Item>icons/friedrich/lp_hex_friedrich_64.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_128.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_128_a.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_128_h.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_256.png</Item>
+          <Item>icons/friedrich/lp_hex_friedrich_alt_64.png</Item>
           <Item>icons/friedrich/majapahit/lp_circ_friedrich_majapahit_128.png</Item>
           <Item>icons/friedrich/majapahit/lp_circ_friedrich_majapahit_256.png</Item>
           <Item>icons/friedrich/majapahit/lp_circ_friedrich_majapahit_64.png</Item>
@@ -5341,11 +5397,19 @@
           <Item>icons/himiko/lp_circ_himiko_128.png</Item>
           <Item>icons/himiko/lp_circ_himiko_256.png</Item>
           <Item>icons/himiko/lp_circ_himiko_64.png</Item>
+          <Item>icons/himiko/lp_circ_himiko_alt_128.png</Item>
+          <Item>icons/himiko/lp_circ_himiko_alt_256.png</Item>
+          <Item>icons/himiko/lp_circ_himiko_alt_64.png</Item>
           <Item>icons/himiko/lp_hex_himiko_128.png</Item>
           <Item>icons/himiko/lp_hex_himiko_128_a.png</Item>
           <Item>icons/himiko/lp_hex_himiko_128_h.png</Item>
           <Item>icons/himiko/lp_hex_himiko_256.png</Item>
           <Item>icons/himiko/lp_hex_himiko_64.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_128.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_128_a.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_128_h.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_256.png</Item>
+          <Item>icons/himiko/lp_hex_himiko_alt_64.png</Item>
           <Item>icons/himiko/majapahit/lp_circ_himiko_majapahit_128.png</Item>
           <Item>icons/himiko/majapahit/lp_circ_himiko_majapahit_256.png</Item>
           <Item>icons/himiko/majapahit/lp_circ_himiko_majapahit_64.png</Item>
@@ -7805,11 +7869,19 @@
           <Item>icons/napoleon/lp_circ_napoleon_128.png</Item>
           <Item>icons/napoleon/lp_circ_napoleon_256.png</Item>
           <Item>icons/napoleon/lp_circ_napoleon_64.png</Item>
+          <Item>icons/napoleon/lp_circ_napoleon_alt_128.png</Item>
+          <Item>icons/napoleon/lp_circ_napoleon_alt_256.png</Item>
+          <Item>icons/napoleon/lp_circ_napoleon_alt_64.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_128.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_128_a.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_128_h.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_256.png</Item>
           <Item>icons/napoleon/lp_hex_napoleon_64.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_128.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_128_a.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_128_h.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_256.png</Item>
+          <Item>icons/napoleon/lp_hex_napoleon_alt_64.png</Item>
           <Item>icons/napoleon/majapahit/lp_circ_napoleon_majapahit_128.png</Item>
           <Item>icons/napoleon/majapahit/lp_circ_napoleon_majapahit_256.png</Item>
           <Item>icons/napoleon/majapahit/lp_circ_napoleon_majapahit_64.png</Item>
@@ -9917,11 +9989,19 @@
           <Item>icons/xerxes/lp_circ_xerxes_128.png</Item>
           <Item>icons/xerxes/lp_circ_xerxes_256.png</Item>
           <Item>icons/xerxes/lp_circ_xerxes_64.png</Item>
+          <Item>icons/xerxes/lp_circ_xerxes_alt_128.png</Item>
+          <Item>icons/xerxes/lp_circ_xerxes_alt_256.png</Item>
+          <Item>icons/xerxes/lp_circ_xerxes_alt_64.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_128.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_128_a.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_128_h.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_256.png</Item>
           <Item>icons/xerxes/lp_hex_xerxes_64.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_128.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_128_a.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_128_h.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_256.png</Item>
+          <Item>icons/xerxes/lp_hex_xerxes_alt_64.png</Item>
           <Item>icons/xerxes/majapahit/lp_circ_xerxes_majapahit_128.png</Item>
           <Item>icons/xerxes/majapahit/lp_circ_xerxes_majapahit_256.png</Item>
           <Item>icons/xerxes/majapahit/lp_circ_xerxes_majapahit_64.png</Item>
