@@ -12,8 +12,8 @@
 - **Repo**: `git@github.com:loki20beta/civ-proper-leaders-for-civs.git` on `main` branch
 
 ### Known Issues
+- **Icon sizing/missing in some UI contexts**: Some in-game icons appear slightly wrong size; in some places icons seem to be missing entirely. Needs investigation — could be IconDefinitions `IconSize` mismatch, missing context entries, or the game expecting BLP-native dimensions vs our PNG dimensions.
 - **All civ-specific images are stubs**: Original portrait with text overlay. No real civ-contextualized artwork yet.
-- **Awaiting in-game verification**: Re-extracted icons (byte-16 fix) need visual confirmation in-game.
 
 ### Mod File Counts
 | Asset | Count |
@@ -47,7 +47,9 @@
 - Mipchain stops at 4×4 (not 1×1)
 - Footer padding after mipchain: transparent BC7 blocks (`80 00 00 00 ... AC AA AA AA`)
 - `payload_size` = mipchain data size; footer_size = file_size - 16 - payload_size
-- All texture types (loading, hex, circ, all sizes) decode correctly from byte 16
+- Hex textures are 25% taller than nominal (128→160, 256→320, 64→80); decode full height, crop bottom NxN
+- Circ textures are square at nominal size; decode directly
+- All texture types decode correctly from byte 16
 
 #### Loading Screen System
 - Original images: 800×1060 RGBA transparent PNGs (BC7-compressed in CIVBIG, 1,132,544 bytes each)
@@ -92,6 +94,6 @@
 `~/Library/Application Support/Civilization VII/Mods/authentic-leaders` → `/Users/admin/work/civ7mod/authentic-leaders`
 
 ### Next Steps
-1. **Verify icons in-game** — Test that byte-16 extracted icons render correctly in all contexts (hex diplomacy, circ select, happy/angry)
+1. **Investigate icon size/missing issues** — Some icons appear wrong size or missing in certain UI contexts. Check IconDefinitions entries, compare our PNG dimensions with what the game expects, inspect which contexts/sizes are affected.
 2. **Build AI art generation pipeline** — API integration for generating civ-contextualized leader portraits
 3. **Replace stubs with real artwork** — Loading screens + icons with actual civ-appropriate art

@@ -10,11 +10,12 @@ The mod infrastructure is complete and working for all 28 leaders across all 43 
 - Civ-specific loading screens for all 28 leaders × 43 civilizations (stub images)
 - Civ-specific in-game icons for all players (local + AI) via runtime UIScript
 - SQL table restructure (composite PK) + JS sort fix for civ-specific image selection
-- Leader icon extraction from game CIVBIG/BLP textures (circ_256 with native alpha)
+- Leader icon extraction from game CIVBIG/BLP textures (all 8 variants per leader, properly centered)
 - Loading screen extraction from game BLP files (800×1060 RGBA transparent PNGs)
 - Full build pipeline: config → generate SQL/XML/modinfo → mod
 
 **Known Issues:**
+- Some icons appear slightly wrong size in certain UI contexts; in some places icons seem missing. Under investigation.
 - All civ-specific images are currently stubs (original portrait + text label), not real civ-contextualized artwork.
 
 ## How It Works
@@ -94,8 +95,9 @@ scripts/
 - [x] Extract original loading screens from game BLP files (28 leaders + 5 persona alts)
 - [x] Extract all 8 icon variants per leader from game textures (28 leaders + 5 alts)
 - [x] Stub images for all 28 leaders × 43 civilizations (loading screens + icons)
-- [x] CIVBIG format decoded: BC7 data at byte 16, all hex/circ/loading textures extract correctly
-- [ ] Verify extracted icons render correctly in-game
+- [x] CIVBIG format decoded: BC7 data at byte 16, hex textures 25% taller (crop bottom NxN)
+- [x] Icon centering verified: circ perfect, hex vertical shift fixed
+- [ ] Investigate icon size/missing issues in some UI contexts
 
 ### Phase 3: AI-Generated Artwork (next)
 - [ ] Build image generation pipeline (API integration with DALL-E / Midjourney / SD)

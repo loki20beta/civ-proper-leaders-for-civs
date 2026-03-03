@@ -280,27 +280,28 @@ def load_portrait_sources(icon_key, fallback_img):
 def generate_leader_stubs(leader, civs, dry_run=False, force=False):
     """Generate all stubs for one leader across given civs.
 
+    Uses extracted game icons/loading screens as base when available.
+    Falls back to reference/portrait images only when extracted assets
+    are missing.
+
     Returns (loading_count, icon_count, skipped_count).
     """
     icon_key = leader["icon_key"]
+
+    # Load base loading screen: prefer extracted original
+    loading_original_path = os.path.join(ASSETS_DIR, "leaders", icon_key, "loading_original.png")
     ref_path = os.path.join(ASSETS_DIR, "leaders", icon_key, "reference.png")
 
-    if not os.path.isfile(ref_path):
-        print(f"  SKIP {icon_key} (no reference image)")
-        return 0, 0, 0
-
-    reference = Image.open(ref_path).convert("RGBA")
-
-    # Prefer extracted original loading screen (already 800x1060 RGBA)
-    loading_original_path = os.path.join(ASSETS_DIR, "leaders", icon_key, "loading_original.png")
     if os.path.isfile(loading_original_path):
         base_loading = Image.open(loading_original_path).convert("RGBA")
-    else:
+    elif os.path.isfile(ref_path):
+        reference = Image.open(ref_path).convert("RGBA")
         base_loading = make_base_loading(reference)
+    else:
+        base_loading = None
 
-    # Load base icons: prefer extracted game originals, fall back to portrait/reference
+    # Load base icons: prefer extracted game originals
     base_icons = {}
-    all_extracted = True
     for v in ICON_VARIANTS:
         key = (v["shape"], v["size"], v["suffix"])
         extracted_path = os.path.join(
@@ -309,29 +310,42 @@ def generate_leader_stubs(leader, civs, dry_run=False, force=False):
         )
         if os.path.isfile(extracted_path):
             base_icons[key] = Image.open(extracted_path).convert("RGBA")
-        else:
-            all_extracted = False
 
-    if not all_extracted:
-        # Fall back to generating from portraits/reference
-        portraits = load_portrait_sources(icon_key, reference)
+    # Fall back to portrait/reference for any missing icon variants
+    missing_keys = [
+        (v["shape"], v["size"], v["suffix"])
+        for v in ICON_VARIANTS
+        if (v["shape"], v["size"], v["suffix"]) not in base_icons
+    ]
+    if missing_keys:
+        if os.path.isfile(ref_path):
+            reference = Image.open(ref_path).convert("RGBA")
+        else:
+            reference = None
+        portraits = load_portrait_sources(icon_key, reference) if reference else {}
         for v in ICON_VARIANTS:
             key = (v["shape"], v["size"], v["suffix"])
             if key in base_icons:
                 continue
-            if v["suffix"] == "_h" and portraits["happy"] is not None:
+            if reference is None:
+                continue
+            if v["suffix"] == "_h" and portraits.get("happy") is not None:
                 source = portraits["happy"]
                 tint = None
-            elif v["suffix"] == "_a" and portraits["angry"] is not None:
+            elif v["suffix"] == "_a" and portraits.get("angry") is not None:
                 source = portraits["angry"]
                 tint = None
-            elif portraits["neutral"] is not None:
+            elif portraits.get("neutral") is not None:
                 source = portraits["neutral"]
                 tint = None
             else:
                 source = reference
                 tint = v.get("tint")
             base_icons[key] = make_base_icon(source, v["shape"], v["size"], tint)
+
+    if not base_icons and base_loading is None:
+        print(f"  SKIP {icon_key} (no extracted icons or reference image)")
+        return 0, 0, 0
 
     loading_count = 0
     icon_count = 0
@@ -342,23 +356,26 @@ def generate_leader_stubs(leader, civs, dry_run=False, force=False):
         abbrev = civ_abbrev(civ_key)
 
         # --- Loading screen ---
-        loading_path = os.path.join(
-            MOD_DIR, "images", "loading", f"lsl_{icon_key}_{civ_key}.png"
-        )
-        if os.path.isfile(loading_path) and not force:
-            skipped += 1
-        elif dry_run:
-            print(f"  WOULD loading: {icon_key}/{civ_key}")
-            loading_count += 1
-        else:
-            os.makedirs(os.path.dirname(loading_path), exist_ok=True)
-            stub = overlay_loading_text(base_loading, label)
-            stub.save(loading_path, "PNG")
-            loading_count += 1
+        if base_loading is not None:
+            loading_path = os.path.join(
+                MOD_DIR, "images", "loading", f"lsl_{icon_key}_{civ_key}.png"
+            )
+            if os.path.isfile(loading_path) and not force:
+                skipped += 1
+            elif dry_run:
+                print(f"  WOULD loading: {icon_key}/{civ_key}")
+                loading_count += 1
+            else:
+                os.makedirs(os.path.dirname(loading_path), exist_ok=True)
+                stub = overlay_loading_text(base_loading, label)
+                stub.save(loading_path, "PNG")
+                loading_count += 1
 
         # --- Icons ---
         for v in ICON_VARIANTS:
             vkey = (v["shape"], v["size"], v["suffix"])
+            if vkey not in base_icons:
+                continue
             out_name = (
                 f"lp_{v['shape']}_{icon_key}_{civ_key}"
                 f"_{v['size']}{v['suffix']}.png"
@@ -485,12 +502,14 @@ def main():
         leaders = config["leaders"]
 
     # Generate base icons and loading screens for selected leaders
+    # Never force-overwrite base assets — they come from game extraction.
+    # Use extract-game-assets.py --force to re-extract them.
     print(f"Generating base icons/loading for {len(leaders)} leaders...")
     base_icon_total = 0
     base_loading_total = 0
     for leader in leaders:
-        ic = generate_base_icons(leader, dry_run=args.dry_run, force=args.force)
-        lc = generate_base_loading(leader, dry_run=args.dry_run, force=args.force)
+        ic = generate_base_icons(leader, dry_run=args.dry_run, force=False)
+        lc = generate_base_loading(leader, dry_run=args.dry_run, force=False)
         if ic or lc:
             action = "Would create" if args.dry_run else "Created"
             print(f"  {leader['icon_key']}: {action} {ic} base icons + {lc} loading")
