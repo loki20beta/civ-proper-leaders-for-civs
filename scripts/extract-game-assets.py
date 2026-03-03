@@ -5,9 +5,10 @@ Extracts from game BLP/CIVBIG textures:
   - Loading screens → assets/leaders/{icon_key}/loading_original.png
   - Leader icons → authentic-leaders/icons/{icon_key}/lp_*.png
 
-CIVBIG format: variable-length header + BC7-compressed texture data.
-Header = 16-byte prefix ("CIVBIG\0\0" + uint32 payload_size + uint32 flags)
-followed by variable padding. Header size = file_size - payload_size.
+CIVBIG format: 16-byte prefix + BC7-compressed texture data + footer padding.
+Prefix = "CIVBIG\\0\\0" + uint32 payload_size + uint32 flags.
+BC7 level-0 mipmap data starts immediately at byte 16.
+BC7 decodes as BGRA; we swap to RGBA for PNG output.
 """
 
 import argparse
@@ -15,7 +16,6 @@ import glob
 import json
 import os
 import struct
-import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
@@ -80,21 +80,17 @@ def persona_key(leader_type, persona_type):
 
 
 def decode_civbig(file_path, width, height):
-    """Decode a CIVBIG file to an RGBA PIL Image.
+    """Decode level-0 from a CIVBIG file to an RGBA PIL Image.
 
-    Reads payload_size from the 16-byte header prefix to compute
-    dynamic header offset. BC7 decodes to BGRA; we swap to RGBA.
+    BC7 mipmap data starts at byte 16 (right after the prefix).
+    Level-0 is first in the mipchain. BC7 decodes to BGRA; we swap to RGBA.
     """
     import texture2ddecoder
     from PIL import Image
 
-    bc7_size = (width // 4) * (height // 4) * 16
-    file_size = os.path.getsize(file_path)
+    bc7_size = max(1, width // 4) ** 2 * 16
     with open(file_path, "rb") as f:
-        f.seek(8)
-        payload_size = struct.unpack("<I", f.read(4))[0]
-        header_size = file_size - payload_size
-        f.seek(header_size)
+        f.seek(16)
         bc7_data = f.read(bc7_size)
 
     decoded = texture2ddecoder.decode_bc7(bc7_data, width, height)
@@ -212,139 +208,68 @@ def find_icon_texture(tex_name, shape, size, suffix):
     return matches[0] if matches else None
 
 
-def extract_circ256_raw(tex_name):
-    """Extract raw 256x256 portrait from circ_256 CIVBIG with native alpha.
-
-    Only circ_256 decodes cleanly — smaller circ sizes and ALL hex sizes
-    use mip tail packing that overwrites the base level with mip data.
-    Returns RGBA Image (with game's head silhouette alpha) or None.
-    """
-    tex_path = find_icon_texture(tex_name, "circ", 256, "")
-    if tex_path is None:
-        return None
-    return decode_civbig(tex_path, 256, 256)
-
-
-def fit_portrait_to_icon(portrait_img, target_size):
-    """Fit a rectangular portrait into a square icon canvas.
-
-    Centers the portrait on a transparent canvas, scaling to fill the
-    width while keeping aspect ratio. Used for _h (happy) and _a (angry)
-    icon variants from pre-extracted portrait images.
-    """
-    from PIL import Image
-
-    pw, ph = portrait_img.size
-    scale = target_size / pw
-    new_w = target_size
-    new_h = int(ph * scale)
-    resized = portrait_img.resize((new_w, new_h), Image.LANCZOS)
-
-    canvas = Image.new("RGBA", (target_size, target_size), (0, 0, 0, 0))
-    y_offset = (target_size - new_h) // 2
-    canvas.paste(resized, (0, max(0, y_offset)))
-    return canvas
-
-
 def extract_icon_originals(config, force=False):
     """Extract original icon images from game BLP files.
 
     Saves 8 variants per leader to authentic-leaders/icons/{icon_key}/.
     Also extracts alt/persona icons using PERSONA_ALT_TEXTURES mapping.
 
-    Portrait source:
-    - Neutral (circ + hex, all sizes): circ_256 game texture with native
-      head silhouette alpha. This is the only size that decodes cleanly.
-      Resized with LANCZOS for smaller sizes. No custom hex/circ masks
-      applied — the game's fxs-icon renderer handles geometric clipping.
-    - Happy/Angry (_h/_a): portrait_happy.png / portrait_angry.png from
-      assets/leaders/. Game's hex_128_h/hex_128_a textures use mip tail
-      packing and can't be cleanly decoded, so we use pre-extracted
-      portrait artwork instead.
+    Each variant is extracted directly from its own game texture via
+    level-0 BC7 decoding at byte 16. Hex and circ textures contain
+    different portrait crops (hex = wider head+shoulders bottom-aligned,
+    circ = tight head-shot centered), so each must come from its
+    own source file.
     """
-    from PIL import Image
-
     mod_icons_dir = os.path.join(PROJECT_ROOT, "authentic-leaders", "icons")
 
     extracted = 0
     skipped = 0
-    missing = []
+    missing_leaders = []
 
-    def save_variant(img, icon_name, variant, dest_dir):
-        """Save a single icon variant PNG."""
+    def extract_leader_icons(tex_name, icon_name, dest_dir):
+        """Extract all 8 icon variants for a single leader/persona."""
         nonlocal extracted, skipped
-        out_name = (
-            f"lp_{variant['shape']}_{icon_name}"
-            f"_{variant['size']}{variant['suffix']}.png"
-        )
-        dest = os.path.join(dest_dir, out_name)
-
-        if os.path.isfile(dest) and not force:
-            skipped += 1
-            return False
-
-        os.makedirs(dest_dir, exist_ok=True)
-        img.save(dest, "PNG")
-        extracted += 1
-        return True
-
-    def generate_neutral_icons(source_256, icon_name, dest_dir):
-        """Generate all neutral icon variants from circ_256 source."""
         count = 0
+        miss = 0
         for v in ICON_EXTRACT_VARIANTS:
-            if v["suffix"]:
-                continue  # Skip _h/_a — handled separately
-            if v["size"] == 256:
-                img = source_256.copy()
-            else:
-                img = source_256.resize(
-                    (v["size"], v["size"]), Image.LANCZOS
-                )
-            if save_variant(img, icon_name, v, dest_dir):
-                count += 1
-        return count
-
-    def generate_mood_icons(icon_key, icon_name, dest_dir):
-        """Generate _h (happy) and _a (angry) icon variants from portrait files."""
-        count = 0
-        mood_map = {"_h": "happy", "_a": "angry"}
-        for v in ICON_EXTRACT_VARIANTS:
-            if v["suffix"] not in mood_map:
-                continue
-            mood = mood_map[v["suffix"]]
-            portrait_path = os.path.join(
-                ASSETS_DIR, "leaders", icon_key, f"portrait_{mood}.png"
+            out_name = (
+                f"lp_{v['shape']}_{icon_name}"
+                f"_{v['size']}{v['suffix']}.png"
             )
-            if not os.path.isfile(portrait_path):
+            dest = os.path.join(dest_dir, out_name)
+
+            if os.path.isfile(dest) and not force:
+                skipped += 1
                 continue
-            portrait = Image.open(portrait_path).convert("RGBA")
-            img = fit_portrait_to_icon(portrait, v["size"])
-            if save_variant(img, icon_name, v, dest_dir):
-                count += 1
-        return count
+
+            tex_path = find_icon_texture(
+                tex_name, v["shape"], v["size"], v["suffix"]
+            )
+            if tex_path is None:
+                miss += 1
+                continue
+
+            img = decode_civbig(tex_path, v["size"], v["size"])
+            os.makedirs(dest_dir, exist_ok=True)
+            img.save(dest, "PNG")
+            extracted += 1
+            count += 1
+        return count, miss
 
     for leader in config["leaders"]:
         icon_key = leader["icon_key"]
         tex_name = TEXTURE_NAME_OVERRIDES.get(icon_key, icon_key)
-
-        # Extract circ_256 as the source for neutral icons
-        circ_raw = extract_circ256_raw(tex_name)
-        if circ_raw is None:
-            missing.append(icon_key)
-            print(f"  MISS  {icon_key} (no circ_256 texture)")
-            continue
-
         dest_dir = os.path.join(mod_icons_dir, icon_key)
 
-        # Neutral icons (circ + hex, all sizes) from game texture
-        n_count = generate_neutral_icons(circ_raw, icon_key, dest_dir)
-
-        # Happy/Angry icons from portrait files
-        m_count = generate_mood_icons(icon_key, icon_key, dest_dir)
-
-        total = n_count + m_count
-        if total > 0:
-            print(f"  OK    {icon_key} ({total} icons)")
+        count, miss = extract_leader_icons(tex_name, icon_key, dest_dir)
+        if count > 0:
+            msg = f"  OK    {icon_key} ({count} icons)"
+            if miss:
+                msg += f" ({miss} missing)"
+            print(msg)
+        elif miss == len(ICON_EXTRACT_VARIANTS):
+            missing_leaders.append(icon_key)
+            print(f"  MISS  {icon_key} (no textures found)")
 
         # Extract alt/persona icons
         for persona in leader.get("personas", []):
@@ -353,23 +278,19 @@ def extract_icon_originals(config, force=False):
                 continue
             alt_tex_name = PERSONA_ALT_TEXTURES[ptype]
 
-            alt_raw = extract_circ256_raw(alt_tex_name)
-            if alt_raw is None:
-                alt_raw = circ_raw
-                print(f"  WARN  {icon_key}/{alt_tex_name} circ_256 not found, using base portrait")
-
-            n_count = generate_neutral_icons(alt_raw, alt_tex_name, dest_dir)
-            # Alt personas use the same mood portraits as the base leader
-            m_count = generate_mood_icons(icon_key, alt_tex_name, dest_dir)
-
-            total = n_count + m_count
-            if total > 0:
-                print(f"  OK    {icon_key}/{alt_tex_name} ({total} alt icons)")
+            count, miss = extract_leader_icons(
+                alt_tex_name, alt_tex_name, dest_dir
+            )
+            if count > 0:
+                msg = f"  OK    {icon_key}/{alt_tex_name} ({count} alt icons)"
+                if miss:
+                    msg += f" ({miss} missing)"
+                print(msg)
 
     print(f"\nIcon originals: extracted {extracted}, skipped {skipped}, "
-          f"missing {len(missing)}")
-    if missing:
-        print(f"  Not found: {', '.join(missing)}")
+          f"missing leaders {len(missing_leaders)}")
+    if missing_leaders:
+        print(f"  Not found: {', '.join(missing_leaders)}")
 
 
 def main():

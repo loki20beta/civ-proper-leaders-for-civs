@@ -298,28 +298,40 @@ def generate_leader_stubs(leader, civs, dry_run=False, force=False):
     else:
         base_loading = make_base_loading(reference)
 
-    # Load portrait images for icons (proper game portraits, not three-quarter refs)
-    portraits = load_portrait_sources(icon_key, reference)
-    has_portraits = portraits["neutral"] is not None
-
-    # Pre-generate base icons for all variants
+    # Load base icons: prefer extracted game originals, fall back to portrait/reference
     base_icons = {}
+    all_extracted = True
     for v in ICON_VARIANTS:
         key = (v["shape"], v["size"], v["suffix"])
-        # Select source image: use proper portrait when available
-        if v["suffix"] == "_h" and portraits["happy"] is not None:
-            source = portraits["happy"]
-            tint = None  # real happy portrait, no fake tint needed
-        elif v["suffix"] == "_a" and portraits["angry"] is not None:
-            source = portraits["angry"]
-            tint = None  # real angry portrait, no fake tint needed
-        elif portraits["neutral"] is not None:
-            source = portraits["neutral"]
-            tint = None
+        extracted_path = os.path.join(
+            MOD_DIR, "icons", icon_key,
+            f"lp_{v['shape']}_{icon_key}_{v['size']}{v['suffix']}.png"
+        )
+        if os.path.isfile(extracted_path):
+            base_icons[key] = Image.open(extracted_path).convert("RGBA")
         else:
-            source = reference
-            tint = v.get("tint")
-        base_icons[key] = make_base_icon(source, v["shape"], v["size"], tint)
+            all_extracted = False
+
+    if not all_extracted:
+        # Fall back to generating from portraits/reference
+        portraits = load_portrait_sources(icon_key, reference)
+        for v in ICON_VARIANTS:
+            key = (v["shape"], v["size"], v["suffix"])
+            if key in base_icons:
+                continue
+            if v["suffix"] == "_h" and portraits["happy"] is not None:
+                source = portraits["happy"]
+                tint = None
+            elif v["suffix"] == "_a" and portraits["angry"] is not None:
+                source = portraits["angry"]
+                tint = None
+            elif portraits["neutral"] is not None:
+                source = portraits["neutral"]
+                tint = None
+            else:
+                source = reference
+                tint = v.get("tint")
+            base_icons[key] = make_base_icon(source, v["shape"], v["size"], tint)
 
     loading_count = 0
     icon_count = 0
@@ -373,6 +385,7 @@ def generate_leader_stubs(leader, civs, dry_run=False, force=False):
 def generate_base_icons(leader, dry_run=False, force=False):
     """Generate default (non-civ-specific) icons for a leader from portrait images.
 
+    Skips icons that already exist (e.g., extracted from game BLP files).
     Returns count of icons generated.
     """
     icon_key = leader["icon_key"]

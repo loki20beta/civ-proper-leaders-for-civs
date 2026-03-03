@@ -120,12 +120,17 @@ def scan_leaders(config):
         # Collect persona types from config
         persona_types = [p["type"] for p in leader.get("personas", [])]
 
+        # Check for alt icons (persona-specific icon art)
+        alt_icon = os.path.join(icons_dir, key, f"lp_hex_{key}_alt_256.png")
+        has_alt_icons = os.path.isfile(alt_icon)
+
         leaders.append({
             "key": key,
             "type": leader_type,
             "persona_types": persona_types,
             "civ_keys": civ_keys,
             "has_base_icons": has_base_icons,
+            "has_alt_icons": has_alt_icons,
             "icon_civs": icon_civs,
         })
 
@@ -218,14 +223,25 @@ def generate_default_icons_xml(leaders):
             continue
         key = leader["key"]
 
-        # All leader types that need icon entries: base + personas
-        all_types = [leader["type"]] + leader.get("persona_types", [])
+        # Base leader type icons
+        for v in ICON_VARIANTS:
+            fname = f"lp_{v['shape']}_{key}_{v['size']}{v['suffix']}.png"
+            lines.append("\t\t<Replace>")
+            lines.append(f"\t\t\t<ID>{leader['type']}</ID>")
+            lines.append(f"\t\t\t<Path>{FS_PREFIX}/icons/{key}/{fname}</Path>")
+            lines.append(f"\t\t\t<IconSize>{v['size']}</IconSize>")
+            if v["context"]:
+                lines.append(f"\t\t\t<Context>{v['context']}</Context>")
+            lines.append("\t\t</Replace>")
 
-        for ltype in all_types:
+        # Persona/alt type icons — use alt-specific files if available,
+        # otherwise fall back to base icon files
+        for ptype in leader.get("persona_types", []):
+            icon_name_key = f"{key}_alt" if leader.get("has_alt_icons") else key
             for v in ICON_VARIANTS:
-                fname = f"lp_{v['shape']}_{key}_{v['size']}{v['suffix']}.png"
+                fname = f"lp_{v['shape']}_{icon_name_key}_{v['size']}{v['suffix']}.png"
                 lines.append("\t\t<Replace>")
-                lines.append(f"\t\t\t<ID>{ltype}</ID>")
+                lines.append(f"\t\t\t<ID>{ptype}</ID>")
                 lines.append(f"\t\t\t<Path>{FS_PREFIX}/icons/{key}/{fname}</Path>")
                 lines.append(f"\t\t\t<IconSize>{v['size']}</IconSize>")
                 if v["context"]:
@@ -285,6 +301,14 @@ def generate_modinfo(leaders):
         if leader["has_base_icons"]:
             for v in ICON_VARIANTS:
                 fname = f"lp_{v['shape']}_{key}_{v['size']}{v['suffix']}.png"
+                path = f"icons/{key}/{fname}"
+                shell_imports.append(path)
+                game_imports.append(path)
+
+        # Alt/persona icons (shell + game)
+        if leader.get("has_alt_icons"):
+            for v in ICON_VARIANTS:
+                fname = f"lp_{v['shape']}_{key}_alt_{v['size']}{v['suffix']}.png"
                 path = f"icons/{key}/{fname}"
                 shell_imports.append(path)
                 game_imports.append(path)

@@ -12,9 +12,8 @@
 - **Repo**: `git@github.com:loki20beta/civ-proper-leaders-for-civs.git` on `main` branch
 
 ### Known Issues
-- **Icon extraction quality**: Game hex textures use mip tail packing — only circ_256 decodes cleanly. Current neutral icons use circ_256 with native head silhouette alpha (no custom geometric masks). Awaiting in-game verification that fxs-icon renders them correctly without geometric masks.
-- **Happy/angry icons**: _h/_a variants sourced from portrait files (originally wiki-downloaded), not from game textures. Game hex_128_h/hex_128_a can't be cleanly decoded. ibn_battuta missing mood portraits — _h/_a are identical.
 - **All civ-specific images are stubs**: Original portrait with text overlay. No real civ-contextualized artwork yet.
+- **Awaiting in-game verification**: Re-extracted icons (byte-16 fix) need visual confirmation in-game.
 
 ### Mod File Counts
 | Asset | Count |
@@ -36,17 +35,19 @@
 5. **SQL restructure + JS ImportFiles override** → Works for civ-specific loading screens.
 6. **Wiki-sourced images** → Abandoned. Now extract everything from game files via `scripts/extract-game-assets.py`.
 7. **Custom hex/circ masks for icons** → Caused ~5px shift (game portrait centered at 133,131 not 128,128). Switched to native head silhouette alpha from circ_256 texture.
-8. **Hex texture extraction** → All hex sizes have mip tail packing. Only circ_256 decodes cleanly. Use circ_256 for all neutral icon variants.
+8. **Hex texture extraction with header_size offset** → Icons shifted horizontally/vertically. Root cause: BC7 data starts at byte 16, NOT at `file_size - payload_size`.
+9. **Byte-16 extraction (CORRECT)** → All 8 icon variants per leader + loading screens extract perfectly from byte 16. No special hex skip needed.
 
 ### Key Technical Findings
 
 #### CIVBIG Texture Format
-- Variable header + BC7-compressed texture data (BGRA channel order)
 - 16-byte prefix: "CIVBIG\0\0" + uint32 payload_size (offset 8) + uint32 flags (offset 12)
-- Header size = file_size - payload_size (not fixed!)
-- Loading screens: header=144, circ icons=176, hex icons=288
-- Hex textures: mip tail packing overwrites middle of base level — portrait left/right edges survive but center is destroyed
-- Only circ_256 decodes cleanly (standard mip chain, no tail packing)
+- BC7-compressed texture data starts at **byte 16** (immediately after prefix)
+- Level-0 mipmap is first in the mipchain; BC7 decodes as BGRA (swap R↔B for RGBA)
+- Mipchain stops at 4×4 (not 1×1)
+- Footer padding after mipchain: transparent BC7 blocks (`80 00 00 00 ... AC AA AA AA`)
+- `payload_size` = mipchain data size; footer_size = file_size - 16 - payload_size
+- All texture types (loading, hex, circ, all sizes) decode correctly from byte 16
 
 #### Loading Screen System
 - Original images: 800×1060 RGBA transparent PNGs (BC7-compressed in CIVBIG, 1,132,544 bytes each)
@@ -91,6 +92,6 @@
 `~/Library/Application Support/Civilization VII/Mods/authentic-leaders` → `/Users/admin/work/civ7mod/authentic-leaders`
 
 ### Next Steps
-1. **Verify icons in-game** — Test that native-alpha icons (no geometric masks) render correctly in fxs-icon
+1. **Verify icons in-game** — Test that byte-16 extracted icons render correctly in all contexts (hex diplomacy, circ select, happy/angry)
 2. **Build AI art generation pipeline** — API integration for generating civ-contextualized leader portraits
 3. **Replace stubs with real artwork** — Loading screens + icons with actual civ-appropriate art

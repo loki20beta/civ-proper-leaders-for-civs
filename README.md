@@ -15,7 +15,6 @@ The mod infrastructure is complete and working for all 28 leaders across all 43 
 - Full build pipeline: config → generate SQL/XML/modinfo → mod
 
 **Known Issues:**
-- Icon extraction: game hex textures use mip tail packing (can't decode cleanly). Only circ_256 decodes correctly. Happy/angry (_h/_a) variants sourced from separate portrait files since hex_128_h/hex_128_a are mip-packed.
 - All civ-specific images are currently stubs (original portrait + text label), not real civ-contextualized artwork.
 
 ## How It Works
@@ -93,11 +92,10 @@ scripts/
 
 ### Phase 2: Game Asset Extraction (current)
 - [x] Extract original loading screens from game BLP files (28 leaders + 5 persona alts)
-- [x] Extract leader icons from game circ_256 textures (28 leaders + 5 alts)
+- [x] Extract all 8 icon variants per leader from game textures (28 leaders + 5 alts)
 - [x] Stub images for all 28 leaders × 43 civilizations (loading screens + icons)
-- [ ] Verify extracted icons render correctly in-game (native alpha, no custom masks)
-- [ ] Resolve icon quality: hex textures have mip tail packing, only circ_256 is clean
-- [ ] Happy/angry icon variants: currently from portrait files, ideally from game data
+- [x] CIVBIG format decoded: BC7 data at byte 16, all hex/circ/loading textures extract correctly
+- [ ] Verify extracted icons render correctly in-game
 
 ### Phase 3: AI-Generated Artwork (next)
 - [ ] Build image generation pipeline (API integration with DALL-E / Midjourney / SD)
@@ -131,7 +129,7 @@ scripts/
 
 - **JS sort bug**: Both `getLeaderLoadingInfo()` and `getCivLoadingInfo()` sort ascending by specificity (`a_score - b_score`) and pick index `[0]`. Fix: `b_score - a_score`.
 
-- **CIVBIG texture format**: Variable header + BC7 data (BGRA channel order). Header size = file_size - payload_size (payload_size at offset 8). Loading screens: header=144, circ icons=176, hex icons=288. Hex textures use mip tail packing (base level data destroyed by mip data). Only circ_256 decodes cleanly.
+- **CIVBIG texture format**: 16-byte prefix (`"CIVBIG\0\0"` + uint32 payload_size + uint32 flags) followed immediately by BC7-compressed texture data (BGRA channel order). Level-0 mipmap starts at byte 16. Mipchain stops at 4×4. Footer = transparent BC7 padding blocks.
 
 - **ImportFiles can override base game files** when the relative path matches the base module's path (confirmed by BorderToggles community mod).
 
