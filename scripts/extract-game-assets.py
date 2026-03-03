@@ -79,24 +79,36 @@ def persona_key(leader_type, persona_type):
     return persona_type.replace("LEADER_", "").lower()
 
 
-def decode_civbig(file_path, width, height):
+def decode_civbig(file_path, width, height, decode_height=None):
     """Decode level-0 from a CIVBIG file to an RGBA PIL Image.
 
     BC7 mipmap data starts at byte 16 (right after the prefix).
     Level-0 is first in the mipchain. BC7 decodes to BGRA; we swap to RGBA.
+
+    If decode_height > height, decodes the taller texture and crops the
+    bottom `height` rows. Hex icon textures are stored 25% taller than
+    their nominal icon size (e.g. 128×160 for a 128×128 icon).
     """
     import texture2ddecoder
     from PIL import Image
 
-    bc7_size = max(1, width // 4) ** 2 * 16
+    if decode_height is None:
+        decode_height = height
+
+    bc7_size = max(1, width // 4) * max(1, decode_height // 4) * 16
     with open(file_path, "rb") as f:
         f.seek(16)
         bc7_data = f.read(bc7_size)
 
-    decoded = texture2ddecoder.decode_bc7(bc7_data, width, height)
-    img = Image.frombytes("RGBA", (width, height), decoded)
+    decoded = texture2ddecoder.decode_bc7(bc7_data, width, decode_height)
+    img = Image.frombytes("RGBA", (width, decode_height), decoded)
     r, g, b, a = img.split()
-    return Image.merge("RGBA", (b, g, r, a))
+    img = Image.merge("RGBA", (b, g, r, a))
+
+    if decode_height > height:
+        img = img.crop((0, decode_height - height, width, decode_height))
+
+    return img
 
 
 # --- Loading screen extraction ---
@@ -249,7 +261,9 @@ def extract_icon_originals(config, force=False):
                 miss += 1
                 continue
 
-            img = decode_civbig(tex_path, v["size"], v["size"])
+            # Hex textures are stored 25% taller; decode full height, crop bottom
+            decode_h = v["size"] * 5 // 4 if v["shape"] == "hex" else v["size"]
+            img = decode_civbig(tex_path, v["size"], v["size"], decode_height=decode_h)
             os.makedirs(dest_dir, exist_ok=True)
             img.save(dest, "PNG")
             extracted += 1
