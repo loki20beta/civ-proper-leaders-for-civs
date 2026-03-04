@@ -1,6 +1,6 @@
 # Civ7 Authentic Leaders Mod - Development Plan
 
-> **Status (2026-03-04):** Phase 1 (infrastructure) and Phase 2 (asset extraction + stubs) are complete. All 33 leaders/alts × 43 civs have working civ-specific loading screens and icons (currently stubs). Persona/alt leaders fully supported with persona-first icon lookup. Next: Phase 3 (AI-generated artwork).
+> **Status (2026-03-04):** Phase 1 (infrastructure) and Phase 2 (asset extraction + stubs) are complete. All 33 leaders/alts × 44 civs have working civ-specific loading screens and icons (currently stubs). Persona/alt leaders fully supported with persona-first icon lookup. Next: Phase 3 (AI art generation pipeline).
 
 ## Context
 
@@ -158,7 +158,434 @@ authentic-leaders/
 
 ---
 
-## Phase 3: 3D Animation Changes
+## Phase 3: AI Art Generation Pipeline
+
+**Goal**: Replace all ~1,427 stub images with AI-generated artwork where each leader wears civilization-appropriate attire. Uses **Nano Banana 2** (`google/gemini-3.1-flash-image-preview`) via **OpenRouter API** with multi-image reference for identity preservation and costume transfer.
+
+**Key principles:**
+- Native leader×civ pairs are **skipped** — default game art already correct
+- Non-native pairs **reference the native leader's image** as costume source
+- **Gender-aware**: female leaders get period-appropriate female attire
+- **Generate largest icon size only** (hex 256×360, circ 256×256), downscale smaller programmatically
+- **AI-generate all 3 expressions** (neutral, happy, angry) — no color tinting
+- Optimize for quality, no budget limit
+- API key stored in `ai-generator/.env` (git-ignored)
+
+### 3.1 Master Metadata — `config/ai-generation.json`
+
+Central config for native pairings, gender-aware attire descriptors, and generation status tracking.
+
+#### Native Pairings (skip list — ~25 pairs)
+
+Leader×civ combos where the default game art already matches. Generator skips these and uses original extracted images.
+
+```
+augustus           → rome
+hatshepsut        → egypt
+ashoka            → maurya
+xerxes            → persia
+confucius         → han
+pachacuti         → inca
+charlemagne       → normandy
+isabella          → spain
+napoleon          → french_empire
+lafayette         → french_empire
+catherine         → russia
+benjamin_franklin → america
+harriet_tubman    → america
+friedrich         → prussia
+genghis_khan      → mongolia
+tecumseh          → shawnee
+trung_trac        → dai_viet
+ada_lovelace      → britain
+edward_teach      → pirates
+sayyida_al_hurra  → pirates
+simon_bolivar     → mexico
+
+# No native civ (generate for ALL civs):
+amina, ibn_battuta, jose_rizal, lakshmibai,
+himiko, gilgamesh, machiavelli
+```
+
+Persona alts:
+```
+ashoka_alt    → maurya
+friedrich_alt → prussia
+napoleon_alt  → french_empire
+xerxes_alt    → persia
+himiko_alt    → (none — generate for all)
+```
+
+#### Costume Reference Leader per Civilization
+
+When dressing a non-native leader for a civ, use the native leader's game image as a **costume reference** (same gender only). Cross-gender pairs use text-only attire descriptions.
+
+```
+rome           → augustus (M)          | female: text-only
+egypt          → hatshepsut (F)       | male: text-only
+han            → confucius (M)        | female: text-only
+maurya         → ashoka (M)           | female: text-only
+persia         → xerxes (M)           | female: text-only
+inca           → pachacuti (M)        | female: text-only
+normandy       → charlemagne (M)      | female: text-only
+spain          → isabella (F)         | male: text-only
+french_empire  → napoleon (M)         | female: text-only
+russia         → catherine (F)        | male: text-only
+america        → benjamin_franklin(M) | female: harriet_tubman (F)
+prussia        → friedrich (M)        | female: text-only
+mongolia       → genghis_khan (M)     | female: text-only
+shawnee        → tecumseh (M)         | female: text-only
+dai_viet       → trung_trac (F)       | male: text-only
+pirates        → edward_teach (M)     | female: sayyida_al_hurra (F)
+britain        → ada_lovelace (F)     | male: text-only
+mexico         → simon_bolivar (M)    | female: text-only
+
+# No native leader — text-only prompts for both genders:
+greece, khmer, maya, mississippian, aksum, assyria, carthage, silla, tonga,
+abbasid, chola, hawaii, majapahit, ming, songhai, bulgaria, iceland,
+meiji, mughal, qing, siam, buganda, ottoman, qajar, nepal
+```
+
+#### Gender-Aware Civ Attire Descriptors
+
+Each of the 44 civs gets `male_attire` and `female_attire` with:
+- `clothing`: main garment description
+- `headwear`: era-appropriate headwear
+- `accessories`: jewelry, ornaments, weapons
+- `forbidden`: anachronisms that MUST NOT appear
+- `palette`: color scheme
+
+Example (Rome):
+```json
+{
+  "rome": {
+    "period": "1st century BCE - 5th century CE",
+    "setting": "Roman marble columns, eagle standards, Forum backdrop",
+    "male_attire": {
+      "clothing": "imperial toga picta with purple trim over tunica, gold-embroidered borders",
+      "headwear": "laurel wreath",
+      "accessories": "gold fibula brooch, imperial signet ring, arm bands",
+      "forbidden": ["trousers", "buttons", "epaulettes", "modern boots"],
+      "palette": ["imperial red", "gold", "marble white", "deep purple"]
+    },
+    "female_attire": {
+      "clothing": "Roman stola in imperial purple with gold belt, palla draped over shoulder",
+      "headwear": "golden diadem with jewels, or pearl-studded hair ornaments",
+      "accessories": "pearl necklace, gold armillae bracelets, cameo brooch",
+      "forbidden": ["trousers", "boots", "military armor", "modern elements"],
+      "palette": ["imperial red", "gold", "marble white", "deep purple"]
+    }
+  }
+}
+```
+
+**Work needed**: 33 civs have male-only descriptors in `generate-prompts.py` → add female variants. 10 civs missing entirely (Assyrian, Carthaginian, Silla, Tongan, Bulgarian, Dai Viet, Icelandic, Pirates, Shawnee, Nepalese) → create both genders. Total: **88 attire descriptors** (44 civs × 2 genders).
+
+#### Generation Status Tracking
+
+Per-pair status with attempts and quality scores for resume/retry. **Never overwrite generated files** — each attempt is saved as a numbered variant. The status tracks which variant is selected as "best".
+
+```json
+{
+  "augustus_abbasid": {
+    "loading": {
+      "status": "completed",
+      "variants": [
+        {"file": "loading_v1.png", "quality": 3},
+        {"file": "loading_v2.png", "quality": 5}
+      ],
+      "selected": "loading_v2.png"
+    },
+    "icon_neutral": {
+      "status": "completed",
+      "variants": [{"file": "icon_neutral_v1.png", "quality": 4}],
+      "selected": "icon_neutral_v1.png"
+    },
+    "icon_happy": {"status": "pending", "variants": []},
+    "icon_angry": {"status": "pending", "variants": []}
+  }
+}
+```
+
+Generated files stored as:
+```
+assets/generated/{leader}/{civ}/
+  loading_v1.png
+  loading_v2.png       # retry — v1 NOT deleted
+  icon_neutral_v1.png
+  icon_happy_v1.png
+  icon_angry_v1.png
+```
+
+### 3.2 Python Package — `ai-generator/`
+
+```
+ai-generator/
+  __init__.py
+  .env               # OPENROUTER_API_KEY=sk-or-v1-... (git-ignored)
+  config.py          # Load configs, native pairings, attire descriptors
+  client.py          # OpenRouter API wrapper with retry/rate-limiting
+  prompts.py         # Prompt construction (loading screen + 3 icon expressions)
+  generate.py        # Main CLI orchestrator
+  postprocess.py     # Resize, mask, downscale pipeline
+  status.py          # Status tracking (resume, retry)
+```
+
+#### `.env` — API key (git-ignored)
+
+```
+OPENROUTER_API_KEY=sk-or-v1-...
+```
+
+#### `config.py` — Metadata access layer
+
+- `load_config()` — reads `config/ai-generation.json` + `config/leaders-civilizations.json`
+- `is_native(leader, civ)` — checks skip list
+- `get_costume_ref(leader, civ)` — returns reference leader for same-gender costume, or None
+- `get_attire(civ, gender)` — returns gender-appropriate attire descriptor
+- `get_all_pairs()` — returns all (leader, civ) pairs needing generation
+- `get_leader_gender(leader)` — "male" or "female"
+
+#### `client.py` — OpenRouter API wrapper
+
+Uses OpenRouter's OpenAI-compatible chat completions endpoint (`https://openrouter.ai/api/v1/chat/completions`) with model `google/gemini-3.1-flash-image-preview`.
+
+```python
+class OpenRouterClient:
+    def __init__(self, api_key, model="google/gemini-3.1-flash-image-preview")
+    def generate_image(self, prompt, ref_images, aspect_ratio, resolution) -> Image
+    def multi_turn_generate(self, messages, aspect_ratio, resolution) -> Image
+```
+
+**Request format:**
+```python
+{
+    "model": "google/gemini-3.1-flash-image-preview",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "prompt text here"},
+                {"type": "image_url", "image_url": {"url": "data:image/png;base64,..."}}
+            ]
+        }
+    ],
+    "modalities": ["image", "text"],
+    "image_config": {
+        "aspect_ratio": "3:4",
+        "image_size": "2K"
+    }
+}
+```
+
+**Response format** — images returned as base64 in `choices[0].message.images[].image_url.url`
+
+**Multi-turn** — append assistant response + new user message to messages array for each turn (loading screen → icon neutral → icon happy → icon angry).
+
+**Features:**
+- Exponential backoff retry on 429/500
+- Rate limiting (80 RPM per OpenRouter limits)
+- Cost tracking per call
+- Image save with metadata
+- Reference images sent as base64-encoded PNG in content array
+
+#### `prompts.py` — Prompt construction
+
+Three reference image roles per generation:
+1. **Identity anchor**: `assets/leaders/{leader}/loading_original.png`
+2. **Costume reference**: native leader's `loading_original.png` (same gender only, optional)
+3. **Background reference**: `assets/civilizations/{civ}/background_1080.png`
+
+#### Image Specs — Reference vs Output
+
+All reference images are **RGBA with transparent backgrounds**. Output must match.
+
+| Asset | Reference size | Reference ratio | API aspect_ratio | API image_size | Post-process to |
+|-------|---------------|-----------------|-----------------|----------------|-----------------|
+| Loading screen | 800×1060 | ~3:4 | `"3:4"` | `"2K"` | Resize to 800×1060 RGBA |
+| Hex icon (from headshot) | 256×360 | 32:45 | `"3:4"` | `"1K"` | Crop to 32:45, resize to 256×360, hex mask |
+| Circ icon (from headshot) | 256×256 | 1:1 | `"1:1"` | `"1K"` | Resize to 256×256, circ mask |
+
+**Note**: Gemini may not produce true alpha transparency. Post-processing must:
+1. Generate on dark/flat background
+2. Detect and remove background → convert to RGBA with transparent bg
+3. Or: request "solid dark background" and threshold to alpha in post-processing
+
+**Loading screen prompt template:**
+```
+Generate a portrait of this leader dressed as a ruler of [CIV_NAME].
+
+IDENTITY: This is [LEADER_NAME]. [Identity anchor image] shows their exact appearance.
+Preserve their face, skin tone, facial structure, hair color, and body proportions exactly.
+
+COSTUME: Dress them in [PERIOD] [CIV_NAME] attire:
+- Clothing: [attire.clothing]
+- Headwear: [attire.headwear]
+- Accessories: [attire.accessories]
+Do NOT include: [attire.forbidden]
+
+[IF costume_ref exists]:
+Use [costume reference image] as a visual guide for the attire style and details.
+Apply similar garments and accessories to this leader while respecting their body type.
+
+STYLE: Match the painterly digital art style of Civilization VII game art.
+Dramatic cinematic side lighting, solid dark background (for easy removal).
+Three-quarter view, standing pose.
+Color palette: [attire.palette].
+Image should be 3:4 aspect ratio matching the reference images provided.
+```
+
+**Icon headshot prompt template (per expression):**
+```
+Now create a close-up head-and-shoulders portrait of this same character
+in the same [CIV] costume.
+
+Expression: [NEUTRAL: calm dignified | HAPPY: warm satisfied smile | ANGRY: stern fierce scowl]
+Keep the exact same outfit, headwear, and accessories from the loading screen.
+Centered face, solid dark background, same painterly Civ7 art style.
+3:4 aspect ratio matching the reference.
+```
+
+#### `generate.py` — Main CLI orchestrator
+
+```bash
+python3 -m ai-generator.generate --leader augustus              # one leader, all civs
+python3 -m ai-generator.generate --leader augustus --civ abbasid # one pair
+python3 -m ai-generator.generate --all                          # all pending pairs
+python3 -m ai-generator.generate --resume                       # pick up where left off
+python3 -m ai-generator.generate --retry                        # retry failures
+python3 -m ai-generator.generate --dry-run                      # preview only
+```
+
+**Per-pair workflow** (single multi-turn chat session for consistency):
+
+```
+1. Check if pair is native → SKIP
+2. Check if already completed in status → SKIP (unless --force)
+3. Load reference images:
+   - identity: assets/leaders/{leader}/loading_original.png
+   - costume_ref: assets/leaders/{native_leader}/loading_original.png (if same gender)
+   - background: assets/civilizations/{civ}/background_1080.png
+4. Create chat session via OpenRouter
+5. Turn 1: Generate loading screen (3:4 aspect, 2K resolution)
+   → Save to assets/generated/{leader}/{civ}/loading_v{N}.png (never overwrite)
+6. Turn 2: Generate neutral icon headshot (3:4 aspect, 1K)
+   → Save to assets/generated/{leader}/{civ}/icon_neutral_v{N}.png
+7. Turn 3: Generate happy icon headshot (3:4 aspect, 1K)
+   → Save to assets/generated/{leader}/{civ}/icon_happy_v{N}.png
+8. Turn 4: Generate angry icon headshot (3:4 aspect, 1K)
+   → Save to assets/generated/{leader}/{civ}/icon_angry_v{N}.png
+9. Update status JSON with new variant, auto-select latest as "selected"
+```
+
+#### `postprocess.py` — Image processing pipeline
+
+Takes the **selected** variant from each pair's status and produces all final mod assets:
+
+```
+For each pair:
+  Read status JSON → get "selected" variant for each asset type
+
+  Loading screen:
+    selected loading_v{N}.png (3:4) → resize to 800×1060 RGBA → save as lsl_{leader}_{civ}.png
+
+  Hex icons (from selected neutral/happy/angry headshots):
+    selected icon_*_v{N}.png (3:4) → crop to 32:45 aspect → resize to 256×360 → apply hex mask
+    → downscale to 128×180 and 64×90
+    Neutral → hex_256, hex_128, hex_64
+    Happy   → hex_128_h
+    Angry   → hex_128_a
+
+  Circle icons (from selected neutral headshot):
+    selected icon_neutral_v{N}.png (3:4) → crop center square → resize to 256×256 → apply circle mask
+    → downscale to 128×128 and 64×64
+
+  Create extensionless copies for all icons
+  Copy to authentic-leaders/ mod directory
+```
+
+Reuses existing functions from `scripts/generate.py`:
+- `create_hex_mask()` — hex icon mask generation
+- `create_circle_mask()` — circle icon mask generation
+- `crop_center_rect()` — center cropping utility
+
+### 3.3 Persona/Alt Leader Handling
+
+5 persona alts: Ashoka Alt, Friedrich Alt, Himiko Alt, Napoleon Alt, Xerxes Alt
+
+- Same face as base leader, different default outfit
+- Use persona's own `alt_loading_original.png` as identity anchor
+- Native skips: ashoka_alt→maurya, friedrich_alt→prussia, napoleon_alt→french_empire, xerxes_alt→persia, himiko_alt→(none)
+- Output naming: `lsl_{key}_alt_{civ}.png`, `lp_hex_{key}_alt_{civ}_256.png`
+- Generate independently (don't reuse base leader's civ images)
+
+### 3.4 Quality Control
+
+**Automated checks** after each generation:
+1. Dimensions: correct aspect ratio and minimum resolution
+2. Face present: lightweight face detection (mediapipe or similar)
+3. Background: transparent/dark background verified via alpha histogram
+4. Visual similarity: leader face embedding distance vs reference
+
+**Re-generation** for failures:
+- Max 3 retries with prompt adjustments (more specific, higher thinking level)
+- Track all attempts in status JSON — never overwrite previous variants
+- Fall back to stub for persistent failures
+
+**Manual review**:
+```bash
+python3 -m ai-generator.generate --review  # web gallery for review
+```
+
+### 3.5 Integration with Existing Pipeline
+
+After AI generation:
+```bash
+python3 -m ai-generator.postprocess --all   # resize, mask, downscale
+python3 scripts/generate-mod-data.py         # regenerate SQL, XML, modinfo
+```
+
+Output paths match existing stub conventions — `generate-mod-data.py` picks up new images automatically.
+
+### 3.6 Volume & Cost Estimates
+
+Base leaders: 28 × 44 = 1,232 pairs − 21 native skips = **~1,211 pairs**
+Persona alts: 5 × 44 = 220 pairs − 4 native skips = **~216 pairs**
+Total pairs: **~1,427**
+
+| Item | Count | $/image | Total |
+|------|-------|---------|-------|
+| Loading screens | ~1,427 | $0.10 | ~$143 |
+| Icon neutral headshots | ~1,427 | $0.07 | ~$100 |
+| Icon happy headshots | ~1,427 | $0.07 | ~$100 |
+| Icon angry headshots | ~1,427 | $0.07 | ~$100 |
+| Re-generations (~20%) | ~1,140 | $0.08 | ~$91 |
+| **Total** | **~6,848** | | **~$534** |
+
+Time: ~6,850 API calls at 80 RPM = ~1.4 hours interactive.
+
+### 3.7 Implementation — Phase A: Build Pipeline (code, metadata, config)
+
+1. `.gitignore` + `ai-generator/.env` — API key setup (git-ignored)
+2. `config/ai-generation.json` — metadata, native pairings, 44 civs × 2 genders attire descriptors
+3. `ai-generator/config.py` — load and query metadata
+4. `ai-generator/client.py` — OpenRouter API wrapper
+5. `ai-generator/prompts.py` — prompt construction
+6. `ai-generator/status.py` — generation tracking
+7. `ai-generator/generate.py` — main CLI orchestrator
+8. `ai-generator/postprocess.py` — resize/mask/downscale pipeline
+
+### 3.8 Implementation — Phase B: Generation Run
+
+9. Test with 1 leader × 2-3 civs, validate quality and prompt effectiveness
+10. Full generation run across all ~1,427 pairs
+11. Quality review, re-generation of failures
+12. Run `generate-mod-data.py` to rebuild mod data from generated images
+13. In-game verification
+
+---
+
+## Phase 4: 3D Animation Changes
 
 **Goal**: Change the 3D leader model/animation based on the civilization being played.
 
