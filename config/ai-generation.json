@@ -1,0 +1,933 @@
+{
+  "_comment": "AI Generation Pipeline Configuration - attire descriptors, native pairings, and costume references for all leader x civilization combinations",
+  "_version": "1.0.0",
+
+  "native_pairings": {
+    "base": {
+      "augustus": "rome",
+      "hatshepsut": "egypt",
+      "ashoka": "maurya",
+      "xerxes": "persia",
+      "confucius": "han",
+      "pachacuti": "inca",
+      "charlemagne": "normandy",
+      "isabella": "spain",
+      "napoleon": "french_empire",
+      "lafayette": "french_empire",
+      "catherine": "russia",
+      "benjamin_franklin": "america",
+      "harriet_tubman": "america",
+      "friedrich": "prussia",
+      "genghis_khan": "mongolia",
+      "tecumseh": "shawnee",
+      "trung_trac": "dai_viet",
+      "ada_lovelace": "britain",
+      "edward_teach": "pirates",
+      "sayyida_al_hurra": "pirates",
+      "simon_bolivar": "mexico"
+    },
+    "persona": {
+      "ashoka_alt": "maurya",
+      "friedrich_alt": "prussia",
+      "napoleon_alt": "french_empire",
+      "xerxes_alt": "persia"
+    }
+  },
+
+  "leader_genders": {
+    "amina": "female",
+    "ashoka": "male",
+    "augustus": "male",
+    "benjamin_franklin": "male",
+    "catherine": "female",
+    "charlemagne": "male",
+    "confucius": "male",
+    "friedrich": "male",
+    "harriet_tubman": "female",
+    "hatshepsut": "female",
+    "himiko": "female",
+    "ibn_battuta": "male",
+    "isabella": "female",
+    "jose_rizal": "male",
+    "lafayette": "male",
+    "machiavelli": "male",
+    "napoleon": "male",
+    "pachacuti": "male",
+    "tecumseh": "male",
+    "trung_trac": "female",
+    "xerxes": "male",
+    "ada_lovelace": "female",
+    "simon_bolivar": "male",
+    "genghis_khan": "male",
+    "lakshmibai": "female",
+    "edward_teach": "male",
+    "sayyida_al_hurra": "female",
+    "gilgamesh": "male"
+  },
+
+  "costume_references": {
+    "rome": { "male": "augustus", "female": null },
+    "egypt": { "male": null, "female": "hatshepsut" },
+    "han": { "male": "confucius", "female": null },
+    "maurya": { "male": "ashoka", "female": null },
+    "persia": { "male": "xerxes", "female": null },
+    "inca": { "male": "pachacuti", "female": null },
+    "normandy": { "male": "charlemagne", "female": null },
+    "spain": { "male": null, "female": "isabella" },
+    "french_empire": { "male": "napoleon", "female": null },
+    "russia": { "male": null, "female": "catherine" },
+    "america": { "male": "benjamin_franklin", "female": "harriet_tubman" },
+    "prussia": { "male": "friedrich", "female": null },
+    "mongolia": { "male": "genghis_khan", "female": null },
+    "shawnee": { "male": "tecumseh", "female": null },
+    "dai_viet": { "male": null, "female": "trung_trac" },
+    "pirates": { "male": "edward_teach", "female": "sayyida_al_hurra" },
+    "britain": { "male": null, "female": "ada_lovelace" },
+    "mexico": { "male": "simon_bolivar", "female": null },
+    "greece": { "male": null, "female": null },
+    "khmer": { "male": null, "female": null },
+    "maya": { "male": null, "female": null },
+    "mississippian": { "male": null, "female": null },
+    "aksum": { "male": null, "female": null },
+    "assyria": { "male": null, "female": null },
+    "carthage": { "male": null, "female": null },
+    "silla": { "male": null, "female": null },
+    "tonga": { "male": null, "female": null },
+    "abbasid": { "male": null, "female": null },
+    "chola": { "male": null, "female": null },
+    "hawaii": { "male": null, "female": null },
+    "majapahit": { "male": null, "female": null },
+    "ming": { "male": null, "female": null },
+    "songhai": { "male": null, "female": null },
+    "bulgaria": { "male": null, "female": null },
+    "iceland": { "male": null, "female": null },
+    "buganda": { "male": null, "female": null },
+    "meiji": { "male": null, "female": null },
+    "mughal": { "male": null, "female": null },
+    "qing": { "male": null, "female": null },
+    "siam": { "male": null, "female": null },
+    "ottoman": { "male": null, "female": null },
+    "qajar": { "male": null, "female": null },
+    "nepal": { "male": null, "female": null }
+  },
+
+  "civilizations": {
+    "rome": {
+      "name": "Roman Empire",
+      "period": "1st century BCE - 5th century CE",
+      "setting": "Roman columns, marble architecture, Roman eagle standards",
+      "male_attire": {
+        "clothing": "imperial toga picta with broad purple border over white tunica, gold-embroidered hem, draped over left shoulder with sinus fold",
+        "headwear": "laurel wreath of gold leaves",
+        "accessories": "gold fibula brooch at shoulder, imperial signet ring, gold arm bands, calcei patricii boots",
+        "forbidden": ["trousers", "buttons", "epaulettes", "modern boots", "belted tunic"],
+        "palette": ["deep red", "gold", "marble white", "imperial purple"]
+      },
+      "female_attire": {
+        "clothing": "stola in Tyrian purple with gold-threaded borders over inner tunica, palla draped gracefully over left shoulder",
+        "headwear": "golden stephane diadem with inset gems, or pearl-woven hairnet (reticulum)",
+        "accessories": "pearl necklace in multiple strands, gold armillae bracelets, cameo brooch, gold serpentine earrings",
+        "forbidden": ["trousers", "modern buttons", "military armor", "bare midriff"],
+        "palette": ["deep red", "gold", "marble white", "imperial purple"]
+      }
+    },
+    "egypt": {
+      "name": "Ancient Egypt",
+      "period": "3100 BCE - 30 BCE",
+      "setting": "pyramids, hieroglyphics, Nile river, papyrus columns",
+      "male_attire": {
+        "clothing": "white linen shendyt kilt with pleated front panel, sheer linen robe over shoulders with gold-beaded collar (wesekh)",
+        "headwear": "nemes headdress in striped blue and gold linen, or double crown (pschent) of Upper and Lower Egypt",
+        "accessories": "wide usekh collar of gold, turquoise, and lapis lazuli, gold wrist cuffs, ceremonial crook and flail",
+        "forbidden": ["leather boots", "woolen cloth", "iron armor", "buttons", "tailored garments"],
+        "palette": ["gold", "turquoise", "sandy beige", "lapis blue"]
+      },
+      "female_attire": {
+        "clothing": "form-fitting white linen kalasiris sheath dress with broad beaded straps, sheer pleated outer robe",
+        "headwear": "vulture headdress with uraeus cobra, or gold circlet with lotus motif and long braided wig",
+        "accessories": "broad usekh collar of gold and faience beads, gold serpent arm bands, ankh pendant, kohl-lined eyes",
+        "forbidden": ["leather boots", "woolen cloth", "iron armor", "tailored bodices"],
+        "palette": ["gold", "turquoise", "sandy beige", "lapis blue"]
+      }
+    },
+    "greece": {
+      "name": "Ancient Greece",
+      "period": "8th - 2nd century BCE",
+      "setting": "Parthenon, Greek columns, olive groves, Aegean sea",
+      "male_attire": {
+        "clothing": "white linen chiton with meander (Greek key) border in gold, himation draped over left shoulder, pinned at right",
+        "headwear": "olive wreath (kotinos) or gold laurel stephanos",
+        "accessories": "gold fibula pin at shoulder, embossed bronze belt, leather sandals with gold buckles",
+        "forbidden": ["trousers", "boots", "long sleeves", "buttons", "fur"],
+        "palette": ["white", "blue", "olive green", "terracotta"]
+      },
+      "female_attire": {
+        "clothing": "floor-length Doric peplos in saffron or white linen, belted at waist with gold cord, pleated chiton underneath",
+        "headwear": "gold diadem with floral motifs, or woven fillet ribbon through upswept hair",
+        "accessories": "gold disc earrings, snake-form arm bracelet, amber bead necklace, decorated girdle belt",
+        "forbidden": ["trousers", "tall boots", "barbarian furs", "corsets"],
+        "palette": ["white", "blue", "olive green", "terracotta"]
+      }
+    },
+    "han": {
+      "name": "Han Dynasty China",
+      "period": "206 BCE - 220 CE",
+      "setting": "Chinese palace, silk banners, Great Wall in distance",
+      "male_attire": {
+        "clothing": "layered silk hanfu with wide sleeves and crossed collar (jiaoling youren), outer shenyi robe in deep red with gold-embroidered dragon motifs, sash belt at waist",
+        "headwear": "black lacquered guan cap (jinxian guan) with jade pin, or mianguan ceremonial crown with bead curtains",
+        "accessories": "jade bi disc pendant on silk cord, jade belt hook, silk fan, embroidered cloth shoes",
+        "forbidden": ["Qing-style queue hairstyle", "Manchu collar", "horse-hoof sleeves", "Western buttons"],
+        "palette": ["red", "gold", "jade green", "imperial yellow"]
+      },
+      "female_attire": {
+        "clothing": "layered silk hanfu with wide flowing sleeves, deep ruqun bodice and skirt combination, sash tied at high waist with trailing ribbons",
+        "headwear": "elaborate gold buyao hairpin with dangling jade pendants, hair in high cloud bun (yunjibun)",
+        "accessories": "jade disc earrings, gold filigree necklace, silk waist sash with jade ornament, painted silk fan",
+        "forbidden": ["Qing-style queue", "Manchu collar", "bound feet references", "Western corset"],
+        "palette": ["red", "gold", "jade green", "imperial yellow"]
+      }
+    },
+    "khmer": {
+      "name": "Khmer Empire",
+      "period": "802 - 1431 CE",
+      "setting": "Angkor Wat temple, tropical vegetation, stone carvings, lotus-filled moats",
+      "male_attire": {
+        "clothing": "silk sampot chang kben draped between legs and tucked at back, bare chest with crossed gold sash (sabai), ornate gold belt",
+        "headwear": "tiered gold mukut crown with pointed spire, or conical gold diadem",
+        "accessories": "elaborate gold collar necklace, gold arm bands, ankle bracelets, gold rings on every finger",
+        "forbidden": ["full-length trousers", "closed shoes", "heavy fur", "Western military uniform"],
+        "palette": ["gold", "stone gray", "jungle green", "saffron"]
+      },
+      "female_attire": {
+        "clothing": "silk sampot draped as long skirt with gold-threaded border, sabai cloth draped diagonally across chest over one shoulder, jeweled belt",
+        "headwear": "ornate gold mukut crown with floral finials, or tiered gold diadem with flame motifs, hair in elaborate updo",
+        "accessories": "wide gold choker with lotus motif, gold chandelier earrings, stacked gold bangles, jeweled anklets",
+        "forbidden": ["full trousers", "closed shoes", "heavy layered robes", "Western corset"],
+        "palette": ["gold", "stone gray", "jungle green", "saffron"]
+      }
+    },
+    "maurya": {
+      "name": "Maurya Empire",
+      "period": "322 - 185 BCE",
+      "setting": "Indian palace, Ashoka pillar with lion capital, lotus gardens",
+      "male_attire": {
+        "clothing": "fine white cotton antariya dhoti draped in kachha style, uttariya shoulder cloth with gold borders, light muslin upper garment",
+        "headwear": "jeweled turban (ushnisha) with central gem and peacock feather, or gold crown with lotus motifs",
+        "accessories": "layered gold necklaces with pendant gems, jeweled arm bands (keyura), gold earrings, ornate belt with tiger-head buckle",
+        "forbidden": ["Mughal-era clothing", "British colonial uniform", "stitched garments", "shoes in palace"],
+        "palette": ["saffron", "white", "deep blue", "gold"]
+      },
+      "female_attire": {
+        "clothing": "unstitched cotton sari in white or saffron with gold-embroidered border (zari), draped elegantly with pleated front and pallu over shoulder",
+        "headwear": "gold maang tikka forehead ornament with chain into hair parting, hair in braided bun with jasmine flowers",
+        "accessories": "gold jhumka earrings, choker necklace with pendant, stacked gold bangles, waist chain (kamarband), nose ring",
+        "forbidden": ["Mughal-era purdah", "stitched blouse anachronism", "modern sari draping", "Western footwear"],
+        "palette": ["saffron", "white", "deep blue", "gold"]
+      }
+    },
+    "maya": {
+      "name": "Maya Civilization",
+      "period": "2000 BCE - 1500 CE",
+      "setting": "Maya step pyramid, jungle canopy, carved stelae, sacred cenote",
+      "male_attire": {
+        "clothing": "woven cotton loincloth (ex) with elaborate embroidered panel, jaguar-skin hip drape, jade-beaded pectoral chest piece",
+        "headwear": "towering quetzal-feather headdress with jade mosaic brow band and carved jade central ornament",
+        "accessories": "large jade ear spools, jade bead necklace in multiple tiers, obsidian lip plug, shell and jade wrist cuffs",
+        "forbidden": ["metal armor", "steel weapons", "European cloth", "full body robes"],
+        "palette": ["jade green", "turquoise", "red", "stone gray"]
+      },
+      "female_attire": {
+        "clothing": "white cotton huipil tunic with elaborate red and blue geometric embroidery, wrapped cotton skirt tied at waist",
+        "headwear": "quetzal feather fan headdress with jade brow ornament, hair woven with colored threads and jade beads",
+        "accessories": "large jade disc earrings, layered jade bead necklace, shell bracelet, painted body designs in red",
+        "forbidden": ["metal armor", "European textiles", "full trousers", "glass beads"],
+        "palette": ["jade green", "turquoise", "red", "stone gray"]
+      }
+    },
+    "mississippian": {
+      "name": "Mississippian Culture",
+      "period": "800 - 1600 CE",
+      "setting": "earthen mound (Cahokia), river valley, ceremonial plaza, wooden palisade",
+      "male_attire": {
+        "clothing": "tanned deerskin breechcloth with painted symbols, feathered mantle draped over shoulders, copper-decorated chest plate",
+        "headwear": "copper forehead plate with embossed falcon motif, or feathered headdress with dyed turkey feathers",
+        "accessories": "large marine shell gorget with cross-in-circle design, copper ear spools, shell bead necklace (wampum strands), face paint",
+        "forbidden": ["European cloth", "metal armor", "steel weapons", "glass beads", "horses"],
+        "palette": ["earth brown", "copper", "sky blue", "forest green"]
+      },
+      "female_attire": {
+        "clothing": "woven fiber wraparound skirt with geometric patterns, deerskin shawl over shoulders with shell-bead fringe",
+        "headwear": "shell and seed bead headband, hair parted center with bun at nape adorned with feathers",
+        "accessories": "columella shell pendant necklace, copper hair pins, shell ear ornaments, woven cane bracelet",
+        "forbidden": ["European cloth", "metal jewelry", "glass beads", "dyed wool", "horses"],
+        "palette": ["earth brown", "copper", "sky blue", "forest green"]
+      }
+    },
+    "persia": {
+      "name": "Achaemenid Persia",
+      "period": "550 - 330 BCE",
+      "setting": "Persepolis columns, Persian relief carvings, royal paradise garden",
+      "male_attire": {
+        "clothing": "flowing Persian riding robe (kandys) draped over shoulders, embroidered under-tunic with wide sleeves, fitted trousers tucked into soft boots",
+        "headwear": "fluted tiara (kitaris) or tall felt bashlyk cap, or crenellated gold crown",
+        "accessories": "gold torque neck ring with lion-head terminals, gold arm bands with griffon motifs, ornate gold belt, gold earring",
+        "forbidden": ["Roman toga", "Greek chiton", "medieval plate armor", "Islamic turban"],
+        "palette": ["royal blue", "gold", "stone gray", "deep purple"]
+      },
+      "female_attire": {
+        "clothing": "richly embroidered floor-length tunic with wide sleeves in purple and blue, light veil draped from crown, flowing trousers beneath",
+        "headwear": "gold diadem with rosette motifs and dangling chain ornaments, or tall headdress with veil",
+        "accessories": "gold torque necklace, elaborate gold disc earrings, gold bracelets with inlaid lapis lazuli, jeweled belt sash",
+        "forbidden": ["Roman toga", "Greek peplos", "Islamic-era clothing", "medieval corset"],
+        "palette": ["royal blue", "gold", "stone gray", "deep purple"]
+      }
+    },
+    "aksum": {
+      "name": "Kingdom of Aksum",
+      "period": "1st - 7th century CE",
+      "setting": "Aksum stelae obelisks, Ethiopian highlands, ancient stone church",
+      "male_attire": {
+        "clothing": "draped white cotton shamma with broad colored border stripe (tibeb) in red and gold, wrapped over both shoulders, embroidered tunic underneath",
+        "headwear": "tall gold Aksumite crown with cross finial, or cloth headwrap with gold circlet",
+        "accessories": "large gold cross pendant on chain, gold arm bands, ornate gold ring, ceremonial fly whisk",
+        "forbidden": ["Islamic turban", "European armor", "modern Ethiopian suit", "Roman toga"],
+        "palette": ["gold", "deep red", "green", "stone gray"]
+      },
+      "female_attire": {
+        "clothing": "white cotton kemis dress to ankles with colorful embroidered borders (tibeb), netela shawl draped over hair and shoulders",
+        "headwear": "gold filigree headband with dangling coin ornaments, or embroidered headscarf with gold circlet",
+        "accessories": "large gold hoop earrings, layered gold necklace with cross pendant, silver bangles, tattoo-style forehead cross",
+        "forbidden": ["Islamic veil", "European dress", "modern habesha kemis style", "denim"],
+        "palette": ["gold", "deep red", "green", "stone gray"]
+      }
+    },
+    "assyria": {
+      "name": "Neo-Assyrian Empire",
+      "period": "911 - 609 BCE",
+      "setting": "Nineveh palace gates, lamassu winged bull statues, cuneiform-inscribed walls, Assyrian relief carvings",
+      "male_attire": {
+        "clothing": "elaborately fringed woolen robe with geometric rosette embroidery, cross-body sash with tasseled ends, layered shawl over one shoulder",
+        "headwear": "tall conical fez-like royal cap (kularis) with gold band and rosette, or gold headband with horned divine crown",
+        "accessories": "intricately curled and oiled square-cut beard, gold earrings, wide gold bracelet with inlaid rosettes, ceremonial mace",
+        "forbidden": ["Roman toga", "Greek chiton", "Persian riding trousers", "turban", "medieval armor"],
+        "palette": ["royal blue", "gold", "deep crimson", "stone gray"]
+      },
+      "female_attire": {
+        "clothing": "fringed woolen robe with layered rosette-pattern embroidery, draped shawl pinned at shoulder, ankle-length with wide sash belt",
+        "headwear": "gold diadem with rosette and palmette motifs, hair in elaborate braided coils with gold ribbon woven through",
+        "accessories": "gold hoop earrings with granulation, wide gold cuff bracelets with lapis lazuli inlay, gold choker, kohl-lined eyes",
+        "forbidden": ["Roman stola", "Greek peplos", "Islamic-era covering", "modern corset"],
+        "palette": ["royal blue", "gold", "deep crimson", "stone gray"]
+      }
+    },
+    "carthage": {
+      "name": "Carthaginian Republic",
+      "period": "814 - 146 BCE",
+      "setting": "Carthage harbor with warships, Temple of Tanit, Phoenician purple-dye workshops, Mediterranean coast",
+      "male_attire": {
+        "clothing": "Phoenician-style long tunic in Tyrian purple with gold-embroidered borders, lighter linen under-tunic, draped mantle clasped at right shoulder",
+        "headwear": "pointed Phoenician cap (pileus) in purple felt, or gold diadem with crescent moon of Tanit",
+        "accessories": "gold Tanit pendant (triangle with disc and crescent), gold signet ring with ship seal, ivory-handled curved sword (falcata)",
+        "forbidden": ["Roman toga", "Greek armor style", "medieval plate", "turban"],
+        "palette": ["Tyrian purple", "gold", "Mediterranean blue", "ivory white"]
+      },
+      "female_attire": {
+        "clothing": "flowing Tyrian purple tunic with gold-embroidered hem, sheer linen overdress, sash belt with tasseled ends",
+        "headwear": "gold tiara with crescent moon and disc of Tanit, or embroidered veil over elaborate curled hair",
+        "accessories": "gold crescent earrings, Tanit symbol pendant necklace, glass bead bracelets in many colors, gold anklets",
+        "forbidden": ["Roman stola", "Greek peplos style", "Islamic-era clothing", "modern dress"],
+        "palette": ["Tyrian purple", "gold", "Mediterranean blue", "ivory white"]
+      }
+    },
+    "silla": {
+      "name": "Silla Kingdom",
+      "period": "57 BCE - 935 CE",
+      "setting": "Gyeongju capital, Cheomseongdae observatory, Buddhist temple, gold crown tombs, Silla pagoda",
+      "male_attire": {
+        "clothing": "silk dopo-style layered robe with wide sleeves in deep blue, white inner garment with tied front, baji trousers, sash belt with gold buckle",
+        "headwear": "tall black lacquered gwanmo official's cap with gold ornamental wings, or gold Silla crown with upright tree and antler branches",
+        "accessories": "jade comma-shaped gogok bead necklace (magatama), gold belt with dangling pendants, ornamental sword in gold scabbard",
+        "forbidden": ["Japanese kimono", "Chinese Ming robes", "Joseon-era gat hat", "Western military uniform"],
+        "palette": ["deep blue", "gold", "jade green", "celadon"]
+      },
+      "female_attire": {
+        "clothing": "short jeogori jacket with ribbon tie (otgoreum) over high-waisted full chima skirt in flowing silk, layered with sheer outer robe",
+        "headwear": "gold Silla queen's crown with upright leaf and tree ornaments, jade comma beads dangling from sides, or gold filigree hairpin",
+        "accessories": "gold filigree earrings with dangling chains, layered gold and jade necklace, gold girdle belt with pendant ornaments",
+        "forbidden": ["Japanese geisha styling", "Chinese Tang court dress", "modern hanbok", "Western gown"],
+        "palette": ["deep blue", "gold", "jade green", "celadon"]
+      }
+    },
+    "tonga": {
+      "name": "Tu'i Tonga Empire",
+      "period": "950 - 1865 CE",
+      "setting": "Ha'amonga 'a Maui stone trilithon, Pacific ocean, tapa-decorated fale house, coral reef lagoon",
+      "male_attire": {
+        "clothing": "fine woven ta'ovala waist mat over tapa bark cloth (ngatu) wraparound skirt, bare chest with diagonal sash of woven pandanus leaf",
+        "headwear": "garland of frangipani flowers and green leaves, or woven headband with red feather tufts",
+        "accessories": "whale tooth tabua pendant on braided coconut fiber cord, shell necklace, tattoo patterns (pe'a) on thighs and torso",
+        "forbidden": ["European cloth", "metal armor", "shoes", "feathered war helmet (non-Tongan)"],
+        "palette": ["tapa brown", "ocean blue", "palm green", "shell white"]
+      },
+      "female_attire": {
+        "clothing": "decorated tapa bark cloth wraparound skirt to mid-calf, fine woven pandanus-leaf kiekie waist garment, tapa shoulder drape",
+        "headwear": "crown of fragrant flowers (heilala blossoms) and woven green leaves, or decorated tapa headband",
+        "accessories": "whale tooth pendant necklace, shell and coconut bead lei, tattooed hands (tatatau), scented coconut oil on skin",
+        "forbidden": ["European dress", "metal jewelry", "glass beads", "sewn garments"],
+        "palette": ["tapa brown", "ocean blue", "palm green", "shell white"]
+      }
+    },
+    "abbasid": {
+      "name": "Abbasid Caliphate",
+      "period": "750 - 1258 CE",
+      "setting": "Islamic geometric architecture, Baghdad skyline, ornate library (House of Wisdom), muqarnas arches",
+      "male_attire": {
+        "clothing": "layered black silk robe (khil'a) with gold tiraz embroidered bands on upper arms, white inner thobe, wide sash at waist",
+        "headwear": "black turban (imamah) wrapped over tall qalansuwa cap, with jeweled brooch at front",
+        "accessories": "gold-hilted ceremonial dagger, jeweled ring of authority, ivory prayer beads, calligraphy scroll",
+        "forbidden": ["European armor", "Christian cross", "bare-headed in court", "short tunics"],
+        "palette": ["black", "gold", "deep blue", "white"]
+      },
+      "female_attire": {
+        "clothing": "richly embroidered silk dress with gold tiraz bands on sleeves, flowing outer robe in deep blue, wide embroidered sash",
+        "headwear": "silk veil draped loosely over elaborately braided hair, gold circlet with pendant gems at forehead",
+        "accessories": "gold filigree earrings, pearl and gold necklace, henna-decorated hands, jeweled gold bracelets",
+        "forbidden": ["European corset", "bare shoulders in court", "Christian iconography", "modern dress"],
+        "palette": ["black", "gold", "deep blue", "white"]
+      }
+    },
+    "chola": {
+      "name": "Chola Dynasty",
+      "period": "3rd century BCE - 1279 CE",
+      "setting": "Brihadeeswarar temple, South Indian gopuram gateway, naval fleet, Chola bronze sculptures",
+      "male_attire": {
+        "clothing": "white silk veshti dhoti with gold zari border wrapped in pancha-kacham style, bare chest with sacred thread (yajnopavita), silk angavastram shoulder cloth",
+        "headwear": "jeweled gold kireedam crown with fan-shaped crest, or gold-threaded turban with ruby centerpiece",
+        "accessories": "elaborate gold necklace with temple-style pendant (haram), thick gold arm bands (vanki), gold waist chain, gold toe rings",
+        "forbidden": ["Mughal-era clothing", "stitched garments", "boots", "Northern Indian sherwani"],
+        "palette": ["bronze", "gold", "temple red", "deep blue"]
+      },
+      "female_attire": {
+        "clothing": "nine-yard silk sari in deep red with heavy gold zari border draped in Chola-period style, unstitched bodice cloth, gold waist belt",
+        "headwear": "gold jadai nagam hair braid ornament with fan pendant, surya-chandra (sun-moon) gold hair pins, jasmine garland in hair",
+        "accessories": "gold temple jewelry set with ruby and emerald, chandelier jhumka earrings, mango-motif gold choker, nose ring (nath), heavy gold bangles",
+        "forbidden": ["Mughal-era purdah", "Northern Indian lehenga", "modern blouse", "Western shoes"],
+        "palette": ["bronze", "gold", "temple red", "deep blue"]
+      }
+    },
+    "hawaii": {
+      "name": "Kingdom of Hawaii",
+      "period": "1795 - 1893 CE",
+      "setting": "volcanic island landscape, tropical ocean, carved ki'i akua tiki statues, palm-fringed coast",
+      "male_attire": {
+        "clothing": "flowing feather cloak (ahu ula) in red and yellow feathers over bare chest, tapa bark cloth (kapa) malo loincloth",
+        "headwear": "crested feather helmet (mahiole) in red and yellow with forward-curving crest",
+        "accessories": "whale-tooth hook pendant (lei niho palaoa) on braided human hair cord, shell lei necklace, wrist guards of woven fibers",
+        "forbidden": ["European military uniform", "metal armor", "shoes", "Western hat"],
+        "palette": ["red feather", "yellow feather", "ocean blue", "volcanic black"]
+      },
+      "female_attire": {
+        "clothing": "tapa bark cloth (kapa) wraparound skirt (pa'u) with geometric stamped designs, shoulder drape of fine kapa cloth, flower garlands",
+        "headwear": "crown of braided ferns and fragrant maile leaves, or red-feathered lei po'o headband",
+        "accessories": "whale tooth pendant (lei niho palaoa), shell and seed lei necklaces in multiple strands, flower lei (plumeria, pikake)",
+        "forbidden": ["European dress", "metal jewelry", "sewn garments", "corset"],
+        "palette": ["red feather", "yellow feather", "ocean blue", "volcanic black"]
+      }
+    },
+    "inca": {
+      "name": "Inca Empire",
+      "period": "1438 - 1533 CE",
+      "setting": "Machu Picchu, Andes mountains, Incan ashlar stone walls, agricultural terraces",
+      "male_attire": {
+        "clothing": "finely woven alpaca wool uncu tunic with tocapu geometric patterns in bright colors, yacolla mantle draped over shoulders",
+        "headwear": "royal llautu headband with multicolored fringe (mascapaicha) falling over forehead, feather plume",
+        "accessories": "large gold ear spools (orejones), gold pectoral disc, coca bag at waist, gold arm bands",
+        "forbidden": ["European armor", "iron weapons", "wheeled vehicles", "horses"],
+        "palette": ["gold", "red", "mountain blue", "stone gray"]
+      },
+      "female_attire": {
+        "clothing": "ankle-length woven aksu dress secured at shoulders with gold tupu pins, wide chumpi woven belt with geometric patterns, lliclla shawl over shoulders",
+        "headwear": "folded cloth headband (vincha) with gold ornament, or gold diadem with feather accent",
+        "accessories": "large gold tupu shawl pins, gold disc earrings, shell and turquoise bead necklace, woven chuspa coca bag",
+        "forbidden": ["European clothing", "iron jewelry", "wheeled vehicles", "glass beads"],
+        "palette": ["gold", "red", "mountain blue", "stone gray"]
+      }
+    },
+    "majapahit": {
+      "name": "Majapahit Empire",
+      "period": "1293 - 1527 CE",
+      "setting": "Javanese candi temple, tropical garden, Majapahit court with gamelans, rice terraces",
+      "male_attire": {
+        "clothing": "batik-patterned kain sarong in brown and indigo wrapped at waist, bare chest with gold chest chain, embroidered dodot cloth draped diagonally",
+        "headwear": "gold makuta crown in stepped pyramidal shape with kala monster-face motif, or tekes headcloth wrapped tall",
+        "accessories": "elaborate gold kala-motif arm bands, gold belt with ceremonial keris dagger, gold ear ornaments, gemstone rings",
+        "forbidden": ["Islamic-era baju melayu", "Dutch colonial dress", "full trousers", "shoes in palace"],
+        "palette": ["gold", "batik brown", "tropical green", "temple red"]
+      },
+      "female_attire": {
+        "clothing": "batik kain panjang wrapped as floor-length skirt, sheer kemben breast cloth with gold-thread border, selendang sash draped over shoulder",
+        "headwear": "gold crown with lotus and floral motifs (siger), hair in elaborate sanggul bun with gold pins and flower garlands",
+        "accessories": "gold gelang bracelet sets, ornate gold kalung necklace, gold subang ear ornaments, jeweled pending waist ornament",
+        "forbidden": ["Islamic-era hijab", "Dutch colonial dress", "modern kebaya", "Western shoes"],
+        "palette": ["gold", "batik brown", "tropical green", "temple red"]
+      }
+    },
+    "ming": {
+      "name": "Ming Dynasty China",
+      "period": "1368 - 1644 CE",
+      "setting": "Forbidden City, Chinese dragon motifs, blue-and-white porcelain, Great Wall",
+      "male_attire": {
+        "clothing": "dragon-embroidered silk longpao robe in imperial yellow with five-clawed dragon roundels, crossed collar, wide sleeves, jade-buckle belt",
+        "headwear": "winged black gauze futou official's cap, or mianguan twelve-stringed bead ceremonial crown",
+        "accessories": "jade belt plaques, jade pendant, silk court boots, gold-threaded collar, ivory hu tablet",
+        "forbidden": ["Qing-era queue hairstyle", "Manchu horse-hoof sleeves", "Mongolian fur", "Western buttons"],
+        "palette": ["imperial yellow", "dragon red", "blue porcelain", "gold"]
+      },
+      "female_attire": {
+        "clothing": "embroidered silk ao jacket over flowing chang skirt (aoqun), phoenix motifs in gold thread, wide sleeves with layered cuffs, brocade sash",
+        "headwear": "phoenix crown (fengguang) with gold filigree, kingfisher feather inlay (dian cui), pearl and jade dangles",
+        "accessories": "gold and jade hairpins in multiple styles, pearl earrings, jade bracelet, embroidered silk cloud-toe shoes",
+        "forbidden": ["Qing-era styles", "Manchu collar", "bound feet wrappings visible", "Western dress"],
+        "palette": ["imperial yellow", "dragon red", "blue porcelain", "gold"]
+      }
+    },
+    "mongolia": {
+      "name": "Mongol Empire",
+      "period": "1206 - 1368 CE",
+      "setting": "vast steppe grassland, Mongol ger (yurt), cavalry banners with horse-tail standards (tug)",
+      "male_attire": {
+        "clothing": "heavy silk or leather deel robe overlapping left-over-right, cinched with wide leather belt, fur-lined collar and cuffs, leather riding boots",
+        "headwear": "fur-trimmed conical leather helmet with horsehair crest, or boqta (tall ceremonial hat) in peacetime",
+        "accessories": "composite bow on back, gold belt buckle with animal motifs, leather quiver, horse-head fiddle at side",
+        "forbidden": ["Chinese dragon robe", "European plate armor", "turban", "Roman toga"],
+        "palette": ["leather brown", "sky blue", "grass green", "fur gray"]
+      },
+      "female_attire": {
+        "clothing": "richly embroidered silk deel robe with wide sash belt, layered with fur-lined outer cloak, high collar with gold thread",
+        "headwear": "tall boqta headdress (birch-bark frame covered in silk, adorned with peacock feathers and gold ornaments at peak)",
+        "accessories": "gold and turquoise pendant earrings, silver belt ornaments, coral bead necklace, embroidered leather boots",
+        "forbidden": ["Chinese bound-feet shoes", "European corset", "Islamic veil", "modern hat"],
+        "palette": ["leather brown", "sky blue", "grass green", "fur gray"]
+      }
+    },
+    "normandy": {
+      "name": "Norman Kingdom",
+      "period": "10th - 12th century CE",
+      "setting": "medieval stone castle, Norman keep, Romanesque church, Bayeux tapestry-style imagery",
+      "male_attire": {
+        "clothing": "riveted chainmail hauberk over padded gambeson, heraldic surcoat with embroidered coat of arms, leather belt with iron buckle",
+        "headwear": "conical nasal helm with nose guard, or iron crown over chainmail coif",
+        "accessories": "kite shield with Norman heraldry, longsword in leather scabbard, gold crucifix pendant, leather riding gloves",
+        "forbidden": ["plate armor (too late)", "Greek toga", "turban", "musket or gunpowder weapons"],
+        "palette": ["chainmail silver", "heraldic red", "heraldic blue", "stone gray"]
+      },
+      "female_attire": {
+        "clothing": "long woolen bliaut gown with fitted bodice and flared skirts, wide decorative sleeves, embroidered girdle belt, linen chemise underneath",
+        "headwear": "linen wimple and veil over hair, or gold circlet crown with trailing silk veil",
+        "accessories": "gold brooch at neckline, jeweled belt clasp, rosary beads, embroidered leather shoes",
+        "forbidden": ["plate armor", "corset (too late)", "Renaissance ruff", "bare head in public"],
+        "palette": ["chainmail silver", "heraldic red", "heraldic blue", "stone gray"]
+      }
+    },
+    "songhai": {
+      "name": "Songhai Empire",
+      "period": "1430 - 1591 CE",
+      "setting": "Timbuktu Djinguereber mosque, Niger River, Saharan trading post, mud-brick Sudano-Sahelian architecture",
+      "male_attire": {
+        "clothing": "flowing grand boubou robe in rich indigo or white cotton with elaborate gold embroidery at collar and chest, wide sleeves, inner tunic",
+        "headwear": "white cloth turban wrapped in Sahelian style with tail draped over shoulder, or embroidered kufi cap",
+        "accessories": "gold ornaments, leather amulet pouch (gris-gris), ceremonial sword with leather-wrapped hilt, leather sandals",
+        "forbidden": ["European armor", "pith helmet", "modern shoes", "Christian iconography"],
+        "palette": ["desert sand", "gold", "indigo blue", "mud brown"]
+      },
+      "female_attire": {
+        "clothing": "richly dyed indigo or white cotton wrapper skirt (pagne) and matching blouse with gold embroidery, shawl draped over shoulder",
+        "headwear": "elaborate headwrap (gele) in dyed cotton with gold thread, tied in sculpted style",
+        "accessories": "heavy gold hoop earrings, layered gold necklaces, gold arm bands, henna-patterned hands, amber bead waist chain",
+        "forbidden": ["European dress", "pith helmet", "modern fabrics", "shoes"],
+        "palette": ["desert sand", "gold", "indigo blue", "mud brown"]
+      }
+    },
+    "spain": {
+      "name": "Spanish Empire",
+      "period": "15th - 17th century CE",
+      "setting": "Spanish galleon, Alhambra arches, New World discovery, Castilian cathedral",
+      "male_attire": {
+        "clothing": "polished steel half-armor cuirass and gorget over black velvet doublet, white linen ruff collar, slashed trunk hose, short cape",
+        "headwear": "morion helmet with comb crest, or black velvet toque cap with gold medallion",
+        "accessories": "gold cross pendant, Toledo steel rapier in ornate scabbard, leather gauntlets, conquistador boots",
+        "forbidden": ["full plate Gothic armor", "Moorish turban", "modern military uniform", "tricorn hat"],
+        "palette": ["Castilian red", "gold", "dark steel", "white ruff"]
+      },
+      "female_attire": {
+        "clothing": "richly embroidered velvet Spanish court gown (verdugado) with wide farthingale skirt, fitted bodice with gold lacework, high stiff collar (cuello)",
+        "headwear": "pearl-studded gold diadem, or black lace mantilla veil draped over ornate comb (peineta)",
+        "accessories": "jeweled gold cross pendant, pearl strand necklace, gold filigree earrings, embroidered silk fan, rosary at waist",
+        "forbidden": ["Moorish veil", "modern mantilla style", "short skirt", "decolletage"],
+        "palette": ["Castilian red", "gold", "dark steel", "white ruff"]
+      }
+    },
+    "bulgaria": {
+      "name": "Second Bulgarian Empire",
+      "period": "1185 - 1396 CE",
+      "setting": "Veliko Tarnovo fortress (Tsarevets), Bulgarian Orthodox church, Balkan mountain pass, frescoed interior",
+      "male_attire": {
+        "clothing": "heavy brocade kaftan-style robe (dalmatic) with gold-embroidered borders over tunic, wide sash belt, soft leather boots reaching mid-calf",
+        "headwear": "jeweled stemma crown (Byzantine-influenced) with cross finial and pendant chains (prependoulia) at temples",
+        "accessories": "gold and enamel pectoral cross, jeweled orb and scepter, gold belt with enamel medallions, ceremonial labrys",
+        "forbidden": ["Ottoman turban", "Western medieval plate armor", "Roman toga", "modern military uniform"],
+        "palette": ["imperial crimson", "gold", "forest green", "Byzantine purple"]
+      },
+      "female_attire": {
+        "clothing": "Byzantine-influenced silk dalmatic gown with wide embroidered borders, loros sash crossed at chest, flowing sleeves with gold-thread cuffs, under-tunic of white linen",
+        "headwear": "jeweled crown with pearl and gem pendilia hanging at temples, silk veil draped behind crown",
+        "accessories": "gold and enamel cross pendant, pearl chandelier earrings, gold filigree bracelet, jeweled belt with enamel plaques",
+        "forbidden": ["Ottoman-era clothing", "Western corset", "modern Bulgarian folk dress", "Roman stola"],
+        "palette": ["imperial crimson", "gold", "forest green", "Byzantine purple"]
+      }
+    },
+    "dai_viet": {
+      "name": "Dai Viet",
+      "period": "968 - 1802 CE",
+      "setting": "Thang Long Imperial Citadel, Vietnamese pagoda, rice paddies, Red River delta, dragon-adorned gates",
+      "male_attire": {
+        "clothing": "layered silk ao dai-style long tunic with side slits over loose trousers, cross-collar inner robe, wide sash belt in contrasting color",
+        "headwear": "black gauze phuong (turban-style headcloth) or mitered court hat with gold ornaments, mandarin square badge on chest",
+        "accessories": "jade belt plaque, ceremonial sword in lacquered scabbard, ivory fan, scholar's brush case, embroidered cloth shoes",
+        "forbidden": ["Chinese Qing queue", "French colonial uniform", "modern ao dai", "Japanese kimono"],
+        "palette": ["imperial yellow", "deep red", "jade green", "lacquer black"]
+      },
+      "female_attire": {
+        "clothing": "flowing ao tu than (four-paneled robe) over wide-leg trousers, cross-collar with gold-embroidered hems, silk sash at waist",
+        "headwear": "elaborate gold khan dong headpiece with jade ornaments, or black silk turban with gold pins, hair in long braid or updo",
+        "accessories": "gold filigree earrings, jade bangle, betel nut container at waist, lotus-embroidered silk slippers, painted silk fan",
+        "forbidden": ["Chinese Manchu court dress", "French colonial dress", "modern ao dai style", "Japanese obi"],
+        "palette": ["imperial yellow", "deep red", "jade green", "lacquer black"]
+      }
+    },
+    "iceland": {
+      "name": "Icelandic Commonwealth",
+      "period": "930 - 1262 CE (Viking-age heritage)",
+      "setting": "Thingvellir assembly site, volcanic landscape with geysers, turf longhouse, dramatic fjords, northern lights",
+      "male_attire": {
+        "clothing": "heavy wool tunic (kyrtill) with tablet-woven trim at neck and cuffs, over linen undershirt, wool cloak (mottull) pinned at right shoulder, woolen trousers with leg wraps",
+        "headwear": "rounded wool or leather cap, or bare-headed with windswept hair for chieftains",
+        "accessories": "ornate penannular brooch (ring pin) in silver or bronze, wide leather belt with iron buckle, seax knife in sheath, arm rings of twisted silver",
+        "forbidden": ["horned Viking helmet (myth)", "full plate armor", "silk garments", "Mediterranean sandals"],
+        "palette": ["storm gray", "ocean blue", "undyed wool brown", "silver"]
+      },
+      "female_attire": {
+        "clothing": "wool smokkr (strap dress/apron dress) over full-length linen underdress, rectangular wool shawl fastened at front, embroidered hems",
+        "headwear": "linen headcloth (faldr) wrapped and pinned, or kransen (circlet) of woven wool and metal for unmarried women",
+        "accessories": "pair of oval tortoise brooches (skallar) connecting smokkr straps, bead festoon between brooches (amber, glass, crystal), keys on chain at waist (symbol of household authority), silver arm ring",
+        "forbidden": ["horned helmet", "Mediterranean clothing", "silk gown", "modern knitwear"],
+        "palette": ["storm gray", "ocean blue", "undyed wool brown", "silver"]
+      }
+    },
+    "pirates": {
+      "name": "Republic of Pirates",
+      "period": "1706 - 1718 CE",
+      "setting": "Nassau harbor, Caribbean ship deck, Jolly Roger flag, tropical coast with palm trees, treasure chests",
+      "male_attire": {
+        "clothing": "long weathered captain's coat in dark blue or red over loose white linen shirt, wide leather belt with pistol and cutlass, canvas breeches, tall bucket-top boots",
+        "headwear": "wide-brimmed tricorn hat with feather or bare head with bandana headscarf",
+        "accessories": "flintlock pistol on baldric, curved cutlass, leather bandolier with shot, gold earring, compass on chain, smoking fuse braids",
+        "forbidden": ["full naval dress uniform (too formal)", "plate armor", "modern pirate costume", "eye patch (cliche)"],
+        "palette": ["weather-beaten brown", "blood red", "sea blue", "tarnished gold"]
+      },
+      "female_attire": {
+        "clothing": "practical linen shirt with rolled sleeves, leather corset-vest over shirt, wide sash at waist, flowing divided skirt or breeches, tall boots",
+        "headwear": "silk headscarf tied at back, or wide-brimmed hat with feather plume",
+        "accessories": "flintlock pistol at belt, cutlass, gold hoop earrings, compass pendant, leather wrist guard, rope-braided bracelet",
+        "forbidden": ["ball gown", "full naval uniform", "modern costume", "excessive jewelry"],
+        "palette": ["weather-beaten brown", "blood red", "sea blue", "tarnished gold"]
+      }
+    },
+    "shawnee": {
+      "name": "Shawnee Confederacy",
+      "period": "1600s - 1800s CE",
+      "setting": "Ohio River valley, forest clearing, birch bark council house, Great Lakes woodland, campfire council circle",
+      "male_attire": {
+        "clothing": "fringed buckskin hunting shirt with quillwork decoration, leather leggings with side-seam fringe, breechclout, trade cloth blanket over one shoulder",
+        "headwear": "silver headband with single eagle feather at back, or gustoweh-style cap with deer hair roach and feather",
+        "accessories": "silver gorget at throat, beaded bandolier bag across chest, tomahawk at belt, quillwork moccasins, face paint in red and black",
+        "forbidden": ["Plains Indian war bonnet", "European military uniform", "turban", "full nudity"],
+        "palette": ["buckskin tan", "forest green", "wampum white", "copper red"]
+      },
+      "female_attire": {
+        "clothing": "knee-length buckskin or trade-cloth dress with cape-like yoke, decorated with quillwork and shell fringe, leggings, woven sash belt",
+        "headwear": "silver hair combs and brooches, or beaded headband with small feather, hair in long braids with otter fur wraps",
+        "accessories": "silver brooches in cascading row down front, wampum bead earrings, quillwork moccasins, woven burden strap basket",
+        "forbidden": ["Plains Indian buckskin dress style", "European bonnet", "feathered war bonnet", "modern clothing"],
+        "palette": ["buckskin tan", "forest green", "wampum white", "copper red"]
+      }
+    },
+    "america": {
+      "name": "United States of America",
+      "period": "1776 - 1860s CE",
+      "setting": "Independence Hall, American flag, colonial architecture, eastern seaboard",
+      "male_attire": {
+        "clothing": "colonial-era navy blue frock coat with brass buttons, cream waistcoat, white linen cravat, knee breeches with white stockings",
+        "headwear": "black tricorn hat with cockade, or beaver felt top hat",
+        "accessories": "silver pocket watch and chain, leather document satchel, buckled shoes, quill pen",
+        "forbidden": ["medieval armor", "crown", "Roman toga", "Confederate uniform"],
+        "palette": ["navy blue", "white", "red", "parchment beige"]
+      },
+      "female_attire": {
+        "clothing": "colonial-era cotton and silk gown with fitted bodice, fichu scarf at neckline, wide pannier skirt, elbow-length sleeves with lace cuffs",
+        "headwear": "white linen mob cap with ribbon, or straw bonnet with ribbon ties",
+        "accessories": "cameo brooch at throat, pearl earrings, lace handkerchief, small reticule purse, buckled leather shoes",
+        "forbidden": ["medieval gown", "crown", "revealing neckline", "modern dress"],
+        "palette": ["navy blue", "white", "red", "parchment beige"]
+      }
+    },
+    "buganda": {
+      "name": "Kingdom of Buganda",
+      "period": "14th century - 1894 CE",
+      "setting": "Bugandan thatched palace (Lubiri), Lake Victoria shore, tropical gardens, reed-fenced compound",
+      "male_attire": {
+        "clothing": "bark cloth (olubugo) robe in warm brown draped toga-style over one shoulder, white cotton kanzu inner tunic, leather belt",
+        "headwear": "beaded ceremonial crown (ekikonge) with feather crest, or bark cloth head wrap with gold ornament",
+        "accessories": "leopard skin sash (symbol of royalty), ivory bracelet, copper arm bands, ceremonial spear and shield",
+        "forbidden": ["European military uniform", "Western hat", "shoes in palace", "Islamic turban"],
+        "palette": ["bark brown", "lake blue", "green", "royal gold"]
+      },
+      "female_attire": {
+        "clothing": "bark cloth (olubugo) wraparound dress with wide sash belt, cotton gomesi-style gathered dress with square neckline and puff sleeves",
+        "headwear": "beaded headband with cowrie shells, or bark cloth headwrap with gold ornaments",
+        "accessories": "layered bead necklaces in red, white, and blue, copper bangles, cowrie shell belt, ankle beads",
+        "forbidden": ["European corset", "Western bonnet", "shoes", "modern gomesi fabric"],
+        "palette": ["bark brown", "lake blue", "green", "royal gold"]
+      }
+    },
+    "french_empire": {
+      "name": "French Empire",
+      "period": "1804 - 1815 CE (Napoleonic era)",
+      "setting": "Versailles palace, Arc de Triomphe, French tricolor banners, gilded interiors",
+      "male_attire": {
+        "clothing": "dark blue Napoleonic military tunic with gold epaulettes, white waistcoat and breeches, high leather boots, gold-braided sash",
+        "headwear": "black felt bicorne hat with tricolor cockade and gold trim",
+        "accessories": "Legion of Honor medal, ceremonial sword with gold hilt, white leather gloves, gold pocket watch",
+        "forbidden": ["medieval armor", "powdered wig (out of fashion)", "toga", "pith helmet"],
+        "palette": ["French blue", "white", "red", "gold"]
+      },
+      "female_attire": {
+        "clothing": "high-waisted Empire silhouette gown in white muslin or silk with gold-embroidered bodice, short puffed sleeves, flowing train, satin sash below bust",
+        "headwear": "gold laurel-leaf tiara, or jeweled bandeau with ostrich feather plume",
+        "accessories": "long satin gloves to elbow, pearl drop earrings, cameo necklace, cashmere shawl draped at elbows, silk dancing slippers",
+        "forbidden": ["medieval wimple", "wide farthingale skirt", "powdered wig", "modern dress"],
+        "palette": ["French blue", "white", "red", "gold"]
+      }
+    },
+    "meiji": {
+      "name": "Meiji Japan",
+      "period": "1868 - 1912 CE",
+      "setting": "Japanese castle, cherry blossoms, rising sun motif, modernizing Japan with Western and traditional elements",
+      "male_attire": {
+        "clothing": "Meiji-era military dress uniform in dark navy with gold braid, standing collar, brass buttons, or formal montsuki kimono with hakama",
+        "headwear": "military kepi cap with chrysanthemum crest badge, or traditional eboshi court cap",
+        "accessories": "chrysanthemum imperial crest pin, ceremonial katana in gold-fitted scabbard, white gloves, polished black boots",
+        "forbidden": ["samurai full armor (outdated)", "Western cowboy hat", "Chinese queue", "casual yukata"],
+        "palette": ["imperial red", "white", "black", "gold chrysanthemum"]
+      },
+      "female_attire": {
+        "clothing": "formal twelve-layered junihitoe court kimono in graduated colors, or Meiji-era uchikake over-robe with elaborate chrysanthemum and wave embroidery, wide obi sash",
+        "headwear": "ornate gold and lacquer kanzashi hairpins in elaborate nihongami hairstyle, or small gold tiara in Western-influenced style",
+        "accessories": "gold and pearl hair ornaments, sensu folding fan with gold leaf, tabi socks and zori sandals, jade bracelet",
+        "forbidden": ["Chinese hanfu", "Western ball gown alone", "casual yukata", "samurai armor"],
+        "palette": ["imperial red", "white", "black", "gold chrysanthemum"]
+      }
+    },
+    "mexico": {
+      "name": "Independent Mexico",
+      "period": "1821 - 1870s CE",
+      "setting": "Mexico City metropolitan cathedral, agave fields, eagle on cactus (coat of arms) symbol, Zocalo plaza",
+      "male_attire": {
+        "clothing": "dark blue Mexican military dress uniform with gold-braided frogging, red sash of office across chest, white trousers with gold stripe",
+        "headwear": "plumed military shako hat with Mexican eagle badge, or gold-braided kepi",
+        "accessories": "curved cavalry saber, gold eagle and serpent belt buckle, polished boots with spurs, tricolor cockade",
+        "forbidden": ["Aztec feathers (wrong era)", "Spanish conquistador armor", "modern suit", "sombrero"],
+        "palette": ["green", "white", "red", "gold eagle"]
+      },
+      "female_attire": {
+        "clothing": "Romantic-era gown with fitted bodice and full skirt in Mexican tricolor-inspired colors, rebozo shawl draped elegantly, lace-trimmed neckline",
+        "headwear": "gold and jeweled peineta comb in upswept hair with flowers, or mantilla lace veil",
+        "accessories": "gold filigree earrings, coral bead necklace, embroidered silk fan, rosary, tortoiseshell combs",
+        "forbidden": ["Aztec costume", "modern Mexican folk dress", "European crown", "military uniform"],
+        "palette": ["green", "white", "red", "gold eagle"]
+      }
+    },
+    "mughal": {
+      "name": "Mughal Empire",
+      "period": "1526 - 1857 CE",
+      "setting": "Taj Mahal, Mughal charbagh garden, ornate pietra dura marble inlay, Mughal miniature painting style",
+      "male_attire": {
+        "clothing": "elaborate brocade jama robe with flared skirt tied at left, layered with jeweled patka sash, fine muslin inner tunic, churidar fitted trousers",
+        "headwear": "jeweled turban (pagri) with gold aigrette (sarpech) plume holder and central gem, pearl strings draped at side",
+        "accessories": "layered pearl necklace (haar), gem-encrusted rings on multiple fingers, jeweled dagger (khanjar) at waist, jeweled thumb ring for archery",
+        "forbidden": ["British military uniform", "Hindu dhoti alone", "European hat", "modern suit"],
+        "palette": ["marble white", "emerald green", "ruby red", "gold"]
+      },
+      "female_attire": {
+        "clothing": "richly embroidered silk anarkali tunic with wide flared skirt, churidar trousers, sheer dupatta veil draped over head and shoulders, jeweled belt",
+        "headwear": "gold and pearl-encrusted jhoomar side ornament, maang tikka forehead chain, hair in long braid with gold paranda",
+        "accessories": "elaborate jhumka chandelier earrings, multi-strand pearl choker, emerald-set gold bangles, jeweled nose ring (nath) with chain",
+        "forbidden": ["European corset", "sari (informal for court)", "modern lehenga style", "bare midriff"],
+        "palette": ["marble white", "emerald green", "ruby red", "gold"]
+      }
+    },
+    "prussia": {
+      "name": "Kingdom of Prussia",
+      "period": "1701 - 1871 CE",
+      "setting": "Brandenburg Gate, Prussian parade ground, iron eagle standard, Potsdam palace",
+      "male_attire": {
+        "clothing": "dark blue Prussian military tunic (Waffenrock) with red piping, brass buttons, standing collar, white cross-belt, knee-high polished boots",
+        "headwear": "spiked Pickelhaube helmet with brass eagle plate, or grenadier's mitre cap for formal occasions",
+        "accessories": "Iron Cross medal at collar, Prussian eagle belt buckle, ceremonial saber, white cotton gloves",
+        "forbidden": ["medieval knight armor", "French bicorne", "Roman toga", "modern beret"],
+        "palette": ["Prussian blue", "iron black", "white", "silver"]
+      },
+      "female_attire": {
+        "clothing": "Biedermeier-era gown with fitted bodice, wide bell-shaped skirt, leg-of-mutton sleeves, high neckline with lace collar, dark blue and white color scheme",
+        "headwear": "small jeweled tiara or diadem, or bonnet with silk ribbons and Prussian blue trim",
+        "accessories": "iron cross brooch (iron jewelry was patriotic in Prussia), cameo pendant, kid leather gloves, silk sash in Prussian blue",
+        "forbidden": ["medieval wimple", "French Empire waistline", "revealing gown", "modern dress"],
+        "palette": ["Prussian blue", "iron black", "white", "silver"]
+      }
+    },
+    "qing": {
+      "name": "Qing Dynasty China",
+      "period": "1644 - 1912 CE",
+      "setting": "Forbidden City, nine-dragon screen wall, Qing imperial court, garden pavilion",
+      "male_attire": {
+        "clothing": "formal dragon robe (longpao) in imperial yellow with nine five-clawed dragons, horse-hoof cuff sleeves, standing Mandarin collar, silk riding jacket over",
+        "headwear": "conical winter court hat with red silk fringe and jeweled finial button denoting rank, or summer hat of woven straw with finial",
+        "accessories": "court necklace (chaozhu) of 108 amber and jade beads, jade thumb ring, embroidered pouch at belt, silk court boots with thick white soles",
+        "forbidden": ["Ming-era winged cap", "Han-era hanfu", "Western military cap", "bare head in court"],
+        "palette": ["imperial yellow", "dragon blue", "red", "jade"]
+      },
+      "female_attire": {
+        "clothing": "embroidered Manchu-style changfu robe with standing collar, side slits, wide border of elaborate embroidery, cloud-collar overlay at shoulders",
+        "headwear": "large fan-shaped Manchu court headdress (dianzi) adorned with kingfisher feather inlay, pearls, and gold flowers",
+        "accessories": "long decorative nail guards in gold filigree, jade and pearl hairpins, court necklace of pearls, flower-shaped ear ornaments, platform shoes (qixie)",
+        "forbidden": ["Ming-era phoenix crown", "Han-era hanfu", "Western ball gown", "modern cheongsam"],
+        "palette": ["imperial yellow", "dragon blue", "red", "jade"]
+      }
+    },
+    "russia": {
+      "name": "Russian Empire",
+      "period": "1721 - 1917 CE",
+      "setting": "Winter Palace, St. Petersburg, onion dome churches, snow-covered landscape",
+      "male_attire": {
+        "clothing": "imperial Russian military dress uniform with gold-embroidered collar and cuffs, white tunic with gold aiguillettes, blue sash of the Order of St. Andrew",
+        "headwear": "tall astrakhan fur papakha hat, or bicorne with feather plume for formal occasions",
+        "accessories": "double-headed eagle medal, jeweled ceremonial sword, polished boots with spurs, white leather gloves",
+        "forbidden": ["medieval Rus' chainmail", "Viking helmet", "Mongol deel", "Cossack papakha alone"],
+        "palette": ["imperial white", "gold", "deep red", "black eagle"]
+      },
+      "female_attire": {
+        "clothing": "elaborate court gown with kokoshnik-inspired bodice, wide skirt with gold-embroidered train, off-shoulder neckline with jeweled trim, long white gloves",
+        "headwear": "jeweled kokoshnik tiara (crescent-shaped headdress studded with diamonds and pearls), or gold diadem",
+        "accessories": "diamond and pearl parure set (necklace, earrings, brooches), Faberge-style jeweled brooch, sable fur stole over shoulders",
+        "forbidden": ["medieval sarafan alone", "Mongol dress", "peasant headscarf", "modern gown"],
+        "palette": ["imperial white", "gold", "deep red", "black eagle"]
+      }
+    },
+    "siam": {
+      "name": "Kingdom of Siam",
+      "period": "1351 - 1932 CE",
+      "setting": "Thai temple (wat), golden spires and prangs, lotus pond, royal elephant procession",
+      "male_attire": {
+        "clothing": "silk chut thai prarajathan formal attire with chong kraben draped lower garment, sabai sash across chest, gold-embroidered jacket (suea)",
+        "headwear": "tall pointed gold chada crown with tiered spire, or royal mongkut coronet",
+        "accessories": "gold chain of office, ornate gold belt with pendant, jeweled rings, ceremonial sword in gold scabbard, pointed gold-tipped shoes",
+        "forbidden": ["Chinese dragon robe", "Indian dhoti", "European military uniform", "modern necktie"],
+        "palette": ["temple gold", "royal purple", "white lotus", "emerald"]
+      },
+      "female_attire": {
+        "clothing": "silk chut thai phra ratcha niyom with sabai cloth draped diagonally over one shoulder, chong kraben lower garment in gold brocade, jeweled belt",
+        "headwear": "tiered gold chada crown with flame finials, or gold diadem with jeweled floral motifs, hair in elaborate updo",
+        "accessories": "gold choker necklace with pendant, long gold chandelier earrings, stacked gold bangles, jeweled hair pins, pointed-toe gold slippers",
+        "forbidden": ["Chinese court dress", "Indian sari", "European corset", "modern gown"],
+        "palette": ["temple gold", "royal purple", "white lotus", "emerald"]
+      }
+    },
+    "britain": {
+      "name": "British Empire",
+      "period": "1837 - 1901 CE (Victorian era)",
+      "setting": "Houses of Parliament, British warship, Union Jack, foggy London skyline",
+      "male_attire": {
+        "clothing": "scarlet British military dress tunic with gold braiding and high collar, dark blue trousers with red stripe, white cross-belt with gold plate",
+        "headwear": "pith helmet (tropical) or bearskin ceremonial cap, or peaked officer's forage cap",
+        "accessories": "gold-hilted ceremonial sword, campaign medals and star orders, polished Sam Browne belt, white gloves",
+        "forbidden": ["medieval plate armor", "Roman toga", "American colonial dress", "modern beret"],
+        "palette": ["navy blue", "red", "white", "gold"]
+      },
+      "female_attire": {
+        "clothing": "Victorian bustle gown in rich silk with fitted bodice, high neckline with lace collar, leg-of-mutton sleeves, elaborate train, jet bead trim",
+        "headwear": "small jeweled crown or tiara, or fashionable bonnet with silk flowers and ribbons",
+        "accessories": "multi-strand pearl choker, diamond and sapphire brooch, long gloves, lace parasol, small beaded reticule purse",
+        "forbidden": ["medieval gown", "Regency-era Empire waistline", "revealing neckline", "modern dress"],
+        "palette": ["navy blue", "red", "white", "gold"]
+      }
+    },
+    "ottoman": {
+      "name": "Ottoman Empire",
+      "period": "1299 - 1922 CE",
+      "setting": "Topkapi Palace, Blue Mosque, Ottoman court with tulip gardens, Iznik tile patterns",
+      "male_attire": {
+        "clothing": "ornate silk kaftan robe with tulip and pomegranate brocade patterns, fur-lined edges, wide sash (kusak) at waist, inner entari gown",
+        "headwear": "tall white muslin turban (kavuk) wrapped around red felt fez base, with jeweled aigrette brooch and heron feather",
+        "accessories": "tughra seal ring, jeweled ceremonial dagger at sash, gold chain of office, curled-toe leather babouche slippers",
+        "forbidden": ["European armor", "bare head in court", "modern fez alone", "Western hat"],
+        "palette": ["Ottoman red", "gold", "white", "turquoise tile blue"]
+      },
+      "female_attire": {
+        "clothing": "layered silk entari robe with long hanging sleeves, embroidered salvar trousers, short vest (yelek) over chemise, gold-threaded sash",
+        "headwear": "tall jeweled hotoz headdress with gold coins and pearl strands, sheer yasmak veil, or gold-threaded headscarf",
+        "accessories": "gold belt with gem-encrusted clasp, pearl tassel earrings, gold cuff bracelets, jeweled collar, henna-decorated hands",
+        "forbidden": ["European corset", "bare-headed in public", "modern clothing", "Greek peplos"],
+        "palette": ["Ottoman red", "gold", "white", "turquoise tile blue"]
+      }
+    },
+    "qajar": {
+      "name": "Qajar Persia",
+      "period": "1789 - 1925 CE",
+      "setting": "Qajar palace with mirror mosaics, Persian miniature painting style, rose garden, Golestan Palace",
+      "male_attire": {
+        "clothing": "long ornate coat (qaba) with heavy gold embroidery over silk tunic, wide jeweled belt, fitted trousers, high-heeled leather boots",
+        "headwear": "tall black astrakhan (lambskin) hat with gold aigrette brooch and gem",
+        "accessories": "jeweled ceremonial sword, Order of the Lion and Sun medal, gold-handled walking stick, thick mustache, kohl-lined eyes",
+        "forbidden": ["ancient Persian tiara", "Arab turban", "European top hat", "modern beret"],
+        "palette": ["deep red", "gold", "turquoise", "black astrakhan"]
+      },
+      "female_attire": {
+        "clothing": "short embroidered velvet jacket over sheer blouse, wide knee-length tutu-style gathered skirt over fitted trousers, gold-embroidered chador draped loosely",
+        "headwear": "small jeweled cap with gold coins and pearl strands across forehead, or silk headscarf with gold filigree ornaments",
+        "accessories": "heavy gold coin necklace, jeweled forehead ornament (band-e pishani), kohl-lined eyes, thick connected eyebrows (beauty mark), hennaed hands",
+        "forbidden": ["ancient Persian dress", "modern chador style", "European bustle gown", "minimal jewelry"],
+        "palette": ["deep red", "gold", "turquoise", "black astrakhan"]
+      }
+    },
+    "nepal": {
+      "name": "Kingdom of Nepal",
+      "period": "1768 - 2008 CE",
+      "setting": "Kathmandu Durbar Square, Himalayan mountains, multi-tiered pagoda temples, prayer flags",
+      "male_attire": {
+        "clothing": "daura suruwal national dress: cross-front tunic (daura) with five ties (pancha badan) and fitted trousers (suruwal), patuka waist sash, long coat (labeda) for royalty",
+        "headwear": "dhaka topi (Nepali cap) in colorful woven pattern, or jeweled gold mukut crown for royalty",
+        "accessories": "khukuri knife in ornate scabbard at waist, gold necklace with sacred thread, leather sandals, gold earrings",
+        "forbidden": ["Indian Mughal turban", "Chinese hat", "Western top hat", "Tibetan chuba alone"],
+        "palette": ["crimson red", "gold", "Himalayan blue", "forest green"]
+      },
+      "female_attire": {
+        "clothing": "red and gold sari draped in Nepali style with wide gold-embroidered border, cholo fitted blouse with gold trim, haku patasi (black sari with red border for Newari)",
+        "headwear": "gold tikka forehead ornament with red tika mark, hair in bun adorned with gold phuli (flower ornament) and fresh flowers",
+        "accessories": "bulaki (gold nose ring) with chain to ear, heavy gold necklace (tilhari), glass bangle sets in red and green, gold jantar (amulet), pote bead necklace",
+        "forbidden": ["Indian lehenga", "Tibetan dress", "Western gown", "modern kurta"],
+        "palette": ["crimson red", "gold", "Himalayan blue", "forest green"]
+      }
+    }
+  }
+}

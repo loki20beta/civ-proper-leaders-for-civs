@@ -3,6 +3,9 @@
 __pycache__/
 .claude/
 
+# API keys
+ai_generator/.env
+
 # Asset images (large binaries, not tracked in git)
 assets/leaders/*/*.png
 assets/civilizations/*/background.png

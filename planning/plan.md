@@ -1,6 +1,6 @@
 # Civ7 Authentic Leaders Mod - Development Plan
 
-> **Status (2026-03-04):** Phase 1 (infrastructure) and Phase 2 (asset extraction + stubs) are complete. All 33 leaders/alts × 44 civs have working civ-specific loading screens and icons (currently stubs). Persona/alt leaders fully supported with persona-first icon lookup. Next: Phase 3 (AI art generation pipeline).
+> **Status (2026-03-04):** Phase 1 (infrastructure) and Phase 2 (asset extraction + stubs) are complete. All 33 leaders/alts × 43 civs have working civ-specific loading screens and icons (currently stubs). Persona/alt leaders fully supported with persona-first icon lookup. Phase 3A (AI generation pipeline code) built and dry-run tested — not yet tested with live API calls. Next: Phase 3B (generation run).
 
 ## Context
 
@@ -169,7 +169,7 @@ authentic-leaders/
 - **Generate largest icon size only** (hex 256×360, circ 256×256), downscale smaller programmatically
 - **AI-generate all 3 expressions** (neutral, happy, angry) — no color tinting
 - Optimize for quality, no budget limit
-- API key stored in `ai-generator/.env` (git-ignored)
+- API key stored in `ai_generator/.env` (git-ignored)
 
 ### 3.1 Master Metadata — `config/ai-generation.json`
 
@@ -564,21 +564,23 @@ Total pairs: **~1,427**
 
 Time: ~6,850 API calls at 80 RPM = ~1.4 hours interactive.
 
-### 3.7 Implementation — Phase A: Build Pipeline (code, metadata, config)
+### 3.7 Implementation — Phase A: Build Pipeline (code, metadata, config) ✅ BUILT (dry-run tested)
 
-1. `.gitignore` + `ai-generator/.env` — API key setup (git-ignored)
-2. `config/ai-generation.json` — metadata, native pairings, 44 civs × 2 genders attire descriptors
-3. `ai-generator/config.py` — load and query metadata
-4. `ai-generator/client.py` — OpenRouter API wrapper
-5. `ai-generator/prompts.py` — prompt construction
-6. `ai-generator/status.py` — generation tracking
-7. `ai-generator/generate.py` — main CLI orchestrator
-8. `ai-generator/postprocess.py` — resize/mask/downscale pipeline
+1. ✅ `.gitignore` + `ai_generator/.env` — API key setup (git-ignored)
+2. ✅ `config/ai-generation.json` — metadata, native pairings, 43 civs × 2 genders attire descriptors (86 total)
+3. ✅ `ai_generator/config.py` — load and query metadata
+4. ✅ `ai_generator/client.py` — OpenRouter API wrapper
+5. ✅ `ai_generator/prompts.py` — prompt construction
+6. ✅ `ai_generator/status.py` — generation tracking
+7. ✅ `ai_generator/generate.py` — main CLI orchestrator
+8. ✅ `ai_generator/postprocess.py` — resize/mask/downscale pipeline
+
+**Note:** Package directory is `ai_generator` (underscore) for Python import compatibility. Dry-run tested (config loading, native skip detection, costume refs, prompt generation, status tracking). Not yet tested with live API calls.
 
 ### 3.8 Implementation — Phase B: Generation Run
 
 9. Test with 1 leader × 2-3 civs, validate quality and prompt effectiveness
-10. Full generation run across all ~1,427 pairs
+10. Full generation run across all ~1,394 non-native pairs
 11. Quality review, re-generation of failures
 12. Run `generate-mod-data.py` to rebuild mod data from generated images
 13. In-game verification
@@ -638,6 +640,14 @@ Time: ~6,850 API calls at 80 RPM = ~1.4 hours interactive.
 3. Verify fallback to default image when no civ-specific image exists
 
 ### Phase 3
+1. Dry-run: `python3 -m ai_generator.generate --leader augustus --dry-run` — verify prompts and ref images ✅
+2. Test 1 leader × 2-3 civs with live API — verify image quality and identity preservation
+3. Full generation run — verify all ~1,394 pairs complete
+4. Post-process: `python3 -m ai_generator.postprocess --all` — verify icon variants at correct dimensions
+5. Run `generate-mod-data.py` — verify SQL/XML/modinfo updated
+6. In-game: verify loading screens and icons display correctly
+
+### Phase 4
 1. Test leader model swap in leader select screen
 2. Test model swap in diplomacy encounters
 3. Verify no crashes or visual glitches
