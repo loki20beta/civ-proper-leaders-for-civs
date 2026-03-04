@@ -15,6 +15,7 @@ Usage:
 import argparse
 import json
 import os
+import shutil
 import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -225,7 +226,7 @@ def generate_default_icons_xml(leaders):
 
         # Base leader type icons
         for v in ICON_VARIANTS:
-            fname = f"lp_{v['shape']}_{key}_{v['size']}{v['suffix']}.png"
+            fname = f"lp_{v['shape']}_{key}_{v['size']}{v['suffix']}"
             lines.append("\t\t<Replace>")
             lines.append(f"\t\t\t<ID>{leader['type']}</ID>")
             lines.append(f"\t\t\t<Path>{FS_PREFIX}/icons/{key}/{fname}</Path>")
@@ -239,7 +240,7 @@ def generate_default_icons_xml(leaders):
         for ptype in leader.get("persona_types", []):
             icon_name_key = f"{key}_alt" if leader.get("has_alt_icons") else key
             for v in ICON_VARIANTS:
-                fname = f"lp_{v['shape']}_{icon_name_key}_{v['size']}{v['suffix']}.png"
+                fname = f"lp_{v['shape']}_{icon_name_key}_{v['size']}{v['suffix']}"
                 lines.append("\t\t<Replace>")
                 lines.append(f"\t\t\t<ID>{ptype}</ID>")
                 lines.append(f"\t\t\t<Path>{FS_PREFIX}/icons/{key}/{fname}</Path>")
@@ -272,7 +273,7 @@ def generate_civ_icons_xml(leaders, civ_db_types):
             for v in ICON_VARIANTS:
                 fname = (
                     f"lp_{v['shape']}_{key}_{civ_key}"
-                    f"_{v['size']}{v['suffix']}.png"
+                    f"_{v['size']}{v['suffix']}"
                 )
                 lines.append("\t\t<Row>")
                 lines.append(f"\t\t\t<ID>{icon_id}</ID>")
@@ -297,23 +298,27 @@ def generate_modinfo(leaders):
     for leader in leaders:
         key = leader["key"]
 
-        # Base icons (shell + game)
+        # Base icons (shell + game) — import both .png and extensionless
         if leader["has_base_icons"]:
             for v in ICON_VARIANTS:
                 fname = f"lp_{v['shape']}_{key}_{v['size']}{v['suffix']}.png"
                 path = f"icons/{key}/{fname}"
                 shell_imports.append(path)
+                shell_imports.append(path[:-4])  # extensionless copy
                 game_imports.append(path)
+                game_imports.append(path[:-4])
 
-        # Alt/persona icons (shell + game)
+        # Alt/persona icons (shell + game) — import both .png and extensionless
         if leader.get("has_alt_icons"):
             for v in ICON_VARIANTS:
                 fname = f"lp_{v['shape']}_{key}_alt_{v['size']}{v['suffix']}.png"
                 path = f"icons/{key}/{fname}"
                 shell_imports.append(path)
+                shell_imports.append(path[:-4])
                 game_imports.append(path)
+                game_imports.append(path[:-4])
 
-        # Civ-specific icons (game only)
+        # Civ-specific icons (game only) — import both .png and extensionless
         for civ_key in leader["icon_civs"]:
             for v in ICON_VARIANTS:
                 fname = (
@@ -321,6 +326,7 @@ def generate_modinfo(leaders):
                     f"_{v['size']}{v['suffix']}.png"
                 )
                 game_imports.append(f"icons/{key}/{civ_key}/{fname}")
+                game_imports.append(f"icons/{key}/{civ_key}/{fname[:-4]}")
 
         # Loading screens (game only)
         game_imports.append(f"images/loading/lsl_{key}.png")
@@ -398,6 +404,32 @@ def generate_modinfo(leaders):
 </Mod>'''
 
 
+def create_extensionless_copies():
+    """Create extensionless copies of all icon PNGs for getLeaderPortraitIcon() compatibility.
+
+    The game's getLeaderPortraitIcon() appends '.png' to icon URLs from IconDefinitions.
+    By using extensionless paths in IconDefinitions and importing both versions:
+    - Direct icon usage resolves the extensionless imported file
+    - getLeaderPortraitIcon() appends .png → resolves the original .png file
+    """
+    icons_dir = os.path.join(MOD_DIR, "icons")
+    count = 0
+    skipped = 0
+    for dirpath, _dirs, files in os.walk(icons_dir):
+        for fname in files:
+            if not fname.endswith(".png"):
+                continue
+            src = os.path.join(dirpath, fname)
+            dst = os.path.join(dirpath, fname[:-4])  # strip .png
+            # Skip if extensionless copy already exists and is up-to-date
+            if os.path.isfile(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
+                skipped += 1
+                continue
+            shutil.copy2(src, dst)
+            count += 1
+    print(f"  Extensionless copies: {count} created, {skipped} up-to-date")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Generate mod data files from config and available images"
@@ -444,6 +476,8 @@ def main():
             if not content.endswith("\n"):
                 f.write("\n")
         print(f"  Written: {rel_path}")
+
+    create_extensionless_copies()
 
     print("\nMod data generation complete!")
 
