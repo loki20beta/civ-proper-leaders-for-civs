@@ -16,6 +16,8 @@ The mod infrastructure is complete and working for all 28 leaders across all 43 
 
 **Known Issues:**
 - All civ-specific images are currently stubs (original portrait + text label), not real civ-contextualized artwork.
+- Icons break when a leader is custom (from another mod). The runtime icon swapping script expects leaders defined in the base game config.
+- Tonga and Pirates 720p background extracts are visually broken (game ships oversized CIVBIG containers for these two; 1080p variants are fine).
 
 ## How It Works
 

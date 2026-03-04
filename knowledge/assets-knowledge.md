@@ -152,6 +152,121 @@ Persona alt texture names:
 
 ---
 
+## Civilization Background Textures
+
+### File naming
+
+`TEXTURE_lsbg_{civ_name}_{resolution}` — e.g., `TEXTURE_lsbg_rome_1080`, `TEXTURE_lsbg_rome_720`
+
+A `TEXTURE_lsbg_default_{resolution}` pair also exists as fallback.
+
+### Dimensions
+
+- `_1080` variant: **2560 × 1080** pixels (ultrawide aspect ratio ~2.37:1)
+- `_720` variant: **1708 × 720** pixels (same aspect ratio)
+
+These are opaque RGBA images (alpha 254–255, no transparency). They are the
+painted scene backgrounds that appear behind the leader portrait on loading screens.
+
+### File sizes
+
+| Variant | File size | Payload |
+|---------|----------|---------|
+| `_1080` | 3,688,448 bytes | 3,688,432 |
+| `_720` | 1,641,984 bytes | 1,641,968 |
+
+### Location
+
+- `boot-shell` SHARED_DATA: 30 base civs (60 files) + default (2 files)
+- DLC `{civ}-shell` SHARED_DATA: 13 DLC civs (26 files)
+- Total: 44 civs × 2 resolutions + 2 defaults = 90 files
+
+### Texture name ↔ civ_key mapping
+
+Most texture names match `civ_key` directly. Exceptions:
+
+| `civ_key` (config) | Texture name (game) |
+|---------------------|---------------------|
+| `britain` | `great_britain` |
+| `normandy` | `norman` |
+| `ottoman` | `ottomans` |
+| `pirates` | `pirate_republic` |
+
+### DLC shell mapping for backgrounds
+
+| DLC shell | Civilizations |
+|-----------|---------------|
+| `assyria-shell` | assyria |
+| `bulgaria-shell` | bulgaria |
+| `carthage-shell` | carthage |
+| `dai-viet-shell` | dai_viet |
+| `great-britain-shell` | great_britain |
+| `iceland-shell` | iceland |
+| `nepal-shell` | nepal |
+| `ottomans-shell` | ottomans |
+| `pirate-republic-shell` | pirate_republic |
+| `qajar-shell` | qajar |
+| `shawnee-tecumseh-shell` | shawnee |
+| `silla-shell` | silla |
+| `tonga-shell` | tonga |
+
+### Database: LoadingInfo_Civilizations
+
+```sql
+CREATE TABLE 'LoadingInfo_Civilizations' (
+    'CivilizationType' TEXT NOT NULL,
+    'AgeTypeOverride' TEXT,
+    'Audio' TEXT,
+    'BackgroundImageHigh' TEXT,   -- fs://game/lsbg_{civ}_1080.png (≥1080px wide)
+    'BackgroundImageLow' TEXT,    -- fs://game/lsbg_{civ}_720.png (<1080px wide)
+    'CivilizationNameTextOverride' LOC_TEXT,
+    'CivilizationText' LOC_TEXT,
+    'ForegroundImage' TEXT,       -- civ line art icon (128×128, not used by load screen JS)
+    'LeaderTypeOverride' TEXT,
+    'MidgroundImage' TEXT,        -- defined in schema but NOT populated or consumed
+    'Subtitle' TEXT,
+    'Tip' LOC_TEXT,
+    PRIMARY KEY("CivilizationType"),
+    FOREIGN KEY ("CivilizationType") REFERENCES "Civilizations"("CivilizationType")
+);
+```
+
+JS selection logic: `window.innerWidth >= 1080 ? BackgroundImageHigh : BackgroundImageLow`
+
+Data is defined in age-specific modules (`age-antiquity`, `age-exploration`, `age-modern`)
+and DLC modules, NOT in `base-standard`.
+
+### Foreground line art (bonus)
+
+`TEXTURE_civ_line_{civ_name}` — 128×128 white line art on transparent.
+Referenced in `ForegroundImage` column but **not rendered** by current load screen JS.
+
+### Payload layout
+
+Same CIVBIG container format as leader textures. BC7 level-0 at byte 16.
+
+```
+[prefix: 16 bytes]
+[BC7 level-0: 2560×1080 or 1708×720]
+[mip levels...]
+[footer]
+```
+
+```python
+# For _1080:
+bc7_size = (2560 // 4) * (1080 // 4) * 16  # = 2,764,800 bytes
+
+# For _720:
+bc7_size = ((1708 + 3) // 4) * (720 // 4) * 16  # = 1,229,760 bytes
+```
+
+### Extraction
+
+Uses standard `decode_civbig()` — same as leaders, just different dimensions.
+Images are opaque (no BGRA→RGBA alpha issues).
+
+---
+
 ## Icon Textures
 
 ### Two portrait crops: HEX vs CIRC
