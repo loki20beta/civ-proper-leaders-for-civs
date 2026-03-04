@@ -1,5 +1,7 @@
 # Civ7 Authentic Leaders Mod - Development Plan
 
+> **Status (2026-03-04):** Phase 1 (infrastructure) and Phase 2 (asset extraction + stubs) are complete. All 33 leaders/alts × 43 civs have working civ-specific loading screens and icons (currently stubs). Persona/alt leaders fully supported with persona-first icon lookup. Next: Phase 3 (AI-generated artwork).
+
 ## Context
 
 Civilization VII decouples leaders from civilizations - any leader can play any civ. This means the same generic leader portrait (e.g., Augustus) is shown whether you're playing Rome, Abbasid, or Spanish. The goal of this mod is to generate and display leader images that reflect the civilization they're leading, making the experience more historically authentic (e.g., Augustus in Roman imperial regalia vs. Augustus in Abbasid-influenced attire).

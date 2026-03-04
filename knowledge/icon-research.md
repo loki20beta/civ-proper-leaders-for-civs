@@ -10,10 +10,10 @@
 
 Fixed by extracting each variant from its own CIVBIG texture file at byte 16 offset.
 
-### Current: Missing icons in relationship panel and other UI contexts (2026-03-04)
-- Relationship panel (diplomacy screen → "RELATIONSHIPS" section) shows **dark/empty hexagons** instead of leader portraits
-- Affects: relationship panel, city banners, victory screen, combat preview, end results, and ~8 other UI contexts
-- Root cause: game's `getLeaderPortraitIcon()` constructs icon URLs via string concatenation that's incompatible with `fs://game/` paths (see "Second Icon Rendering Path" section below)
+### Resolved: Missing icons in relationship panel and other UI contexts (2026-03-04)
+- ~~Relationship panel shows dark/empty hexagons instead of leader portraits~~
+- Fixed with extensionless icon paths + DOM background-image swapping (see below)
+- All 11 Path B UI contexts now render civ-specific icons correctly
 
 ## Root Cause: Two Different Portrait Crops
 
@@ -476,7 +476,7 @@ All three path issues resolved:
 2. ✅ Verified working across all affected UI contexts
 3. ✅ Civ-specific swapping extended to Path B via DOM background-image interception in UIScript
 
-### Current: Hex icon aspect ratio is wrong (2026-03-04)
+### Resolved: Hex icon aspect ratio was wrong (2026-03-04)
 
 **Discovery:** Comparing with the working Oliver Cromwell custom leader mod revealed our hex icons are the wrong dimensions.
 

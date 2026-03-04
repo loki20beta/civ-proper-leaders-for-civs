@@ -1,30 +1,34 @@
 # Authentic Leaders Mod - Work Log
 
-## Current Status (2026-03-03)
+## Current Status (2026-03-04)
 
 ### What Works
-- **Full mod infrastructure**: All 28 leaders × 43 civilizations wired up with SQL, XML, JS, UIScript
-- **Loading screens**: Civ-specific loading screen selection via SQL composite PK + JS sort fix
-- **Icons**: Civ-specific icon swapping at runtime via UIScript + MutationObserver
+- **Full mod infrastructure**: All 28 leaders (+ 5 persona alts) × 43 civilizations wired up with SQL, XML, JS, UIScript
+- **Loading screens**: Civ-specific loading screen selection via SQL composite PK + JS sort fix — works for both base and persona/alt leaders
+- **Icons**: Civ-specific icon swapping at runtime via UIScript + MutationObserver — works for both base and persona/alt leaders in all UI contexts (fxs-icon Path A + getLeaderPortraitIcon Path B)
+- **Persona/alt leaders**: Full support — persona-specific civ icons and loading screens with persona-first lookup (falls back to base leader if no persona-specific art exists)
 - **Game asset extraction**: Loading screens (28 + 5 alts) and icons (28 + 5 alts) extracted from game BLP/CIVBIG files
-- **Stub images**: All 1,232 loading screens and 9,504 civ-specific icons generated as stubs (original art + civ text overlay)
-- **Modinfo**: ~11,400 items, all assets referenced, all integrations configured
+- **Civ background scenes**: Extracted from game CIVBIG textures (44 civs × 2 resolutions)
+- **Stub images**: All loading screens and civ-specific icons generated as stubs (original art + civ text overlay)
+- **Modinfo**: ~22,000 items, all assets referenced, all integrations configured
 - **Repo**: `git@github.com:loki20beta/civ-proper-leaders-for-civs.git` on `main` branch
 
 ### Known Issues
-- **Icon sizing/missing in some UI contexts**: Some in-game icons appear slightly wrong size; in some places icons seem to be missing entirely. Needs investigation — could be IconDefinitions `IconSize` mismatch, missing context entries, or the game expecting BLP-native dimensions vs our PNG dimensions.
 - **All civ-specific images are stubs**: Original portrait with text overlay. No real civ-contextualized artwork yet.
+- **Icons break with custom leader mods**: The runtime icon swapping script expects leaders defined in the base game config.
+- **Tonga/Pirates 720p background extracts**: Visually broken (game ships oversized CIVBIG containers for these two; 1080p variants are fine).
 
 ### Mod File Counts
 | Asset | Count |
 |-------|-------|
-| Loading screen PNGs | 1,232 (28 leaders × 1 default + 28 × 43 civ-specific) |
-| Icon PNGs (default) | 224 (28 leaders × 8 variants) |
-| Icon PNGs (civ-specific) | 9,288 (27 leaders × 43 civs × 8 variants + ibn_battuta generic only) |
+| Loading screen PNGs | ~1,450 (28 base + 5 alt defaults, + 33 × 43 civ-specific) |
+| Icon PNGs (default) | ~264 (33 leaders/alts × 8 variants) |
+| Icon PNGs (civ-specific) | ~11,350 (33 leaders/alts × 43 civs × 8 variants) |
+| Extensionless icon copies | Same count as icon PNGs (for getLeaderPortraitIcon compatibility) |
 | SQL override | 1 file (composite PK restructure + all entries) |
-| XML icon definitions | 2 files (default overrides + civ-specific definitions) |
+| XML icon definitions | 2 files (default overrides + civ-specific definitions incl. persona) |
 | JS override | 1 file (load-screen sort fix) |
-| UIScript | 1 file (runtime icon swapping) |
+| UIScript | 1 file (runtime icon swapping, persona-first lookup) |
 
 ### History of Approaches Tried
 
@@ -73,13 +77,12 @@
 - Persona/alt leaders: DB type is `LEADER_X_ALT` (not flavor names)
 
 ### Scripts
-- `scripts/extract-game-assets.py` — Extract loading screens + icons from game BLP/CIVBIG files
-- `scripts/generate-stubs.py` — Generate stub images (original + text overlay) for all leader×civ combinations
-- `scripts/generate-civ-icons.py` — Generate civ-specific icon PNGs
-- `scripts/generate-mod-data.py` — Generate SQL, XML, modinfo from config
-- `scripts/generate-manifest.py` — Generate modinfo ImportFiles list
-- `scripts/generate-prompts.py` — Generate AI image generation prompts
+- `scripts/extract-game-assets.py` — Extract loading screens + icons + civ backgrounds from game BLP/CIVBIG files
+- `scripts/generate.py` — Unified generator: base icons/loading, civ stubs (loading + icons). Supports `--stub`, `--force`, `--leader`
+- `scripts/generate-civ-icons.py` — Generate civ-specific icon PNGs (standalone, also called by generate.py)
+- `scripts/generate-mod-data.py` — Generate SQL, XML, modinfo from config + available images
 - `scripts/process-images.py` — Image processing utilities
+- `scripts/generate-prompts.py` — Generate AI image generation prompts
 
 ### Config
 - `config/leaders-civilizations.json` — Master data: all leaders, civilizations, ages
@@ -96,6 +99,11 @@
 `~/Library/Application Support/Civilization VII/Mods/authentic-leaders` → `/Users/admin/work/civ7mod/authentic-leaders`
 
 ### Next Steps
-1. **Investigate icon size/missing issues** — Some icons appear wrong size or missing in certain UI contexts. Check IconDefinitions entries, compare our PNG dimensions with what the game expects, inspect which contexts/sizes are affected.
-2. **Build AI art generation pipeline** — API integration for generating civ-contextualized leader portraits
-3. **Replace stubs with real artwork** — Loading screens + icons with actual civ-appropriate art
+1. **BUILD AI ART GENERATION PIPELINE** ← NEXT
+   - Design prompt templates per leader × civ (attire, setting, architecture, era)
+   - API integration (DALL-E / Midjourney / Stable Diffusion / Flux)
+   - Batch generation script: reads config, generates prompts, calls API, saves outputs
+   - Post-processing: resize to 800×1060 loading screens, crop to icon variants (hex + circ)
+   - Maintain consistent art style matching Civ7 painterly aesthetic
+2. **Replace stubs with real artwork** — Swap generated art into mod, regenerate icons from new loading screens
+3. **Quality review and curation** — Manual review of generated images, re-generate poor results, verify in-game

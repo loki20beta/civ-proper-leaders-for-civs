@@ -150,6 +150,10 @@ Persona alt texture names:
 - `LEADER_XERXES_ALT` → `xerxes_alt`
 - `LEADER_NAPOLEON_ALT` → `napoleon_alt`
 
+Persona civ-specific files follow the pattern:
+- Loading: `lsl_{key}_alt_{civ}.png` (e.g., `lsl_ashoka_alt_rome.png`)
+- Icons: `lp_{shape}_{key}_alt_{civ}_{size}{suffix}.png` (e.g., `lp_hex_ashoka_alt_rome_128.png`)
+
 ---
 
 ## Civilization Background Textures
