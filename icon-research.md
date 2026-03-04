@@ -469,9 +469,49 @@ This mod may have the same `getLeaderPortraitIcon` bug but it's less noticeable 
 
 Direct level-0 extraction at byte 16 works. Previous fallbacks no longer needed.
 
-## Resolution
+## Resolution (Path issues)
 
-All three issues resolved:
+All three path issues resolved:
 1. ✅ Extensionless paths in IconDefinitions (committed 0f64e77)
 2. ✅ Verified working across all affected UI contexts
 3. ✅ Civ-specific swapping extended to Path B via DOM background-image interception in UIScript
+
+### Current: Hex icon aspect ratio is wrong (2026-03-04)
+
+**Discovery:** Comparing with the working Oliver Cromwell custom leader mod revealed our hex icons are the wrong dimensions.
+
+**Root cause:** Hex icon textures are NOT square — they are taller than wide with a 45/32 (1.40625) aspect ratio. Our extraction was cropping them to square.
+
+| Variant | Correct (Cromwell) | Ours (wrong) |
+|---------|-------------------|--------------|
+| hex_256 | 256×360 | 256×256 |
+| hex_128 | 128×180 | 128×128 |
+| hex_64 | 64×90 | 64×64 |
+| circ_256 | 256×256 ✓ | 256×256 ✓ |
+| circ_128 | 128×128 ✓ | 128×128 ✓ |
+
+**Aspect ratio:** All hex sizes use exactly **45/32 = 1.40625**:
+- 256 × 45/32 = 360
+- 128 × 45/32 = 180
+- 64 × 45/32 = 90
+
+**Alpha bounding boxes (128×180 canvas):**
+- Cromwell: (11, 33, 115, 157) — content properly centered in tall hex
+- Our test decode at 128×180: (11, 22, 112, 160) — also properly centered ✓
+- Our current 128×128 crop: (11, 0, 112, 128) — content hits top and bottom edges
+
+**CIVBIG payload verification:** All three hex sizes have sufficient payload for 45/32 decoding:
+- hex_256: need 92,160B, payload=123,104B ✓
+- hex_128: need 23,040B, payload=30,944B ✓
+- hex_64: need 5,888B, payload=7,904B ✓
+
+**Bug in extraction (`extract-game-assets.py` line 265):**
+```python
+# WRONG: 5/4 = 1.25 ratio, crops to square
+decode_h = v["size"] * 5 // 4 if v["shape"] == "hex" else v["size"]
+img = decode_civbig(tex_path, v["size"], v["size"], decode_height=decode_h)
+```
+
+**BC7 block alignment note:** For 64×90, `ceil(90/4) = 23` blocks (92 pixels). The `decode_civbig` function's `bc7_size` calculation uses floor division (`height // 4`), which gives 22 blocks — one block short. Fix: use ceiling division `(height + 3) // 4`.
+
+**Cromwell mod reference:** `/Users/admin/Library/Application Support/Civilization VII/Mods/civmods-oliver-cromwell-39482/`
