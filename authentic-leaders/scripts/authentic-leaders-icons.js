@@ -36,9 +36,12 @@
             var civType = playerConfig.civilizationTypeName;
             if (!localLeaderType || !civType) return false;
             var civSuffix = civType.replace("CIVILIZATION_", "");
-            var baseType = PERSONA_TO_BASE[localLeaderType] || localLeaderType;
-            localCivIconId = baseType + "_" + civSuffix;
+            localCivIconId = localLeaderType + "_" + civSuffix;
             var testUrl = UI.getIconCSS(localCivIconId);
+            if (!testUrl && PERSONA_TO_BASE[localLeaderType]) {
+                localCivIconId = PERSONA_TO_BASE[localLeaderType] + "_" + civSuffix;
+                testUrl = UI.getIconCSS(localCivIconId);
+            }
             if (!testUrl) {
                 console.warn("[AuthenticLeaders] No civ-specific icon for " + localCivIconId);
                 localCivIconId = null;
@@ -86,9 +89,12 @@
                         continue;
                     }
                     var civSuffix = civType.replace("CIVILIZATION_", "");
-                    var baseType = PERSONA_TO_BASE[leaderType] || leaderType;
-                    var civIconId = baseType + "_" + civSuffix;
+                    var civIconId = leaderType + "_" + civSuffix;
                     var testUrl = UI.getIconCSS(civIconId);
+                    if (!testUrl && PERSONA_TO_BASE[leaderType]) {
+                        civIconId = PERSONA_TO_BASE[leaderType] + "_" + civSuffix;
+                        testUrl = UI.getIconCSS(civIconId);
+                    }
                     if (!testUrl) {
                         console.log("[AuthenticLeaders] Player " + p.id + ": no icon for " + civIconId + ", skipping");
                         playerIconCache[p.id] = null;
