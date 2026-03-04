@@ -86,8 +86,8 @@ def decode_civbig(file_path, width, height, decode_height=None):
     Level-0 is first in the mipchain. BC7 decodes to BGRA; we swap to RGBA.
 
     If decode_height > height, decodes the taller texture and crops the
-    bottom `height` rows. Hex icon textures are stored 25% taller than
-    their nominal icon size (e.g. 128×160 for a 128×128 icon).
+    bottom `height` rows. Hex icon textures have a 45/32 aspect ratio
+    (e.g. 128×180 for a 128-wide icon).
     """
     import texture2ddecoder
     from PIL import Image
@@ -95,7 +95,7 @@ def decode_civbig(file_path, width, height, decode_height=None):
     if decode_height is None:
         decode_height = height
 
-    bc7_size = max(1, width // 4) * max(1, decode_height // 4) * 16
+    bc7_size = max(1, (width + 3) // 4) * max(1, (decode_height + 3) // 4) * 16
     with open(file_path, "rb") as f:
         f.seek(16)
         bc7_data = f.read(bc7_size)
@@ -261,9 +261,9 @@ def extract_icon_originals(config, force=False):
                 miss += 1
                 continue
 
-            # Hex textures are stored 25% taller; decode full height, crop bottom
-            decode_h = v["size"] * 5 // 4 if v["shape"] == "hex" else v["size"]
-            img = decode_civbig(tex_path, v["size"], v["size"], decode_height=decode_h)
+            # Hex textures have 45/32 aspect ratio (taller than wide)
+            out_h = v["size"] * 45 // 32 if v["shape"] == "hex" else v["size"]
+            img = decode_civbig(tex_path, v["size"], out_h)
             os.makedirs(dest_dir, exist_ok=True)
             img.save(dest, "PNG")
             extracted += 1

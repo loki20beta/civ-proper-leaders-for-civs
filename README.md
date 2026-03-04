@@ -98,8 +98,8 @@ scripts/
 - [x] Extract original loading screens from game BLP files (28 leaders + 5 persona alts)
 - [x] Extract all 8 icon variants per leader from game textures (28 leaders + 5 alts)
 - [x] Stub images for all 28 leaders × 43 civilizations (loading screens + icons)
-- [x] CIVBIG format decoded: BC7 data at byte 16, hex textures 25% taller (crop bottom NxN)
-- [x] Icon centering verified: circ perfect, hex vertical shift fixed
+- [x] CIVBIG format decoded: BC7 data at byte 16, hex icons 45/32 aspect ratio (256×360, 128×180, 64×90)
+- [x] Icon dimensions verified: hex = rectangular (45/32), circ = square
 - [x] Icons working in all UI contexts (both fxs-icon and getLeaderPortraitIcon paths)
 
 ### Phase 3: AI-Generated Artwork (next)
@@ -147,6 +147,10 @@ scripts/
 - **Persona/alt leader DB types** are `LEADER_X_ALT` (not flavor names like WORLD_RENOUNCER). Alt types have their own `LoadingInfo_Leaders` + `IconDefinitions` entries.
 
 - **Two icon rendering paths**: `fxs-icon` components use `UI.getIconCSS(id, context)` for direct lookup. `getLeaderPortraitIcon()` uses `UI.getIconURL()` + string concatenation + `.png` suffix. To support both: `IconDefinitions` paths are extensionless, and both `.png` and extensionless copies are imported. The UIScript handles civ-specific swapping for both paths.
+
+## Author
+
+loki20beta
 
 ## License
 

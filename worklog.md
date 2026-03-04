@@ -47,7 +47,7 @@
 - Mipchain stops at 4×4 (not 1×1)
 - Footer padding after mipchain: transparent BC7 blocks (`80 00 00 00 ... AC AA AA AA`)
 - `payload_size` = mipchain data size; footer_size = file_size - 16 - payload_size
-- Hex textures are 25% taller than nominal (128→160, 256→320, 64→80); decode full height, crop bottom NxN
+- Hex textures have 45/32 aspect ratio (128×180, 256×360, 64×90); decode at full rectangular size
 - Circ textures are square at nominal size; decode directly
 - All texture types decode correctly from byte 16
 

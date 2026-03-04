@@ -136,17 +136,18 @@ def overlay_loading_text(base_img, text):
 # --- Icon generation ---
 
 
-def create_hex_mask(size):
-    """Create a hexagonal mask."""
-    mask = Image.new("L", (size, size), 0)
+def create_hex_mask(width, height):
+    """Create a hexagonal mask for a rectangular canvas."""
+    mask = Image.new("L", (width, height), 0)
     draw = ImageDraw.Draw(mask)
-    cx, cy = size // 2, size // 2
-    r = size // 2 - 2
+    cx, cy = width // 2, height // 2
+    rx = width // 2 - 2
+    ry = height // 2 - 2
     points = []
     for i in range(6):
         angle = math.pi / 6 + i * math.pi / 3
-        x = cx + r * math.cos(angle)
-        y = cy + r * math.sin(angle)
+        x = cx + rx * math.cos(angle)
+        y = cy + ry * math.sin(angle)
         points.append((x, y))
     draw.polygon(points, fill=255)
     return mask
@@ -160,13 +161,15 @@ def create_circle_mask(size):
     return mask
 
 
-def crop_center_square(img):
-    """Crop the largest centered square from an image."""
+def crop_center_rect(img, target_w, target_h):
+    """Crop the largest centered rectangle with given aspect ratio from an image."""
     w, h = img.size
-    side = min(w, h)
-    left = (w - side) // 2
-    top = (h - side) // 2
-    return img.crop((left, top, left + side, top + side))
+    # Find largest crop matching target aspect ratio
+    crop_w = min(w, int(h * target_w / target_h))
+    crop_h = min(h, int(w * target_h / target_w))
+    left = (w - crop_w) // 2
+    top = (h - crop_h) // 2
+    return img.crop((left, top, left + crop_w, top + crop_h))
 
 
 def apply_tint(img, tint_color, strength=0.15):
@@ -177,14 +180,15 @@ def apply_tint(img, tint_color, strength=0.15):
 
 def make_base_icon(reference_img, shape, size, tint=None):
     """Create a masked icon from reference image."""
-    squared = crop_center_square(reference_img)
-    resized = squared.resize((size, size), Image.LANCZOS)
+    height = size * 45 // 32 if shape == "hex" else size
+    cropped = crop_center_rect(reference_img, size, height)
+    resized = cropped.resize((size, height), Image.LANCZOS)
 
     if tint:
         resized = apply_tint(resized, tint)
 
-    mask = create_hex_mask(size) if shape == "hex" else create_circle_mask(size)
-    result = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    mask = create_hex_mask(size, height) if shape == "hex" else create_circle_mask(size)
+    result = Image.new("RGBA", (size, height), (0, 0, 0, 0))
     result.paste(resized, (0, 0), mask)
     return result
 
@@ -208,18 +212,19 @@ def overlay_icon_text(icon_img, text, icon_size):
 
     padding = max(2, icon_size // 32)
     banner_h = text_h + padding * 2
-    banner_y = icon_size - banner_h - (icon_size // 8)
+    img_h = img.size[1]
+    banner_y = img_h - banner_h - (img_h // 8)
 
     banner = Image.new("RGBA", img.size, (0, 0, 0, 0))
     banner_draw = ImageDraw.Draw(banner)
     banner_draw.rectangle(
-        [0, banner_y, icon_size, banner_y + banner_h],
+        [0, banner_y, img.size[0], banner_y + banner_h],
         fill=(0, 0, 0, 160),
     )
     img = Image.alpha_composite(img, banner)
 
     draw = ImageDraw.Draw(img)
-    text_x = (icon_size - text_w) // 2
+    text_x = (img.size[0] - text_w) // 2
     text_y = banner_y + padding
     draw.text((text_x, text_y), text, font=font, fill=(255, 255, 255, 255))
 

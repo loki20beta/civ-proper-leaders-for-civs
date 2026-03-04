@@ -96,20 +96,20 @@ def overlay_text(img, text, icon_size):
     # Position: centered horizontally, near bottom
     padding = max(2, icon_size // 32)
     banner_h = text_h + padding * 2
-    banner_y = icon_size - banner_h - (icon_size // 8)  # Offset up from very bottom
+    banner_y = img.size[1] - banner_h - (img.size[1] // 8)  # Offset up from very bottom
 
     # Draw semi-transparent dark banner
     banner = Image.new("RGBA", img.size, (0, 0, 0, 0))
     banner_draw = ImageDraw.Draw(banner)
     banner_draw.rectangle(
-        [0, banner_y, icon_size, banner_y + banner_h],
+        [0, banner_y, img.size[0], banner_y + banner_h],
         fill=(0, 0, 0, 160),
     )
     img = Image.alpha_composite(img, banner)
 
     # Draw text
     draw = ImageDraw.Draw(img)
-    text_x = (icon_size - text_w) // 2
+    text_x = (img.size[0] - text_w) // 2
     text_y = banner_y + padding
     draw.text((text_x, text_y), text, font=font, fill=(255, 255, 255, 255))
 

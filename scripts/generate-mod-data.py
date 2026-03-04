@@ -342,7 +342,7 @@ def generate_modinfo(leaders):
   <Properties>
     <Name>Authentic Leaders</Name>
     <Description>Replaces leader loading screen images and icons with civilization-specific artwork for a more historically authentic experience.</Description>
-    <Authors>Custom</Authors>
+    <Authors>loki20beta</Authors>
     <AffectsSavedGames>0</AffectsSavedGames>
     <ShowInBrowser>1</ShowInBrowser>
     <EnabledByDefault>1</EnabledByDefault>

@@ -4,7 +4,7 @@ Definitive documentation of how Civilization VII stores and organizes visual
 assets, derived from binary analysis of game files. This document exists
 because no public documentation of these formats exists anywhere.
 
-Last updated: 2026-03-03
+Last updated: 2026-03-04
 
 ## File Locations
 
@@ -84,7 +84,8 @@ texture) is first in the mipchain.
 
 BC7 format basics:
 - 4×4 pixel blocks, 16 bytes per block
-- For an NxN texture: `(N/4)² × 16` bytes for level-0
+- For a W×H texture: `ceil(W/4) × ceil(H/4) × 16` bytes for level-0
+- Use ceiling division `(n+3)//4` for non-multiple-of-4 dimensions (e.g., 64×90)
 - BC7 decodes to **BGRA** channel order — must swap R and B for RGBA
 - Decoder: `texture2ddecoder.decode_bc7()` (Python, via pip)
 
@@ -151,24 +152,14 @@ Persona alt texture names:
 
 **Critical**: The game stores two completely different portrait crops per leader.
 They are NOT the same image with different masks — they have different framing,
-different zoom levels, and different positioning on the canvas.
+different zoom levels, different aspect ratios, and different positioning.
 
-| Crop | Content | Canvas position | Alpha shape |
-|------|---------|----------------|-------------|
-| **HEX** | Wide: head + shoulders | Bottom-aligned, top is transparent | Head silhouette, wider framing |
-| **CIRC** | Tight: head only | Vertically centered | Head silhouette, tighter framing |
+| Crop | Aspect ratio | Content | Canvas position |
+|------|-------------|---------|----------------|
+| **HEX** | 45/32 (taller than wide) | Wide: head + shoulders | Bottom-aligned, top is transparent |
+| **CIRC** | 1:1 (square) | Tight: head only | Vertically centered |
 
-Measured at 128×128 (Augustus, consistent across leaders):
-```
-hex_128:  alpha bbox = (7, 38, 105, 128)    — content centered, bottom-aligned
-circ_128: alpha bbox = (17, 17, 101, 115)   — content centered vertically
-```
-
-At 256×256:
-```
-hex_256:  alpha bbox = (14, 77, 211, 256)   — content centered, bottom-aligned
-circ_256: alpha bbox = (34, 34, 203, 229)   — content centered, doesn't reach edges
-```
+Hex dimensions: 256×360, 128×180, 64×90. Circ dimensions: 256×256, 128×128, 64×64.
 
 **You cannot use circ images for hex contexts or vice versa.** Each must be
 extracted from its own source texture.
@@ -177,13 +168,13 @@ extracted from its own source texture.
 
 8 textures per leader (and per persona alt):
 
-| Variant | Texture name pattern | Size | IconDefinitions Context |
-|---------|---------------------|------|------------------------|
-| hex_256 | `TEXTURE_lp_hex_{name}_256` | 256×256 | DEFAULT |
-| hex_128 | `TEXTURE_lp_hex_{name}_128` | 128×128 | DEFAULT |
-| hex_128_h | `TEXTURE_lp_hex_{name}_128_h` | 128×128 | LEADER_HAPPY |
-| hex_128_a | `TEXTURE_lp_hex_{name}_128_a` | 128×128 | LEADER_ANGRY |
-| hex_64 | `TEXTURE_lp_hex_{name}_64` | 64×64 | DEFAULT |
+| Variant | Texture name pattern | Size (W×H) | IconDefinitions Context |
+|---------|---------------------|------------|------------------------|
+| hex_256 | `TEXTURE_lp_hex_{name}_256` | 256×360 | DEFAULT |
+| hex_128 | `TEXTURE_lp_hex_{name}_128` | 128×180 | DEFAULT |
+| hex_128_h | `TEXTURE_lp_hex_{name}_128_h` | 128×180 | LEADER_HAPPY |
+| hex_128_a | `TEXTURE_lp_hex_{name}_128_a` | 128×180 | LEADER_ANGRY |
+| hex_64 | `TEXTURE_lp_hex_{name}_64` | 64×90 | DEFAULT |
 | circ_256 | `TEXTURE_lp_circ_{name}_256` | 256×256 | CIRCLE_MASK |
 | circ_128 | `TEXTURE_lp_circ_{name}_128` | 128×128 | CIRCLE_MASK |
 | circ_64 | `TEXTURE_lp_circ_{name}_64` | 64×64 | CIRCLE_MASK |
@@ -219,25 +210,23 @@ Mipchain sizes:
 
 ### HEX payload layout
 
-Hex payloads are larger than circ because they contain additional mip data
-after the main mipchain. Level-0 is still at byte 16.
+Hex textures are rectangular with a 45/32 aspect ratio (width × height×45/32).
+Payloads are larger than circ because of the taller dimensions. Level-0 is at byte 16.
 
 ```
 [prefix: 16 bytes]
-[BC7 level-0: NxN]          ← decode from here (byte 16)
-[BC7 mip levels: N/2 → 4×4]
-[extra mip data]             ← additional data, purpose unknown
+[BC7 level-0: W×H]          ← decode from here (byte 16)
+[BC7 mip levels down to 4×4]
 [footer: 272 bytes]
 ```
 
-| Variant | Payload | Mipchain (N→4×4) | Extra data |
-|---------|---------|-------------------|-----------|
-| hex_256 | 123,104 | 87,376 | 35,728 |
-| hex_128 | 30,944 | 21,840 | 9,104 |
-| hex_64 | 7,904 | 5,456 | 2,448 |
+| Variant | Dimensions | Payload |
+|---------|-----------|---------|
+| hex_256 | 256×360 | 123,104 |
+| hex_128 | 128×180 | 30,944 |
+| hex_64 | 64×90 | 7,904 |
 
-**Extraction: same as circ — decode level-0 at byte 16. No skip needed.**
-```
+**Extraction: same as circ — decode level-0 at byte 16, but with correct W×H.**
 
 ### Previous wrong conclusions (for reference)
 
@@ -256,6 +245,11 @@ after the main mipchain. Level-0 is still at byte 16.
 
 4. "Hex textures have mip tail packing that destroys the base level" — **WRONG**.
    The base level was being read from the wrong offset (header_size instead of 16).
+
+5. "Hex icon textures are square (NxN), stored 25% taller, crop bottom NxN" — **WRONG**.
+   Hex icons have a 45/32 aspect ratio and are natively rectangular (e.g., 128×180).
+   The "extra" data in hex payloads was the mipchain for the taller dimension, not
+   mysterious padding. Confirmed by comparing with Oliver Cromwell custom leader mod.
 
 ---
 
@@ -383,7 +377,7 @@ UpdateIcons, UpdateText, UpdateVisualRemaps, ScenarioScripts, MapGenScripts
 
 - PNG format with RGBA channels
 - Transparent background required (game checks for this)
-- Dimensions must match `IconSize` in IconDefinitions
+- Width must match `IconSize` in IconDefinitions; hex icons are taller (45/32 ratio)
 - No geometric mask needed in the image — game handles display via CSS
 
 ---
@@ -393,7 +387,6 @@ UpdateIcons, UpdateText, UpdateVisualRemaps, ScenarioScripts, MapGenScripts
 ### Correct extraction procedure
 
 ```python
-import struct
 import texture2ddecoder
 from PIL import Image
 
@@ -401,8 +394,9 @@ def decode_civbig(file_path, width, height):
     """Decode level-0 from a CIVBIG file.
 
     BC7 data starts at byte 16 for ALL texture types.
+    Uses ceiling division for non-multiple-of-4 dimensions.
     """
-    bc7_size = (max(1, width // 4)) ** 2 * 16
+    bc7_size = max(1, (width + 3) // 4) * max(1, (height + 3) // 4) * 16
     with open(file_path, "rb") as f:
         f.seek(16)  # Skip prefix, BC7 level-0 starts here
         bc7_data = f.read(bc7_size)
@@ -411,9 +405,9 @@ def decode_civbig(file_path, width, height):
     r, g, b, a = img.split()
     return Image.merge("RGBA", (b, g, r, a))
 
-# Works for ALL types — no special cases needed:
-img = decode_civbig(circ_path, 256, 256)   # circ icon
-img = decode_civbig(hex_path, 128, 128)    # hex icon
+# Works for ALL types — use correct dimensions:
+img = decode_civbig(circ_path, 256, 256)   # circ icon (square)
+img = decode_civbig(hex_path, 128, 180)    # hex icon (45/32 aspect ratio)
 img = decode_civbig(lsl_path, 800, 1060)   # loading screen
 ```
 
