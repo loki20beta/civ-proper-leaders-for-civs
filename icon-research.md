@@ -2,11 +2,18 @@
 
 ## Problem
 
-Mod icons display incorrectly in-game:
-- Neutral icons shifted left/up in the diplomacy banner (hex context)
-- Icons appear at wrong scale in banner — heads too small
-- Happy/angry icons centered but shifted down
-- Table view (circ context) looks OK but still slightly off
+### Resolved: Extraction crop/offset issues
+- ~~Neutral icons shifted left/up in the diplomacy banner (hex context)~~
+- ~~Icons appear at wrong scale in banner — heads too small~~
+- ~~Happy/angry icons centered but shifted down~~
+- ~~Table view (circ context) looks OK but still slightly off~~
+
+Fixed by extracting each variant from its own CIVBIG texture file at byte 16 offset.
+
+### Current: Missing icons in relationship panel and other UI contexts (2026-03-04)
+- Relationship panel (diplomacy screen → "RELATIONSHIPS" section) shows **dark/empty hexagons** instead of leader portraits
+- Affects: relationship panel, city banners, victory screen, combat preview, end results, and ~8 other UI contexts
+- Root cause: game's `getLeaderPortraitIcon()` constructs icon URLs via string concatenation that's incompatible with `fs://game/` paths (see "Second Icon Rendering Path" section below)
 
 ## Root Cause: Two Different Portrait Crops
 
@@ -124,14 +131,133 @@ class FxsIcon extends Component {
 }
 ```
 
-### Leader icon container
+### Leader icon container (`leader-icon`)
 
 `Base/modules/core/ui/save-load/leader-icon.js` builds a layered hex display:
 - Shadow layer (`img-hex-shadow`)
-- Banner/flag area (`img-hud-frontbanner`)
+- Background (`img-hex-64`, tinted with player bg-color)
 - Civ icon overlay (`img-hex-overlay`)
-- Frame (`img-hex-frame`)
-- Leader portrait (`fxs-icon` with `data-icon-context="LEADER"`)
+- Frame (`img-hex-frame`, tinted with secondary color)
+- Leader portrait: `fxs-icon` with `data-icon-id={leaderType}`, `data-icon-context="LEADER"`
+
+The `"LEADER"` context does NOT exist as an explicit row in `IconDefinitions` — only DEFAULT, LEADER_HAPPY, LEADER_ANGRY, CIRCLE_MASK exist. The engine falls back from `"LEADER"` → `"DEFAULT"` when looking up icons.
+
+The inner `fxs-icon` is positioned with absolute insets: `-left-3 -right-3 -top-5 -bottom-1.5`, making it larger than the parent container (overflow creates the portrait-extending-above-frame effect).
+
+Used by: save/load list, some diplomacy dialogs, diplo ribbon calls-to-action.
+
+## Second Icon Rendering Path: `getLeaderPortraitIcon()` (2026-03-04)
+
+### Discovery
+
+Many UI contexts do NOT use `fxs-icon` / `UI.getIconCSS()` for leader portraits. Instead, they use `Icon.getLeaderPortraitIcon()` which constructs icon URLs via string concatenation.
+
+**This is the root cause of missing/broken icons in the relationship panel and other UI contexts.**
+
+### The function (`utilities-image.chunk.js:147-173`)
+
+```javascript
+function getLeaderPortraitIcon(leaderType, size, relationship) {
+    const missingIcon = "blp:leader_portrait_unknown.png";
+    const leader = GameInfo.Leaders.lookup(leaderType);
+    if (!leader) return missingIcon;
+    const sizeSuffix = size == void 0 ? "" : "_" + size.toString();
+    let relationshipSuffix = "";
+    if (relationship) {
+        switch (relationship) {
+            case HOSTILE: case UNFRIENDLY: relationshipSuffix = "_a"; break;
+            case FRIENDLY: case HELPFUL:  relationshipSuffix = "_h"; break;
+        }
+    }
+    const iconName = UI.getIconURL(leader.LeaderType, "LEADER")
+                   + sizeSuffix + relationshipSuffix + ".png";
+    return iconName.toLowerCase();
+}
+```
+
+Key behavior:
+1. Calls `UI.getIconURL(leaderType, "LEADER")` — native engine function, returns a base path
+2. Appends `sizeSuffix` (e.g., `"_128"` or `""` if size undefined)
+3. Appends `relationshipSuffix` (e.g., `"_a"`, `"_h"`, or `""`)
+4. **Always appends `".png"`**
+5. `.toLowerCase()` on the result
+
+### Why this breaks our mod
+
+Vanilla BLP paths in `IconDefinitions` have **no file extension**:
+```
+blp:lp_hex_amina_128
+```
+
+So `UI.getIconURL()` returns a base like `blp:lp_hex_amina`, and the function constructs:
+```
+blp:lp_hex_amina + "" + "" + ".png" → "blp:lp_hex_amina.png"  ✓ (BLP resolves this)
+blp:lp_hex_amina + "_128" + "" + ".png" → "blp:lp_hex_amina_128.png"  ✓
+blp:lp_hex_amina + "_128" + "_a" + ".png" → "blp:lp_hex_amina_128_a.png"  ✓
+```
+
+Our mod paths in `IconDefinitions` **already include `.png`**:
+```
+fs://game/authentic-leaders/icons/amina/lp_hex_amina_128.png
+```
+
+So the function likely constructs something like:
+```
+fs://game/.../lp_hex_amina + "" + "" + ".png" → ".../lp_hex_amina.png"  ✗ (file is lp_hex_amina_128.png)
+fs://game/.../lp_hex_amina_128.png + ".png" → ".../lp_hex_amina_128.png.png"  ✗ (double extension)
+```
+
+The exact behavior depends on what `UI.getIconURL()` (native engine) returns — whether it strips the size suffix, the extension, both, or neither. In all cases the resulting path is invalid for our `fs://game/` paths.
+
+### Affected UI contexts
+
+All of these use `getLeaderPortraitIcon` / `getPlayerLeaderIcon` and are **broken** with our mod:
+
+| UI Context | File | Args |
+|-----------|------|------|
+| **Relationship panel** (hex portraits under Neutral/Friendly/Hostile) | `panel-diplomacy-actions.js:1156` | leaderType only |
+| Diplomacy action leader portraits | `panel-diplomacy-actions.js:725,773,800` | leaderType only |
+| City banners (suzerain portrait) | `city-banners.js:1037,1058` | leaderType only |
+| Call to arms screen | `screen-diplomacy-call-to-arms.js:101-102` | leaderType only |
+| Combat preview | `panel-unit-combat-preview.js:289` | leaderType, size=32 |
+| Victory progress | `model-victory-progress.chunk.js:160` | leaderType only |
+| End results screen | `end-results.js:98` | leaderType only |
+| Endgame screen | `model-endgame.js:58` | leaderType only |
+| Age scores | `model-age-scores.js:99` | leaderType only |
+| Diplomacy target select | `screen-diplomacy-target-select.js:134` | via `getPlayerLeaderIcon` |
+| Diplomacy manager (war notifications) | `diplomacy-manager.js:3546` | leaderType only |
+
+These use `createBorderedIcon()` which sets `div.style.backgroundImage = url(iconURL)` — a plain div, NOT `fxs-icon`.
+
+### UI contexts that DO work (use Path A)
+
+| UI Context | Mechanism |
+|-----------|-----------|
+| **Diplo ribbon** (top bar leader portraits) | `fxs-icon` + `UI.getIconCSS()` with `data-icon-context` = "" / LEADER_HAPPY / LEADER_ANGRY |
+| **Save/load list** | `leader-icon` → inner `fxs-icon` + `UI.getIconCSS()` with `data-icon-context="LEADER"` |
+| **Leader select screen** | `fxs-icon` + `UI.getIconCSS()` with `data-icon-context="CIRCLE_MASK"` |
+
+### Proposed fixes
+
+**Option 1 (Recommended): JS override of `getLeaderPortraitIcon`**
+
+Monkey-patch `Icon.getLeaderPortraitIcon` in our UIScript. The override can:
+- Call `UI.getIconCSS(leaderType, "LEADER")` instead of the string-concat approach
+- Or call the original and fix double `.png` in the result
+- Also apply civ-specific icon swapping for these contexts (currently only the MutationObserver handles civ-specific swaps, and these plain divs are invisible to it)
+
+**Option 2: Create base-name icon files**
+
+For each leader, create additional PNGs without size suffix:
+- `lp_hex_amina.png` (copy of 128px version)
+- `lp_hex_amina_h.png` (copy of 128_h)
+- `lp_hex_amina_a.png` (copy of 128_a)
+
+Handles the no-size case but not size=32 (combat preview). Adds ~84 extra files (28 leaders × 3).
+
+**Option 3: Strip `.png` from IconDefinitions paths**
+
+Register paths like `fs://game/.../lp_hex_amina_128` (no extension) in XML. Unclear if `fs://` resolves extensionless paths, and would break `fxs-icon` path (Path A) if it needs the extension.
 
 ## IconDefinitions Schema
 
@@ -216,11 +342,17 @@ No other Civ7 mod replaces leader portrait icons. Community mods that modify ico
 - `fs://game/{mod-id}/{path}.png` for mod file references
 - `<Replace>` must use child-element syntax (not attribute syntax)
 
-## Fallback Plan
+## Fallback Plan (Extraction — resolved)
 
-If direct level-0 extraction still produces issues:
+Direct level-0 extraction at byte 16 works. Previous fallbacks no longer needed:
 
-1. **Try extracting at different offsets** — the payload might have a sub-header before level-0
-2. **Use circ_256 for circ contexts, hex_128 for hex contexts** — at least get the crop right even if some sizes need resizing
-3. **Screenshot-based extraction** — render icons in-game via an icon browser and screenshot them (like Sukritact's Civ6 tool)
-4. **Manual crop adjustment** — measure the exact offset between our icons and game icons, apply a pixel shift to compensate
+1. ~~Try extracting at different offsets~~
+2. ~~Use circ_256 for circ contexts, hex_128 for hex contexts~~
+3. ~~Screenshot-based extraction~~
+4. ~~Manual crop adjustment~~
+
+## Next Steps
+
+1. **Fix `getLeaderPortraitIcon` path issue** — implement Option 1 (JS override) from the "Second Icon Rendering Path" section
+2. **Verify fix across all affected UI contexts** — relationship panel, city banners, combat preview, victory screen, etc.
+3. **Extend civ-specific swapping to Path B contexts** — the UIScript's MutationObserver only catches `fxs-icon` elements; plain divs using `getLeaderPortraitIcon` also need civ-specific icons
