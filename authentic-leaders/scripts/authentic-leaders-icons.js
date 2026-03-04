@@ -152,6 +152,58 @@
         });
     }
 
+    // --- Path B: getLeaderPortraitIcon() background-image swapping ---
+    // Many UI contexts (relationship panel, city banners, combat preview, etc.)
+    // use getLeaderPortraitIcon() which renders into plain <div> elements.
+    // We intercept by matching backgroundImage URLs and swapping to civ-specific paths.
+
+    // Map: lowercased base URL prefix → lowercased civ URL prefix
+    // e.g. "fs://game/.../lp_hex_amina" → "fs://game/.../rome/lp_hex_amina_rome"
+    var portraitUrlSwapMap = {};
+
+    function buildPortraitSwapMap() {
+        portraitUrlSwapMap = {};
+        for (var pid in playerIconCache) {
+            var info = playerIconCache[pid];
+            if (!info) continue;
+            try {
+                var baseUrl = UI.getIconURL(info.leaderType, "LEADER");
+                var civUrl = UI.getIconURL(info.civIconId, "LEADER");
+                if (baseUrl && civUrl && baseUrl !== civUrl) {
+                    portraitUrlSwapMap[baseUrl.toLowerCase()] = civUrl.toLowerCase();
+                }
+            } catch (e) {
+                // Skip players where URL lookup fails
+            }
+        }
+        console.log("[AuthenticLeaders] Portrait swap map: " + Object.keys(portraitUrlSwapMap).length + " entries");
+    }
+
+    function swapPortraitBackground(el) {
+        var bg = el.style.backgroundImage;
+        if (!bg || bg.indexOf("lp_") === -1) return;
+        var bgLower = bg.toLowerCase();
+        for (var baseUrl in portraitUrlSwapMap) {
+            if (bgLower.indexOf(baseUrl) !== -1) {
+                el.style.backgroundImage = bgLower.replace(baseUrl, portraitUrlSwapMap[baseUrl]);
+                return;
+            }
+        }
+    }
+
+    function processPortraitNodes(rootNode) {
+        if (rootNode.nodeType !== 1) return;
+        swapPortraitBackground(rootNode);
+        var all = rootNode.getElementsByTagName("*");
+        for (var i = 0; i < all.length; i++) {
+            swapPortraitBackground(all[i]);
+        }
+    }
+
+    function processAllPortraits() {
+        processPortraitNodes(document.body);
+    }
+
     var observer = new MutationObserver(function(mutations) {
         if (!initialized) return;
         for (var i = 0; i < mutations.length; i++) {
@@ -174,6 +226,8 @@
                     for (var k = 0; k < children.length; k++) {
                         setTimeout(processIconElement.bind(null, children[k]), 0);
                     }
+                    // Path B: swap portrait backgrounds on newly added nodes
+                    setTimeout(processPortraitNodes.bind(null, node), 0);
                 }
             }
         }
@@ -186,6 +240,8 @@
         }
         // Build cache for all players
         buildPlayerMap();
+        // Build URL swap map for Path B portrait interception
+        buildPortraitSwapMap();
         initialized = true;
         console.log("[AuthenticLeaders] Icon override system active, cached players: " + Object.keys(playerIconCache).length);
         observer.observe(document.body, {
@@ -195,6 +251,7 @@
             attributeFilter: ["data-icon-id"]
         });
         processAllIcons();
+        processAllPortraits();
     }
 
     if (document.body) {

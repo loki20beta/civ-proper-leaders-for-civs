@@ -237,43 +237,23 @@ These use `createBorderedIcon()` which sets `div.style.backgroundImage = url(ico
 | **Save/load list** | `leader-icon` → inner `fxs-icon` + `UI.getIconCSS()` with `data-icon-context="LEADER"` |
 | **Leader select screen** | `fxs-icon` + `UI.getIconCSS()` with `data-icon-context="CIRCLE_MASK"` |
 
-### Proposed fixes
+### Fixes applied (all confirmed working in-game)
 
-**Option 1 (Recommended): Strip `.png` from IconDefinitions paths**
+**Fix 1: Extensionless icon duplicates (committed 0f64e77)**
 
-Register paths WITHOUT `.png` extension in XML:
-```xml
-<Path>fs://game/authentic-leaders/icons/amina/lp_hex_amina_128</Path>
-<!-- instead of -->
-<Path>fs://game/authentic-leaders/icons/amina/lp_hex_amina_128.png</Path>
-```
+Stripped `.png` from all `IconDefinitions` `<Path>` values and created extensionless copies of every icon file. Both `.png` and extensionless versions are imported via `ImportFiles`.
 
-Evidence this works:
-- **Shadowheart custom leader mod** (hjl2009/Civilization7_MOD_Shadowheart) — a confirmed working mod that adds two custom leaders — uses extensionless paths in all `IconDefinitions` entries (see "External Research: Custom Leader Mods" below)
-- **Game's own `civilization-icons.xml`** mixes both forms: `fs://game/civ_sym_aksum` (no ext) alongside `fs://game/civ_sym_unknown.png` (with ext) — engine resolves both
-- The `fs://game/` protocol resolves PNG files with or without the `.png` extension (engine tries both)
-- `getLeaderPortraitIcon()` appends `.png` → extensionless base + `.png` = valid path to existing file
-- `fxs-icon` → `UI.getIconCSS()` → extensionless path → engine resolves to `.png` file
+- `fxs-icon` → `UI.getIconCSS()` → extensionless path → engine resolves to file ✓
+- `getLeaderPortraitIcon()` → extensionless base + `.png` suffix → resolves original `.png` file ✓
+- All 11 Path B UI contexts now render base leader icons correctly ✓
 
-Only change needed: update `generate-mod-data.py` to omit `.png` from Path values in both XML files. No file renames needed — ImportFiles still references files WITH `.png`.
+**Fix 2: Path B civ-specific icon swapping via DOM interception**
 
-**Option 2: JS override of `getLeaderPortraitIcon`**
+Extended the UIScript (`authentic-leaders-icons.js`) to also swap civ-specific icons in Path B contexts. After building the player cache, calls `UI.getIconURL()` for each player's base and civ-specific icon IDs to build a URL swap map. The MutationObserver scans newly added nodes for `backgroundImage` containing base leader portrait URLs and replaces with civ-specific URLs.
 
-Monkey-patch `Icon.getLeaderPortraitIcon` in our UIScript. The override can:
-- Call `UI.getIconCSS(leaderType, "LEADER")` instead of the string-concat approach
-- Or call the original and fix double `.png` in the result
-- Also apply civ-specific icon swapping for these contexts (currently only the MutationObserver handles civ-specific swaps, and these plain divs are invisible to it)
-
-More complex than Option 1 but offers civ-specific swap support for Path B contexts.
-
-**Option 3: Create base-name icon files**
-
-For each leader, create additional PNGs without size suffix:
-- `lp_hex_amina.png` (copy of 128px version)
-- `lp_hex_amina_h.png` (copy of 128_h)
-- `lp_hex_amina_a.png` (copy of 128_a)
-
-Handles the no-size case but not size=32 (combat preview). Adds ~84 extra files (28 leaders × 3). Least clean solution.
+- Relationship panel shows civ-specific icons ✓
+- City banners, combat preview, victory screen, etc. all show civ-specific icons ✓
+- Both fixes work together: extensionless paths ensure correct resolution, DOM swapping ensures civ-specific art ✓
 
 ## IconDefinitions — Leader Icon Entries (8 per leader)
 
@@ -489,8 +469,9 @@ This mod may have the same `getLeaderPortraitIcon` bug but it's less noticeable 
 
 Direct level-0 extraction at byte 16 works. Previous fallbacks no longer needed.
 
-## Next Steps
+## Resolution
 
-1. **Strip `.png` from IconDefinitions paths** — update `generate-mod-data.py` to omit `.png` from `<Path>` values in both `leader-icons-override.xml` and `leader-icons-civ-override.xml`
-2. **Verify fix across all affected UI contexts** — relationship panel, city banners, combat preview, victory screen, etc.
-3. **Extend civ-specific swapping to Path B contexts** — the UIScript's MutationObserver only catches `fxs-icon` elements; plain divs using `getLeaderPortraitIcon` also need civ-specific icons (Option 2 JS override may still be needed for this)
+All three issues resolved:
+1. ✅ Extensionless paths in IconDefinitions (committed 0f64e77)
+2. ✅ Verified working across all affected UI contexts
+3. ✅ Civ-specific swapping extended to Path B via DOM background-image interception in UIScript

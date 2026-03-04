@@ -15,7 +15,6 @@ The mod infrastructure is complete and working for all 28 leaders across all 43 
 - Full build pipeline: config → generate SQL/XML/modinfo → mod
 
 **Known Issues:**
-- Some icons appear slightly wrong size in certain UI contexts; in some places icons seem missing. Under investigation.
 - All civ-specific images are currently stubs (original portrait + text label), not real civ-contextualized artwork.
 
 ## How It Works
@@ -27,6 +26,8 @@ Civilization VII's `LoadingInfo_Leaders` table supports `CivilizationTypeOverrid
 2. **JS sort bug**: `getLeaderLoadingInfo()` sorts matches ascending by specificity and picks index `[0]`, meaning the generic (least specific) entry always wins. This mod overrides the JS to sort descending, so the civ-specific entry wins when available.
 
 3. **Icon system has no civ awareness**: `IconDefinitions` table has no `CivilizationTypeOverride` column. This mod registers civ-specific icon IDs (e.g., `LEADER_AUGUSTUS_ROME`) and swaps them at runtime via a UIScript that reads each player's civilization.
+
+4. **Two icon rendering paths**: The game renders leader icons via two separate code paths — `fxs-icon` web components (diplo ribbon, save/load, leader select) and `getLeaderPortraitIcon()` string concatenation (relationship panel, city banners, combat preview, etc.). This mod handles both: `fxs-icon` elements are intercepted by MutationObserver, and `getLeaderPortraitIcon()` contexts are handled by background-image URL swapping with extensionless icon duplicates.
 
 ## Installation
 
@@ -48,7 +49,7 @@ Civilization VII's `LoadingInfo_Leaders` table supports `CivilizationTypeOverrid
 
 ```
 authentic-leaders/                    # The mod (this folder goes into Mods/)
-  authentic-leaders.modinfo           # Mod manifest (~11,400 items)
+  authentic-leaders.modinfo           # Mod manifest (~22,000 items)
   data/
     loading-info-override.sql         # Table restructure + civ-specific entries
   icons/
@@ -90,14 +91,16 @@ scripts/
 - [x] Persona/alt leader support (LEADER_X_ALT → LEADER_X mapping)
 - [x] Build pipeline: config → SQL/XML/modinfo generation
 - [x] Verified working in-game (loading screens + icons)
+- [x] Extensionless icon duplicates for `getLeaderPortraitIcon()` compatibility
+- [x] Path B civ-specific icon swapping (DOM background-image interception)
 
-### Phase 2: Game Asset Extraction (current)
+### Phase 2: Game Asset Extraction (complete)
 - [x] Extract original loading screens from game BLP files (28 leaders + 5 persona alts)
 - [x] Extract all 8 icon variants per leader from game textures (28 leaders + 5 alts)
 - [x] Stub images for all 28 leaders × 43 civilizations (loading screens + icons)
 - [x] CIVBIG format decoded: BC7 data at byte 16, hex textures 25% taller (crop bottom NxN)
 - [x] Icon centering verified: circ perfect, hex vertical shift fixed
-- [ ] Investigate icon size/missing issues in some UI contexts
+- [x] Icons working in all UI contexts (both fxs-icon and getLeaderPortraitIcon paths)
 
 ### Phase 3: AI-Generated Artwork (next)
 - [ ] Build image generation pipeline (API integration with DALL-E / Midjourney / SD)
@@ -142,6 +145,8 @@ scripts/
 - **Correct civilization type IDs**: `CIVILIZATION_ROME` (not ROMAN), `CIVILIZATION_SPAIN` (not SPANISH), `CIVILIZATION_PRUSSIA` (not PRUSSIAN).
 
 - **Persona/alt leader DB types** are `LEADER_X_ALT` (not flavor names like WORLD_RENOUNCER). Alt types have their own `LoadingInfo_Leaders` + `IconDefinitions` entries.
+
+- **Two icon rendering paths**: `fxs-icon` components use `UI.getIconCSS(id, context)` for direct lookup. `getLeaderPortraitIcon()` uses `UI.getIconURL()` + string concatenation + `.png` suffix. To support both: `IconDefinitions` paths are extensionless, and both `.png` and extensionless copies are imported. The UIScript handles civ-specific swapping for both paths.
 
 ## License
 
