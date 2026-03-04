@@ -239,49 +239,43 @@ These use `createBorderedIcon()` which sets `div.style.backgroundImage = url(ico
 
 ### Proposed fixes
 
-**Option 1 (Recommended): JS override of `getLeaderPortraitIcon`**
+**Option 1 (Recommended): Strip `.png` from IconDefinitions paths**
+
+Register paths WITHOUT `.png` extension in XML:
+```xml
+<Path>fs://game/authentic-leaders/icons/amina/lp_hex_amina_128</Path>
+<!-- instead of -->
+<Path>fs://game/authentic-leaders/icons/amina/lp_hex_amina_128.png</Path>
+```
+
+Evidence this works:
+- **Shadowheart custom leader mod** (hjl2009/Civilization7_MOD_Shadowheart) — a confirmed working mod that adds two custom leaders — uses extensionless paths in all `IconDefinitions` entries (see "External Research: Custom Leader Mods" below)
+- **Game's own `civilization-icons.xml`** mixes both forms: `fs://game/civ_sym_aksum` (no ext) alongside `fs://game/civ_sym_unknown.png` (with ext) — engine resolves both
+- The `fs://game/` protocol resolves PNG files with or without the `.png` extension (engine tries both)
+- `getLeaderPortraitIcon()` appends `.png` → extensionless base + `.png` = valid path to existing file
+- `fxs-icon` → `UI.getIconCSS()` → extensionless path → engine resolves to `.png` file
+
+Only change needed: update `generate-mod-data.py` to omit `.png` from Path values in both XML files. No file renames needed — ImportFiles still references files WITH `.png`.
+
+**Option 2: JS override of `getLeaderPortraitIcon`**
 
 Monkey-patch `Icon.getLeaderPortraitIcon` in our UIScript. The override can:
 - Call `UI.getIconCSS(leaderType, "LEADER")` instead of the string-concat approach
 - Or call the original and fix double `.png` in the result
 - Also apply civ-specific icon swapping for these contexts (currently only the MutationObserver handles civ-specific swaps, and these plain divs are invisible to it)
 
-**Option 2: Create base-name icon files**
+More complex than Option 1 but offers civ-specific swap support for Path B contexts.
+
+**Option 3: Create base-name icon files**
 
 For each leader, create additional PNGs without size suffix:
 - `lp_hex_amina.png` (copy of 128px version)
 - `lp_hex_amina_h.png` (copy of 128_h)
 - `lp_hex_amina_a.png` (copy of 128_a)
 
-Handles the no-size case but not size=32 (combat preview). Adds ~84 extra files (28 leaders × 3).
+Handles the no-size case but not size=32 (combat preview). Adds ~84 extra files (28 leaders × 3). Least clean solution.
 
-**Option 3: Strip `.png` from IconDefinitions paths**
-
-Register paths like `fs://game/.../lp_hex_amina_128` (no extension) in XML. Unclear if `fs://` resolves extensionless paths, and would break `fxs-icon` path (Path A) if it needs the extension.
-
-## IconDefinitions Schema
-
-From `Base/Assets/schema/icons/IconManager.sql`:
-
-```sql
-CREATE TABLE 'IconDefinitions' (
-    'ID' TEXT NOT NULL,
-    'Context' TEXT NOT NULL DEFAULT 'DEFAULT',
-    'IconSize' INTEGER NOT NULL DEFAULT 0,
-    'Path' Text NOT NULL,
-    'NeedsTinting' INTEGER DEFAULT 0,
-    'FitToContent' INTEGER DEFAULT 0,
-    'InteractiveTop' INTEGER,
-    'InteractiveRight' INTEGER,
-    'InteractiveBottom' INTEGER,
-    'InteractiveLeft' INTEGER,
-    PRIMARY KEY('ID', 'Context', 'IconSize')
-);
-```
-
-Composite PK: `(ID, Context, IconSize)`. Each combination is unique.
-
-### Leader icon entries (8 per leader)
+## IconDefinitions — Leader Icon Entries (8 per leader)
 
 | Context | Sizes | Notes |
 |---------|-------|-------|
@@ -292,8 +286,9 @@ Composite PK: `(ID, Context, IconSize)`. Each combination is unique.
 
 ### Path formats
 
-- Base game: `blp:lp_hex_amina_256` (packed in BLP archives)
-- Mods: `fs://game/authentic-leaders/icons/amina/lp_hex_amina_256.png`
+- Base game: `blp:lp_hex_amina_256` (packed in BLP archives, no extension)
+- Mods (recommended): `fs://game/authentic-leaders/icons/amina/lp_hex_amina_256` (no `.png` — see fix Option 1)
+- Mods (also works for Path A only): `fs://game/authentic-leaders/icons/amina/lp_hex_amina_256.png`
 
 ## CIVBIG File Format
 
@@ -311,22 +306,169 @@ Footer = repeating 16-byte blocks (`80 00 00 00 00 00 00 00 00 00 00 00 ac aa aa
 
 BC7 decodes as BGRA — swap R and B channels for RGBA.
 
+## UI.getIconURL() vs UI.getIconCSS()
+
+Both are native engine functions (not defined in JS):
+
+| Function | Returns | Used for |
+|----------|---------|----------|
+| `UI.getIconURL(id, context?)` | Raw URL string: `blp:...` or `fs://game/...` | `<img src>`, URL concatenation, preloading |
+| `UI.getIconCSS(id, context?)` | CSS value: `url('...')` | `element.style.backgroundImage` assignment |
+
+`getIconCSS` is essentially `"url('" + getIconURL(...) + "')"`. Both query the `IconDefinitions` table by `(ID, Context)` and pick the best-fit size.
+
+When context has no matching rows (e.g., `"LEADER"` is not in `IconContexts`), the engine falls back to `DEFAULT`.
+
+## fs://game/ Protocol Extension Handling
+
+The `fs://game/` protocol resolves PNG files **with or without** the `.png` extension.
+
+Evidence:
+- Game's own `civilization-icons.xml` mixes both: `fs://game/civ_sym_aksum` (no ext) and `fs://game/civ_sym_unknown.png` (with ext)
+- Game JS constructs extensionless paths: `"fs://game/core/ui/civ_sym_" + civType.slice(13).toLowerCase()` (no `.png`)
+- Shadowheart custom leader mod (confirmed working) uses extensionless paths in all IconDefinitions
+
+## All Defined IconContexts (from `core/icons/icons.xml`)
+
+```xml
+<IconContexts>
+    <Row Context="DEFAULT" AllowTinting="0" />
+    <Row Context="FONTICON" AllowTinting="0" />
+    <Row Context="FOW" AllowTinting="0" />
+    <Row Context="PLAYER" AllowTinting="1" />
+    <Row Context="BADGE" AllowTinting="0" />
+    <Row Context="CIRCLE_MASK" AllowTinting="1" />
+    <Row Context="BACKGROUND" AllowTinting="0" />
+    <Row Context="BUBBLE" AllowTinting="0" />
+    <Row Context="LEADER_HAPPY" AllowTinting="0" />
+    <Row Context="LEADER_ANGRY" AllowTinting="0" />
+    <Row Context="OUTLINE" AllowTinting="0" />
+</IconContexts>
+```
+
+Additional contexts defined in `base-standard`: `UNIT_FLAG`, `BUILDING`, `IMPROVEMENT`, `WONDER`, `PROJECT`, `TRADITION`, `YIELD`, `YIELD_G`, `NOTIFICATION`, etc.
+
+Note: `"LEADER"` is NOT in the XML-defined `IconContexts`. It's used by `leader-icon.js` (`data-icon-context="LEADER"`) and accepted by `UI.getIconURL("LEADER")` — the engine falls back to `DEFAULT` when no explicit `LEADER` context rows exist.
+
+## Full Icon Schema (from `Base/Assets/schema/icons/IconManager.sql`)
+
+```sql
+CREATE TABLE 'IconContexts' (
+    'Context' TEXT NOT NULL,
+    'AllowTinting' INTEGER DEFAULT 1,
+    PRIMARY KEY('Context')
+);
+
+CREATE TABLE 'Icons' (
+    'ID' TEXT NOT NULL,
+    'Context' TEXT DEFAULT 'DEFAULT',
+    PRIMARY KEY('ID','Context'),
+    FOREIGN KEY('Context') REFERENCES IconContexts('Context')
+);
+
+CREATE TABLE 'IconDefinitions' (
+    'ID' TEXT NOT NULL,
+    'Context' TEXT NOT NULL DEFAULT 'DEFAULT',
+    'IconSize' INTEGER NOT NULL DEFAULT 0,
+    'Path' Text NOT NULL,
+    'NeedsTinting' INTEGER DEFAULT 0,
+    'FitToContent' INTEGER DEFAULT 0,
+    'InteractiveTop' INTEGER,
+    'InteractiveRight' INTEGER,
+    'InteractiveBottom' INTEGER,
+    'InteractiveLeft' INTEGER,
+    PRIMARY KEY('ID', 'Context', 'IconSize'),
+    FOREIGN KEY('ID', 'Context') REFERENCES Icons('ID', 'Context')
+);
+
+CREATE TABLE 'IconAliases' (
+    'ID' TEXT NOT NULL,
+    'Context' TEXT NOT NULL DEFAULT 'DEFAULT',
+    'OtherID' TEXT NOT NULL,
+    'OtherContext' TEXT NOT NULL DEFAULT 'DEFAULT',
+    PRIMARY KEY('ID', 'Context')
+);
+```
+
+An INSERT trigger on `IconDefinitions` auto-inserts into `Icons` — no separate `<Icons>` entries needed.
+
 ## External Research
 
-### No existing extraction tools
+### CIVBIG extraction
 
 Our `scripts/extract-game-assets.py` appears to be the only known CIVBIG texture extractor. No public tools, repos, or documentation exist for this format.
 
-### No reference mods for leader icon replacement
+### Custom leader mods with icon definitions
 
-No other Civ7 mod replaces leader portrait icons. Community mods that modify icons focus on tech/civic/unit icons (simpler: single flat images without portrait crops).
+#### Shadowheart mod (hjl2009/Civilization7_MOD_Shadowheart) — BEST REFERENCE
 
-### Relevant community resources
+A confirmed working custom leader mod adding two alt persona leaders. **Uses extensionless paths** in `IconDefinitions`:
+
+```xml
+<IconDefinitions>
+  <!-- Hex (DEFAULT) — 3 sizes, NO .png extension in Path -->
+  <Row>
+    <ID>LEADER_SHADOWHEART_MOONLIGHT_MAIDEN</ID>
+    <Path>fs://game/ShadowHeart-ShadowHearts/icons/lp_hex_SHADOWHEART_MOONLIGHT_MAIDEN_256</Path>
+    <IconSize>256</IconSize>
+  </Row>
+  <Row>
+    <ID>LEADER_SHADOWHEART_MOONLIGHT_MAIDEN</ID>
+    <Path>fs://game/ShadowHeart-ShadowHearts/icons/lp_hex_SHADOWHEART_MOONLIGHT_MAIDEN_128</Path>
+    <IconSize>128</IconSize>
+  </Row>
+  <Row>
+    <ID>LEADER_SHADOWHEART_MOONLIGHT_MAIDEN</ID>
+    <Path>fs://game/ShadowHeart-ShadowHearts/icons/lp_hex_SHADOWHEART_MOONLIGHT_MAIDEN_64</Path>
+    <IconSize>64</IconSize>
+  </Row>
+  <!-- CIRCLE_MASK — 3 sizes -->
+  <Row>
+    <ID>LEADER_SHADOWHEART_MOONLIGHT_MAIDEN</ID>
+    <Path>fs://game/ShadowHeart-ShadowHearts/icons/lp_circ_SHADOWHEART_MOONLIGHT_MAIDEN_256</Path>
+    <Context>CIRCLE_MASK</Context>
+    <IconSize>256</IconSize>
+  </Row>
+  <!-- ... (128, 64 also) ... -->
+  <!-- LEADER_HAPPY / LEADER_ANGRY — 128 only -->
+  <Row>
+    <ID>LEADER_SHADOWHEART_MOONLIGHT_MAIDEN</ID>
+    <Path>fs://game/ShadowHeart-ShadowHearts/icons/lp_happy_SHADOWHEART_MOONLIGHT_MAIDEN_128</Path>
+    <Context>LEADER_HAPPY</Context>
+    <IconSize>128</IconSize>
+  </Row>
+  <Row>
+    <ID>LEADER_SHADOWHEART_MOONLIGHT_MAIDEN</ID>
+    <Path>fs://game/ShadowHeart-ShadowHearts/icons/lp_angry_SHADOWHEART_MOONLIGHT_MAIDEN_128</Path>
+    <Context>LEADER_ANGRY</Context>
+    <IconSize>128</IconSize>
+  </Row>
+</IconDefinitions>
+```
+
+Key observations:
+- **No `.png` extension** in any `<Path>` — ImportFiles (in `.modinfo`) still references files WITH `.png`
+- Naming: `lp_hex_NAME_SIZE`, `lp_circ_NAME_SIZE`, `lp_happy_NAME_SIZE`, `lp_angry_NAME_SIZE`
+- Same 8-entry pattern: 3 hex (DEFAULT) + 2 emotion (128 only) + 3 circ (CIRCLE_MASK)
+
+#### Leader_Reshuffle mod (MarvinTM/Leader_Reshuffle)
+
+Simpler approach — uses `.png` IN the Path, and reuses the same image for all sizes:
+
+```xml
+<Row><ID>LEADER_PERICLES</ID>
+     <Path>fs://game/owain-glyndwr/icons/pericles.png</Path>
+     <IconSize>256</IconSize></Row>
+<!-- same path for 128, 64, all contexts... -->
+```
+
+This mod may have the same `getLeaderPortraitIcon` bug but it's less noticeable with a single reused image.
+
+### Other community resources
 
 - [CivFanatics: How to import PNG files for icons](https://forums.civfanatics.com/threads/how-to-import-png-files-for-some-art-icon.695384/) — definitive icon import tutorial, shows `<Replace>` with child elements
 - [CivFanatics: Civ 7 Icon change (Unit, Tech)](https://forums.civfanatics.com/threads/civ-7-icon-change-unit-tech.696336/) — notes icon replacement is "inconsistent right now"
 - [CivFanatics: Civilization Asset Templates](https://forums.civfanatics.com/threads/civilization-asset-templates.695913/) — 256×256 PNG templates
-- [CivFanatics: Proof of Concept - Custom Tech/Civic Icons](https://forums.civfanatics.com/resources/proof-of-concept-custom-tech-civic-unique-civic-ideology-icons.31923/) — 256×256 with ~234×234 centered circle
 - [CivFanatics: 3D Leader mods](https://forums.civfanatics.com/threads/3d-leader-mods.697062/) — leader art modding discussion
 - [CivFanatics: BLP files discussion](https://forums.civfanatics.com/threads/blp-files.600399/) — BLP cannot be extracted/decompiled (Civ6 era)
 - [GitHub: izica/civ7-modding-tools](https://github.com/izica/civ7-modding-tools) — TypeScript mod builder with `ImportFileBuilder` for icons
@@ -339,20 +481,16 @@ No other Civ7 mod replaces leader portrait icons. Community mods that modify ico
 
 - Icon PNGs must have transparent backgrounds — game checks for transparency
 - Standard icon dimensions: 256×256 for leaders, 128×128 for units
-- `fs://game/{mod-id}/{path}.png` for mod file references
+- **Use extensionless paths** in `IconDefinitions` for compatibility with both icon rendering paths
 - `<Replace>` must use child-element syntax (not attribute syntax)
+- ImportFiles entries still need `.png` extension
 
 ## Fallback Plan (Extraction — resolved)
 
-Direct level-0 extraction at byte 16 works. Previous fallbacks no longer needed:
-
-1. ~~Try extracting at different offsets~~
-2. ~~Use circ_256 for circ contexts, hex_128 for hex contexts~~
-3. ~~Screenshot-based extraction~~
-4. ~~Manual crop adjustment~~
+Direct level-0 extraction at byte 16 works. Previous fallbacks no longer needed.
 
 ## Next Steps
 
-1. **Fix `getLeaderPortraitIcon` path issue** — implement Option 1 (JS override) from the "Second Icon Rendering Path" section
+1. **Strip `.png` from IconDefinitions paths** — update `generate-mod-data.py` to omit `.png` from `<Path>` values in both `leader-icons-override.xml` and `leader-icons-civ-override.xml`
 2. **Verify fix across all affected UI contexts** — relationship panel, city banners, combat preview, victory screen, etc.
-3. **Extend civ-specific swapping to Path B contexts** — the UIScript's MutationObserver only catches `fxs-icon` elements; plain divs using `getLeaderPortraitIcon` also need civ-specific icons
+3. **Extend civ-specific swapping to Path B contexts** — the UIScript's MutationObserver only catches `fxs-icon` elements; plain divs using `getLeaderPortraitIcon` also need civ-specific icons (Option 2 JS override may still be needed for this)
