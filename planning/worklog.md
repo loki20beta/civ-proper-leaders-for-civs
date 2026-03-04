@@ -55,7 +55,9 @@
 - Original images: 800×1060 RGBA transparent PNGs (BC7-compressed in CIVBIG, 1,132,544 bytes each)
 - Base game references: `blp:lsl_<name>.png` (packed in BLP archives)
 - Mod references: `fs://game/<mod-id>/<path>.png` for PNG files
-- CSS composites image over civ scene via `background-size: cover`
+- Loading screen CSS: `background-size: cover` (clips bottom ~35%)
+- ESC/pause menu CSS: `background-size: contain` (shows full image)
+- CIVBIG extracts may have truncated alpha; civ stubs use base loading screen (full body) as source
 
 #### Icon System
 - `IconDefinitions` table has no `CivilizationTypeOverride` column

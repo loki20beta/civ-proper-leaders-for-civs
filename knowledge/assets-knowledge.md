@@ -110,8 +110,14 @@ Exception: `simon_bolivar` → `TEXTURE_lsl_bolivar`
 
 ### Dimensions
 
-800×1060 pixels, RGBA with transparency. The game composites these over a
-civilization scene background via CSS `background-size: cover`.
+800×1060 pixels, RGBA with transparency. Two rendering contexts:
+- **Loading screen** (pre-game): `background-size: cover` in an oversized element — clips
+  bottom of image, only top ~65% visible
+- **ESC/pause menu** (in-game): `background-size: contain` — shows the **full** image
+
+CIVBIG-extracted textures may have truncated alpha (figure ends before canvas bottom).
+The base loading screen (`lsl_{leader}.png`) generated from reference images has full-body
+content. Civ-specific stubs must use the base loading screen as source, not the raw extract.
 
 ### File sizes
 

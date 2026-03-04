@@ -101,6 +101,7 @@ scripts/
 - [x] CIVBIG format decoded: BC7 data at byte 16, hex icons 45/32 aspect ratio (256×360, 128×180, 64×90)
 - [x] Icon dimensions verified: hex = rectangular (45/32), circ = square
 - [x] Icons working in all UI contexts (both fxs-icon and getLeaderPortraitIcon paths)
+- [x] ESC/pause menu loading screen fix: civ stubs use base loading screen (full body) not raw CIVBIG extract
 
 ### Phase 3: AI-Generated Artwork (next)
 - [ ] Build image generation pipeline (API integration with DALL-E / Midjourney / SD)
@@ -138,7 +139,7 @@ scripts/
 
 - **ImportFiles can override base game files** when the relative path matches the base module's path (confirmed by BorderToggles community mod).
 
-- **Image format**: Loading screens are 800×1060 RGBA transparent PNGs. The game composites them over the civ scene via CSS `background-size: cover`.
+- **Image format**: Loading screens are 800×1060 RGBA transparent PNGs. The loading screen uses `background-size: cover` (clips bottom); the ESC/pause menu uses `background-size: contain` (shows full image). Civ stubs must use the full-body base image, not the raw CIVBIG extract which may have truncated alpha.
 
 - **Icon system has no civ awareness**: `IconDefinitions` table has no `CivilizationTypeOverride` column. Civ-specific icons require registering new IDs (e.g., `LEADER_AUGUSTUS_ROME`) and a UIScript to swap them at runtime.
 
