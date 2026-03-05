@@ -98,22 +98,32 @@
 ### Symlink
 `~/Library/Application Support/Civilization VII/Mods/authentic-leaders` → `/Users/admin/work/civ7mod/authentic-leaders`
 
-### AI Art Generation Pipeline (Phase 3A — Built)
-- **Pipeline code complete**: `ai_generator/` package with config, client, prompts, generate, postprocess, status modules
+### AI Art Generation Pipeline
+
+#### Current Workflow (2026-03-05)
+- **Generation**: Done externally (not via API pipeline). 3 full-body images per leader×civ pair, placed in `assets/generated/{leader}/{civ}/`:
+  - `loading.png` — neutral expression (loading screen + neutral icons)
+  - `happy.png` — happy expression (happy icon)
+  - `angry.png` — angry expression (angry icon)
+  - All ~896×1188 RGBA with solid white background
+- **Post-processing**: `python3 -m ai_generator.postprocess --leader X --civ Y` (or `--all`)
+  1. Removes white background via flood-fill from corners (tolerance=35)
+  2. Produces loading screen (800×1060 RGBA transparent)
+  3. Crops head region from each expression, applies hex/circ masks at all sizes
+  4. Creates extensionless copies for all icons
+  5. Discovers pairs from disk (scans for `loading.png`) — no status.json dependency
 - **Config**: `config/ai-generation.json` — 43 civs × 2 genders attire descriptors, native pairings, costume references
-- **API**: OpenRouter → Gemini image editing (currently `google/gemini-3-pro-image-preview` aka Nano Banana Pro)
-- **Approach**: Pass original game image + edit prompt ("change only clothing/headwear/accessories to X attire")
-- **Each request is independent** (no multi-turn chat) — loading screen + 3 icon expressions = 4 API calls per pair
-- **Variant tracking**: Status JSON tracks all generated variants with `_00`, `_01` numbering; never overwrites
-- **Pipeline works in principle** — tested with Augustus × Egypt, all 4 assets generated successfully
-- **Open questions**:
-  - Prompt engineering still in progress — wording, level of detail, and constraints need iteration
-  - Whether single vs multi-turn requests produce better consistency (currently using independent)
-  - Output quality varies — need more test pairs across different leaders/genders/civs to evaluate
-  - Post-processing pipeline (`ai_generator/postprocess.py`) not yet tested end-to-end
+
+#### Known Limitations / TODO
+- **Background removal**: Flood-fill from corners only removes background connected to edges. Interior regions between arms/props remain white. Need either a smarter algorithm (e.g., `rembg` AI removal) or manual cleanup
+- **Head crop positioning**: Current algorithm takes top 20% of character bounding box, which works for upright poses but fails for tilted/off-center characters. Need either:
+  - Per-leader bounding box overrides (manual coordinates in config)
+  - Face detection (e.g., `dlib`, `mediapipe`) to find face center automatically
+- **Tested pairs**: genghis_khan×egypt, ada_lovelace×egypt — both produce reasonable results with current settings
 
 ### Next Steps
-1. **Iterate on prompts** — Test more leader × civ pairs, refine prompt wording for best quality
-2. **Test postprocess pipeline** — Run postprocessing on generated images, verify icon masking/sizing
-3. **Batch generation** — Once prompts are solid, run across all ~1,394 non-native pairs
-4. **Quality review and curation** — Manual review, re-generate poor results, verify in-game
+1. **Solve background removal** — Evaluate `rembg` or similar AI-based approach for clean transparency
+2. **Solve head detection** — Evaluate face detection libraries or define per-leader crop regions
+3. **Generate more pairs** — Test across different leaders/genders/civs to evaluate consistency
+4. **Batch generation** — Once pipeline is solid, run across all ~1,394 non-native pairs
+5. **Quality review and curation** — Manual review, re-generate poor results, verify in-game

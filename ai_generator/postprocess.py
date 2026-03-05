@@ -1,8 +1,8 @@
 """Post-processing pipeline for AI-generated images.
 
-Takes selected variants from the generation status and produces all
-final mod assets: loading screens, hex icons, circle icons, and
-extensionless copies.
+Takes full-body images with white backgrounds (loading.png, happy.png,
+angry.png) and produces all final mod assets: loading screens, hex icons,
+circle icons, and extensionless copies.
 """
 
 from __future__ import annotations
@@ -12,13 +12,170 @@ import math
 import os
 import shutil
 import sys
+from collections import deque
 
+import numpy as np
 from PIL import Image, ImageDraw
 
-from .config import Config, GENERATED_DIR, MOD_DIR, ASSETS_DIR
-from .status import StatusTracker
+from .config import GENERATED_DIR, MOD_DIR
 
 LOADING_SCREEN_SIZE = (800, 1060)
+INPUT_FILES = ("loading.png", "happy.png", "angry.png")
+# Head region: top portion of character bounding box
+HEAD_FRACTION = 0.20
+
+
+def remove_white_background(img: Image.Image, tolerance: int = 35) -> Image.Image:
+    """Replace white/near-white background with transparency via flood-fill.
+
+    Flood-fills from all 4 corners. Connected pixels where all RGB channels
+    are within tolerance of 255 become transparent. Anti-aliased edges get
+    partial transparency based on how close they are to white.
+
+    Args:
+        img: RGBA image with white-ish background
+        tolerance: Max deviation from 255 per channel to count as "white"
+
+    Returns:
+        RGBA image with background replaced by transparency
+    """
+    img = img.convert("RGBA")
+    arr = np.array(img)
+    h, w = arr.shape[:2]
+
+    # Mask of pixels that could be background (all RGB channels near white)
+    rgb = arr[:, :, :3].astype(np.int16)
+    is_white = np.all(rgb >= (255 - tolerance), axis=2)
+
+    # BFS flood-fill from all 4 corners
+    visited = np.zeros((h, w), dtype=bool)
+    bg_mask = np.zeros((h, w), dtype=bool)
+    queue = deque()
+
+    # Seed from corner regions (3x3 at each corner)
+    for sy, sx in [(0, 0), (0, w - 1), (h - 1, 0), (h - 1, w - 1)]:
+        for dy in range(-2, 3):
+            for dx in range(-2, 3):
+                ny, nx = sy + dy, sx + dx
+                if 0 <= ny < h and 0 <= nx < w and not visited[ny, nx]:
+                    if is_white[ny, nx]:
+                        visited[ny, nx] = True
+                        bg_mask[ny, nx] = True
+                        queue.append((ny, nx))
+
+    # 4-connected flood fill
+    while queue:
+        cy, cx = queue.popleft()
+        for dy, dx in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            ny, nx = cy + dy, cx + dx
+            if 0 <= ny < h and 0 <= nx < w and not visited[ny, nx]:
+                visited[ny, nx] = True
+                if is_white[ny, nx]:
+                    bg_mask[ny, nx] = True
+                    queue.append((ny, nx))
+
+    # Make background transparent
+    result = arr.copy()
+    result[bg_mask, 3] = 0
+
+    # Anti-alias edges: pixels adjacent to background that are somewhat white
+    # get partial transparency proportional to their whiteness
+    # Manual dilation (2 iterations) to find border pixels without scipy
+    dilated = bg_mask.copy()
+    for _ in range(2):
+        new = dilated.copy()
+        new[1:, :] |= dilated[:-1, :]
+        new[:-1, :] |= dilated[1:, :]
+        new[:, 1:] |= dilated[:, :-1]
+        new[:, :-1] |= dilated[:, 1:]
+        dilated = new
+    border = dilated & ~bg_mask
+    for y, x in zip(*np.where(border)):
+        r, g, b = int(arr[y, x, 0]), int(arr[y, x, 1]), int(arr[y, x, 2])
+        # How white is this pixel? (0 = pure white, 255*3 = pure black)
+        whiteness = ((255 - r) + (255 - g) + (255 - b)) / 3.0
+        if whiteness < tolerance:
+            # Partially transparent — more white = more transparent
+            alpha = int(255 * whiteness / tolerance)
+            result[y, x, 3] = min(result[y, x, 3], alpha)
+
+    return Image.fromarray(result)
+
+
+def crop_head_region(img: Image.Image, aspect_w: int, aspect_h: int) -> Image.Image:
+    """Crop head-and-shoulders from a full-body transparent image.
+
+    1. Find bounding box of non-transparent content
+    2. Take top HEAD_FRACTION of character height as the head region
+    3. Center horizontally on the character
+    4. Crop to target aspect ratio
+
+    Args:
+        img: RGBA image with transparent background
+        aspect_w: Target aspect ratio width (e.g., 32 for hex)
+        aspect_h: Target aspect ratio height (e.g., 45 for hex)
+
+    Returns:
+        Cropped RGBA image of head region at the given aspect ratio
+    """
+    arr = np.array(img.convert("RGBA"))
+    alpha = arr[:, :, 3]
+
+    # Find bounding box of non-transparent pixels
+    rows = np.any(alpha > 0, axis=1)
+    cols = np.any(alpha > 0, axis=0)
+    if not rows.any():
+        return img
+
+    top = np.argmax(rows)
+    bottom = len(rows) - np.argmax(rows[::-1])
+    left = np.argmax(cols)
+    right = len(cols) - np.argmax(cols[::-1])
+
+    char_height = bottom - top
+    char_width = right - left
+    char_cx = (left + right) // 2
+
+    # Head region: top portion of character
+    head_height = int(char_height * HEAD_FRACTION)
+    head_top = top
+    head_bottom = top + head_height
+
+    # Calculate crop dimensions to match aspect ratio
+    # Try to fit the head region, expanding as needed
+    target_ratio = aspect_w / aspect_h  # width / height
+
+    # Start with head height, compute matching width
+    crop_h = head_height
+    crop_w = int(crop_h * target_ratio)
+
+    # If crop_w is narrower than the character head area, expand
+    head_width_estimate = int(char_width * 0.35)  # head is ~35% of body width
+    if crop_w < head_width_estimate:
+        crop_w = head_width_estimate
+        crop_h = int(crop_w / target_ratio)
+
+    # Center horizontally on character center
+    crop_left = char_cx - crop_w // 2
+    crop_right = crop_left + crop_w
+
+    # Ensure crop stays within image bounds
+    img_w, img_h = img.size
+    if crop_left < 0:
+        crop_left = 0
+        crop_right = crop_w
+    if crop_right > img_w:
+        crop_right = img_w
+        crop_left = max(0, img_w - crop_w)
+
+    # Vertical: start from head_top, use crop_h
+    crop_top = max(0, head_top - int(crop_h * 0.05))  # small padding above head
+    crop_bottom = crop_top + crop_h
+    if crop_bottom > img_h:
+        crop_bottom = img_h
+        crop_top = max(0, img_h - crop_h)
+
+    return img.crop((crop_left, crop_top, crop_right, crop_bottom))
 
 
 def create_hex_mask(width, height):
@@ -65,7 +222,6 @@ def process_loading_screen(src_img: Image.Image, leader_key: str, civ_key: str,
     """
     target_w, target_h = LOADING_SCREEN_SIZE
 
-    # Resize to target dimensions
     img = src_img.convert("RGBA")
     img = crop_center_rect(img, target_w, target_h)
     img = img.resize((target_w, target_h), Image.LANCZOS)
@@ -85,7 +241,7 @@ def make_masked_icon(src_img: Image.Image, shape: str, size: int) -> Image.Image
     """Create a masked icon from source image.
 
     Args:
-        src_img: Source headshot image
+        src_img: Source headshot image (already cropped to head region)
         shape: "hex" or "circ"
         size: Nominal size (width)
 
@@ -120,7 +276,6 @@ def process_icons(neutral_img: Image.Image | None, happy_img: Image.Image | None
     icon_dir = os.path.join(MOD_DIR, "icons", leader_key, civ_key)
     count = 0
 
-    # Map variant specs to source images
     variants = [
         # (shape, size, suffix, source_expression)
         ("hex",  256, "",   "neutral"),
@@ -142,7 +297,6 @@ def process_icons(neutral_img: Image.Image | None, happy_img: Image.Image | None
     for shape, size, suffix, expr in variants:
         src = source_map.get(expr)
         if src is None:
-            # Fall back to neutral for missing expressions
             src = neutral_img
             if src is None:
                 continue
@@ -152,7 +306,6 @@ def process_icons(neutral_img: Image.Image | None, happy_img: Image.Image | None
         png_name = f"lp_{shape}_{leader_key}_{civ_key}_{size}{suffix}.png"
         png_path = os.path.join(icon_dir, png_name)
 
-        # Extensionless copy name
         ext_name = f"lp_{shape}_{leader_key}_{civ_key}_{size}{suffix}"
         ext_path = os.path.join(icon_dir, ext_name)
 
@@ -169,44 +322,101 @@ def process_icons(neutral_img: Image.Image | None, happy_img: Image.Image | None
     return count
 
 
-def postprocess_pair(cfg: Config, status: StatusTracker,
-                     leader_key: str, civ_key: str,
+def discover_pairs(leader: str | None = None, civ: str | None = None) -> list[tuple[str, str]]:
+    """Discover leader x civ pairs from disk by finding loading.png files.
+
+    Scans assets/generated/{leader}/{civ}/ directories for loading.png.
+
+    Args:
+        leader: Filter to this leader only
+        civ: Filter to this civ only
+
+    Returns:
+        List of (leader_key, civ_key) tuples
+    """
+    pairs = []
+    if not os.path.isdir(GENERATED_DIR):
+        return pairs
+
+    leader_dirs = [leader] if leader else sorted(os.listdir(GENERATED_DIR))
+    for leader_key in leader_dirs:
+        leader_path = os.path.join(GENERATED_DIR, leader_key)
+        if not os.path.isdir(leader_path) or leader_key.startswith("."):
+            continue
+
+        civ_dirs = [civ] if civ else sorted(os.listdir(leader_path))
+        for civ_key in civ_dirs:
+            civ_path = os.path.join(leader_path, civ_key)
+            if not os.path.isdir(civ_path) or civ_key.startswith("."):
+                continue
+
+            loading_path = os.path.join(civ_path, "loading.png")
+            if os.path.isfile(loading_path):
+                pairs.append((leader_key, civ_key))
+
+    return pairs
+
+
+def postprocess_pair(leader_key: str, civ_key: str,
                      dry_run: bool = False) -> tuple[int, int]:
     """Post-process a single leader x civ pair.
 
-    Reads selected variants from status, produces final mod assets.
+    Loads loading.png, happy.png, angry.png from the generated directory,
+    removes white backgrounds, and produces all final mod assets.
     Returns (loading_count, icon_count).
     """
-    gen_dir = cfg.get_generated_dir(leader_key, civ_key)
+    gen_dir = os.path.join(GENERATED_DIR, leader_key, civ_key)
     loading_count = 0
     icon_count = 0
 
-    # Loading screen
-    loading_file = status.get_selected_variant(leader_key, civ_key, "loading")
-    if loading_file:
-        loading_path = os.path.join(gen_dir, loading_file)
-        if os.path.isfile(loading_path):
-            img = Image.open(loading_path)
-            loading_count = process_loading_screen(img, leader_key, civ_key, dry_run)
+    # Load input images
+    loading_path = os.path.join(gen_dir, "loading.png")
+    happy_path = os.path.join(gen_dir, "happy.png")
+    angry_path = os.path.join(gen_dir, "angry.png")
 
-    # Icons
-    icon_images = {}
-    for expr in ["neutral", "happy", "angry"]:
-        variant_file = status.get_selected_variant(leader_key, civ_key, f"icon_{expr}")
-        if variant_file:
-            icon_path = os.path.join(gen_dir, variant_file)
-            if os.path.isfile(icon_path):
-                icon_images[expr] = Image.open(icon_path).convert("RGBA")
+    if not os.path.isfile(loading_path):
+        print(f"  Skipping {leader_key} x {civ_key}: no loading.png")
+        return 0, 0
 
-    if icon_images.get("neutral"):
-        icon_count = process_icons(
-            neutral_img=icon_images.get("neutral"),
-            happy_img=icon_images.get("happy"),
-            angry_img=icon_images.get("angry"),
-            leader_key=leader_key,
-            civ_key=civ_key,
-            dry_run=dry_run
-        )
+    print(f"  Loading images...")
+    loading_img = Image.open(loading_path).convert("RGBA")
+    happy_img = Image.open(happy_path).convert("RGBA") if os.path.isfile(happy_path) else None
+    angry_img = Image.open(angry_path).convert("RGBA") if os.path.isfile(angry_path) else None
+
+    # Remove white background from all images
+    print(f"  Removing backgrounds...")
+    loading_trans = remove_white_background(loading_img)
+    happy_trans = remove_white_background(happy_img) if happy_img else None
+    angry_trans = remove_white_background(angry_img) if angry_img else None
+
+    # Loading screen: from loading.png with transparent background
+    loading_count = process_loading_screen(loading_trans, leader_key, civ_key, dry_run)
+
+    # Icons: crop head region from each expression, then mask
+    print(f"  Cropping head regions...")
+    hex_aspect = (32, 45)
+    circ_aspect = (1, 1)
+
+    # Crop heads for neutral (used for all standard icons)
+    neutral_head_hex = crop_head_region(loading_trans, *hex_aspect)
+    neutral_head_circ = crop_head_region(loading_trans, *circ_aspect)
+
+    # Crop heads for expressions (hex only, 128px)
+    happy_head_hex = crop_head_region(happy_trans, *hex_aspect) if happy_trans else None
+    angry_head_hex = crop_head_region(angry_trans, *hex_aspect) if angry_trans else None
+
+    # For process_icons, we need to provide pre-cropped head images
+    # The neutral images need to work for both hex and circ shapes
+    # Since make_masked_icon does its own aspect ratio crop, pass the hex crop
+    # (wider) and let it re-crop for circ internally
+    icon_count = process_icons(
+        neutral_img=neutral_head_hex,
+        happy_img=happy_head_hex,
+        angry_img=angry_head_hex,
+        leader_key=leader_key,
+        civ_key=civ_key,
+        dry_run=dry_run
+    )
 
     return loading_count, icon_count
 
@@ -215,49 +425,44 @@ def main():
     parser = argparse.ArgumentParser(
         description="Post-process AI-generated images into mod assets"
     )
-    parser.add_argument("--all", action="store_true", help="Process all completed pairs")
+    parser.add_argument("--all", action="store_true",
+                        help="Process all pairs with generated images")
     parser.add_argument("--leader", help="Process one leader only")
     parser.add_argument("--civ", help="Process one civ only")
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing")
 
     args = parser.parse_args()
 
-    cfg = Config()
-    status = StatusTracker()
-
-    # Determine pairs to process
-    if args.leader and args.civ:
-        pairs = [(args.leader, args.civ)]
-    elif args.leader:
-        pairs = [(args.leader, c) for c in cfg.get_all_civ_keys()
-                 if status.is_completed(args.leader, c)]
-    elif args.civ:
-        pairs = [(l, args.civ) for l in cfg.get_all_leader_keys()
-                 if status.is_completed(l, args.civ)]
-    elif args.all:
-        pairs = [
-            (l, c) for l, c in cfg.get_all_pairs()
-            if status.is_completed(l, c)
-        ]
-    else:
+    if not (args.all or args.leader or args.civ):
         parser.print_help()
         sys.exit(1)
 
+    # Discover pairs from disk
+    if args.leader and args.civ:
+        pairs = [(args.leader, args.civ)]
+        # Verify the pair exists
+        gen_dir = os.path.join(GENERATED_DIR, args.leader, args.civ)
+        if not os.path.isfile(os.path.join(gen_dir, "loading.png")):
+            print(f"No loading.png found for {args.leader} x {args.civ}")
+            sys.exit(1)
+    else:
+        pairs = discover_pairs(leader=args.leader, civ=args.civ)
+
     if not pairs:
-        print("No completed pairs to process.")
+        print("No pairs with generated images found.")
         return
 
-    print(f"Post-processing {len(pairs)} pairs...")
+    print(f"Post-processing {len(pairs)} pair(s)...")
 
     total_loading = 0
     total_icons = 0
 
     for i, (leader_key, civ_key) in enumerate(pairs, 1):
-        lc, ic = postprocess_pair(cfg, status, leader_key, civ_key, dry_run=args.dry_run)
+        print(f"\n[{i}/{len(pairs)}] {leader_key} x {civ_key}")
+        lc, ic = postprocess_pair(leader_key, civ_key, dry_run=args.dry_run)
         if lc or ic:
             action = "Would create" if args.dry_run else "Created"
-            print(f"  [{i}/{len(pairs)}] {leader_key} x {civ_key}: "
-                  f"{action} {lc} loading + {ic} icon files")
+            print(f"  {action} {lc} loading + {ic} icon files")
         total_loading += lc
         total_icons += ic
 
