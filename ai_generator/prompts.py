@@ -1,105 +1,66 @@
 """Prompt construction for AI image generation.
 
-Builds structured prompts for loading screens and icon headshots,
-incorporating identity anchors, costume references, and attire descriptors.
+Uses Gemini's image editing capability: pass original image + edit prompt.
+Each request is independent — no multi-turn context.
 """
 
 
 def build_loading_prompt(leader_name: str, civ_name: str, period: str,
                          attire: dict, setting: str,
                          has_costume_ref: bool = False) -> str:
-    """Build a prompt for generating a loading screen image.
-
-    Args:
-        leader_name: Display name of the leader
-        civ_name: Display name of the civilization
-        period: Historical period string
-        attire: Attire descriptor dict with clothing, headwear, accessories, forbidden, palette
-        setting: Setting/backdrop description
-        has_costume_ref: Whether a costume reference image is being provided
-
-    Returns:
-        Complete prompt string
-    """
+    """Build an edit prompt for a loading screen image."""
     forbidden = ", ".join(attire.get("forbidden", []))
     palette = ", ".join(attire.get("palette", []))
 
     lines = [
-        f"Generate a full-body portrait of this leader dressed as a ruler of {civ_name}.",
-        "",
-        f"IDENTITY: This is {leader_name}. The first reference image shows their exact appearance.",
-        "Preserve their face, skin tone, facial structure, hair color, and body proportions EXACTLY.",
-        "Do NOT change their ethnicity, age, or physical features.",
-        "",
-        f"COSTUME: Dress them in {period} {civ_name} attire:",
+        f"This is a game loading screen graphic showing a historical leader.",
+        f"Using the provided image, change only the clothing, headwear, and accessories "
+        f"to {period} {civ_name} attire:",
         f"- Clothing: {attire['clothing']}",
         f"- Headwear: {attire['headwear']}",
         f"- Accessories: {attire['accessories']}",
+        f"- Colors: {palette}",
     ]
 
     if forbidden:
-        lines.append(f"Do NOT include: {forbidden}")
+        lines.append(f"- Avoid: {forbidden}")
 
     if has_costume_ref:
-        lines.extend([
-            "",
-            "COSTUME REFERENCE: The second reference image shows a leader wearing authentic "
-            f"{civ_name} attire. Use it as a visual guide for garment style, textile patterns, "
-            "and accessory details. Apply similar garments to this leader while respecting their "
-            "body type and gender.",
-        ])
+        lines.append(f"The second image shows authentic {civ_name} attire for reference.")
 
-    lines.extend([
-        "",
-        "STYLE: Match the painterly digital art style of Civilization VII game art.",
-        f"Dramatic cinematic side lighting. Setting hints: {setting}.",
-        "TRANSPARENT BACKGROUND — the character must be on a fully transparent background,",
-        "exactly like the reference image provided. No solid color behind the character.",
-        "Three-quarter view, standing pose showing full body.",
-        f"Color palette: {palette}.",
-        "",
-        "OUTPUT: Generate an 800x1060 pixel RGBA PNG with transparent background,",
-        "matching the exact dimensions and transparency of the reference image.",
-    ])
+    lines.append(
+        "Keep everything else in the image exactly the same, preserving the original "
+        "style, lighting, and composition."
+    )
 
     return "\n".join(lines)
 
 
-def build_icon_prompt(expression: str, civ_name: str) -> str:
-    """Build a prompt for generating an icon headshot.
+def build_icon_prompt(expression: str, civ_name: str, period: str,
+                      attire: dict) -> str:
+    """Build an edit prompt for an icon headshot.
 
-    This is used as a follow-up in a multi-turn chat session after
-    the loading screen has been generated, so the AI already has context
-    about the character and costume.
-
-    Args:
-        expression: One of "neutral", "happy", "angry"
-        civ_name: Display name of the civilization
-
-    Returns:
-        Complete prompt string
+    Each icon is an independent request with its own attire description.
     """
-    expr_descriptions = {
-        "neutral": "calm, dignified, composed expression with a slight sense of authority",
-        "happy": "warm satisfied smile, pleased expression, eyes slightly crinkled with genuine warmth",
-        "angry": "stern fierce scowl, furrowed brows, intense disapproving glare, tight jaw",
-    }
+    palette = ", ".join(attire.get("palette", []))
 
-    expr_desc = expr_descriptions.get(expression, expr_descriptions["neutral"])
+    expr_context = {
+        "neutral": "a calm composed expression",
+        "happy": "a pleased smiling expression",
+        "angry": "an angry scowling expression",
+    }
+    expr_desc = expr_context.get(expression, "a neutral expression")
 
     lines = [
-        f"Now create a close-up head-and-shoulders portrait of this same {civ_name} character.",
-        "",
-        f"Expression: {expr_desc}",
-        "",
-        "REQUIREMENTS:",
-        f"- Keep the EXACT same {civ_name} outfit, headwear, and accessories from the loading screen.",
-        "- Centered face, looking slightly toward camera.",
-        "- Same painterly Civilization VII art style.",
-        "- TRANSPARENT BACKGROUND — match the reference image transparency exactly.",
-        "- Show from mid-chest up, head centered in frame.",
-        "",
-        "OUTPUT: 3:4 aspect ratio RGBA PNG with transparent background, matching reference dimensions.",
+        f"This is a small in-game portrait icon of a character with {expr_desc}, "
+        f"used during gameplay.",
+        f"Using the provided image, change the headwear (if any) and visible part of clothing "
+        f"to {period} {civ_name} attire:",
+        f"- Clothing: {attire['clothing']}",
+        f"- Headwear: {attire['headwear']}",
+        f"- Colors: {palette}",
+        "Keep everything else in the image exactly the same, preserving the original "
+        "style, lighting, and composition.",
     ]
 
     return "\n".join(lines)
@@ -107,10 +68,7 @@ def build_icon_prompt(expression: str, civ_name: str) -> str:
 
 def build_reference_description(leader_name: str, leader_gender: str,
                                 features: str = "") -> str:
-    """Build a text description to supplement the identity reference image.
-
-    Used when the AI needs extra guidance about the leader's identity.
-    """
+    """Build a text description to supplement the identity reference image."""
     lines = [
         f"The reference image shows {leader_name}, a {leader_gender} leader.",
     ]

@@ -18,7 +18,7 @@ from PIL import Image
 # Load API key from .env file
 ENV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
-DEFAULT_MODEL = "google/gemini-3.1-flash-image-preview"
+DEFAULT_MODEL = "google/gemini-3-pro-image-preview"
 
 
 def _load_api_key() -> str:
@@ -71,14 +71,11 @@ class OpenRouterClient:
     def total_cost(self) -> float:
         return self._total_cost
 
-    def _make_request(self, messages: list[dict], aspect_ratio: str = "3:4",
-                      image_size: str = "2K", max_retries: int = 5) -> dict:
+    def _make_request(self, messages: list[dict], max_retries: int = 5) -> dict:
         """Make an API request with retry logic.
 
         Args:
             messages: Chat messages array
-            aspect_ratio: Output aspect ratio (e.g., "3:4", "1:1")
-            image_size: Output size hint ("1K" or "2K")
             max_retries: Maximum retry attempts on failure
 
         Returns:
@@ -96,8 +93,7 @@ class OpenRouterClient:
             "messages": messages,
             "modalities": ["image", "text"],
             "image_config": {
-                "aspect_ratio": aspect_ratio,
-                "image_size": image_size
+                "output_mime_type": "image/png"
             }
         }
 
@@ -111,6 +107,18 @@ class OpenRouterClient:
                     print(f"  Rate limited. Waiting {wait}s...")
                     time.sleep(wait)
                     continue
+
+                if resp.status_code == 404:
+                    raise RuntimeError(
+                        f"Model '{self.model}' not found on OpenRouter (404). "
+                        "Check model ID at https://openrouter.ai/models"
+                    )
+
+                if resp.status_code == 402:
+                    raise RuntimeError(
+                        "OpenRouter account has insufficient credits (402 Payment Required). "
+                        "Add funds at https://openrouter.ai/settings/credits"
+                    )
 
                 if resp.status_code >= 500:
                     # Server error — retry
@@ -184,17 +192,27 @@ class OpenRouterClient:
         except (KeyError, IndexError) as e:
             print(f"  Warning: Could not extract image from response: {e}")
 
+        # Log what we got instead of an image
+        try:
+            message = response["choices"][0]["message"]
+            content = message.get("content")
+            if isinstance(content, str):
+                print(f"  Model response text: {content[:200]}")
+            elif isinstance(content, list):
+                for part in content:
+                    if part.get("type") == "text":
+                        print(f"  Model response text: {part['text'][:200]}")
+        except (KeyError, IndexError):
+            pass
+
         return None
 
-    def generate_image(self, prompt: str, ref_images: list[Image.Image] | None = None,
-                       aspect_ratio: str = "3:4", image_size: str = "2K") -> Image.Image | None:
+    def generate_image(self, prompt: str, ref_images: list[Image.Image] | None = None) -> Image.Image | None:
         """Generate a single image from prompt and optional reference images.
 
         Args:
             prompt: Text prompt for generation
             ref_images: Optional list of PIL reference images
-            aspect_ratio: Output aspect ratio
-            image_size: Output size hint
 
         Returns:
             Generated PIL Image, or None on failure
@@ -210,7 +228,7 @@ class OpenRouterClient:
                 })
 
         messages = [{"role": "user", "content": content}]
-        response = self._make_request(messages, aspect_ratio, image_size)
+        response = self._make_request(messages)
         return self._extract_image(response)
 
     def create_chat_session(self) -> "ChatSession":
@@ -229,8 +247,7 @@ class ChatSession:
         self._client = client
         self._messages: list[dict] = []
 
-    def send(self, prompt: str, ref_images: list[Image.Image] | None = None,
-             aspect_ratio: str = "3:4", image_size: str = "2K") -> Image.Image | None:
+    def send(self, prompt: str, ref_images: list[Image.Image] | None = None) -> Image.Image | None:
         """Send a message in the chat and get an image response.
 
         First call includes reference images. Subsequent calls continue
@@ -248,9 +265,7 @@ class ChatSession:
 
         self._messages.append({"role": "user", "content": content})
 
-        response = self._client._make_request(
-            self._messages, aspect_ratio, image_size
-        )
+        response = self._client._make_request(self._messages)
 
         # Add assistant response to maintain conversation
         if "choices" in response and response["choices"]:

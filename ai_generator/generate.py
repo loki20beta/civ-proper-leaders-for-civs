@@ -22,16 +22,17 @@ from .prompts import build_loading_prompt, build_icon_prompt
 from .status import StatusTracker
 
 
+
 def generate_pair(cfg: Config, client: OpenRouterClient, status: StatusTracker,
                   leader_key: str, civ_key: str, force: bool = False,
                   dry_run: bool = False) -> bool:
-    """Generate all assets for a single leader×civ pair.
+    """Generate all assets for a single leader x civ pair.
 
     Uses a single multi-turn chat session for consistency:
-    Turn 1: Loading screen (3:4, 2K)
-    Turn 2: Neutral icon headshot (3:4, 1K)
-    Turn 3: Happy icon headshot (3:4, 1K)
-    Turn 4: Angry icon headshot (3:4, 1K)
+    Turn 1: Loading screen (pass original loading as ref, redress)
+    Turn 2: Neutral icon (pass original neutral icon as ref)
+    Turn 3: Happy icon (pass original happy icon as ref)
+    Turn 4: Angry icon (pass original angry icon as ref)
 
     Never overwrites existing files — saves as numbered variants.
 
@@ -39,10 +40,6 @@ def generate_pair(cfg: Config, client: OpenRouterClient, status: StatusTracker,
     """
     leader_name = cfg.get_leader_name(leader_key)
     civ_name = cfg.get_civ_name(civ_key)
-
-    # Skip if already completed (unless --force)
-    if not force and status.is_completed(leader_key, civ_key):
-        return True
 
     # Skip native pairs
     if cfg.is_native(leader_key, civ_key):
@@ -57,13 +54,13 @@ def generate_pair(cfg: Config, client: OpenRouterClient, status: StatusTracker,
     if not dry_run:
         os.makedirs(out_dir, exist_ok=True)
 
-    # Load reference images
+    # Load reference images for loading screen
     identity_path = cfg.get_identity_image_path(leader_key)
     if not os.path.isfile(identity_path):
         print(f"  ERROR: Identity image not found: {identity_path}")
         return False
 
-    identity_img = Image.open(identity_path).convert("RGBA")
+    identity_img = Image.open(identity_path)
     ref_images = [identity_img]
 
     # Costume reference (same gender native leader)
@@ -72,16 +69,10 @@ def generate_pair(cfg: Config, client: OpenRouterClient, status: StatusTracker,
     if costume_ref_key:
         costume_path = cfg.get_costume_ref_image_path(costume_ref_key)
         if os.path.isfile(costume_path):
-            costume_img = Image.open(costume_path).convert("RGBA")
+            costume_img = Image.open(costume_path)
             ref_images.append(costume_img)
             has_costume_ref = True
             print(f"  Costume ref: {costume_ref_key}")
-
-    # Background reference (optional)
-    bg_path = cfg.get_background_image_path(civ_key)
-    if os.path.isfile(bg_path):
-        bg_img = Image.open(bg_path).convert("RGBA")
-        ref_images.append(bg_img)
 
     # Get attire info
     gender = cfg.get_leader_gender(leader_key)
@@ -92,59 +83,86 @@ def generate_pair(cfg: Config, client: OpenRouterClient, status: StatusTracker,
         print(f"  ERROR: No attire data for {civ_key}/{gender}")
         return False
 
+    period = civ_info.get("period", "")
+
     if dry_run:
-        print(f"  Would generate: loading + 3 icons")
         print(f"  Ref images: {len(ref_images)} (identity"
-              f"{' + costume' if has_costume_ref else ''}"
-              f"{' + background' if os.path.isfile(bg_path) else ''})")
+              f"{' + costume' if has_costume_ref else ''})")
+
+        # Show loading prompt
+        loading_prompt = build_loading_prompt(
+            leader_name=leader_name, civ_name=civ_name,
+            period=period, attire=attire,
+            setting=civ_info.get("setting", ""), has_costume_ref=has_costume_ref
+        )
+        print(f"\n  --- LOADING SCREEN PROMPT (independent request) ---")
+        for line in loading_prompt.split("\n"):
+            print(f"  {line}")
+
+        # Show icon prompts with ref paths
+        for expression in ["neutral", "happy", "angry"]:
+            icon_ref_path = cfg.get_icon_ref_path(leader_key, expression)
+            icon_exists = os.path.isfile(icon_ref_path)
+            prompt = build_icon_prompt(
+                expression=expression, civ_name=civ_name,
+                period=period, attire=attire
+            )
+            print(f"\n  --- {expression.upper()} ICON PROMPT (independent request) ---")
+            print(f"  Icon ref: {os.path.basename(icon_ref_path)} ({'found' if icon_exists else 'MISSING'})")
+            for line in prompt.split("\n"):
+                print(f"  {line}")
+
         return True
 
-    # Create chat session for multi-turn consistency
-    session = client.create_chat_session()
     success = True
 
-    # --- Turn 1: Loading screen ---
+    # --- Request 1: Loading screen (independent) ---
     asset_type = "loading"
-    if force or status.get_asset_status(leader_key, civ_key, asset_type) != "completed":
-        variant_num = status.get_next_variant_number(leader_key, civ_key, asset_type)
-        filename = f"loading_v{variant_num}.png"
+    variant_num = status.get_next_variant_number(leader_key, civ_key, asset_type)
+    filename = f"loading_{variant_num:02d}.png"
 
-        prompt = build_loading_prompt(
-            leader_name=leader_name,
-            civ_name=civ_name,
-            period=civ_info.get("period", ""),
-            attire=attire,
-            setting=civ_info.get("setting", ""),
-            has_costume_ref=has_costume_ref
-        )
+    prompt = build_loading_prompt(
+        leader_name=leader_name,
+        civ_name=civ_name,
+        period=period,
+        attire=attire,
+        setting=civ_info.get("setting", ""),
+        has_costume_ref=has_costume_ref
+    )
 
-        print(f"  Generating loading screen (v{variant_num})...")
-        img = session.send(prompt, ref_images=ref_images, aspect_ratio="3:4", image_size="2K")
+    print(f"  Generating loading screen (#{variant_num:02d})...")
+    img = client.generate_image(prompt, ref_images=ref_images)
 
-        if img:
-            save_path = os.path.join(out_dir, filename)
-            img.save(save_path, "PNG")
-            status.add_variant(leader_key, civ_key, asset_type, filename)
-            print(f"  Loading screen saved: {filename}")
-        else:
-            status.mark_failed(leader_key, civ_key, asset_type)
-            print(f"  Loading screen FAILED")
-            success = False
+    if img:
+        save_path = os.path.join(out_dir, filename)
+        img.save(save_path, "PNG")
+        status.add_variant(leader_key, civ_key, asset_type, filename)
+        print(f"  Loading screen saved: {filename}")
+    else:
+        status.mark_failed(leader_key, civ_key, asset_type)
+        print(f"  Loading screen FAILED")
+        success = False
 
-    # --- Turns 2-4: Icon headshots ---
+    # --- Requests 2-4: Icon headshots (each independent) ---
     for expression in ["neutral", "happy", "angry"]:
         asset_type = f"icon_{expression}"
-        if not force and status.get_asset_status(leader_key, civ_key, asset_type) == "completed":
-            continue
-
         variant_num = status.get_next_variant_number(leader_key, civ_key, asset_type)
-        filename = f"icon_{expression}_v{variant_num}.png"
+        filename = f"icon_{expression}_{variant_num:02d}.png"
 
-        prompt = build_icon_prompt(expression=expression, civ_name=civ_name)
+        # Load original game icon as reference
+        icon_ref_path = cfg.get_icon_ref_path(leader_key, expression)
+        icon_ref_images = None
+        if os.path.isfile(icon_ref_path):
+            icon_ref_img = Image.open(icon_ref_path)
+            icon_ref_images = [icon_ref_img]
 
-        print(f"  Generating {expression} icon (v{variant_num})...")
-        # Icons use 1K resolution, same 3:4 aspect
-        img = session.send(prompt, aspect_ratio="3:4", image_size="1K")
+        prompt = build_icon_prompt(
+            expression=expression, civ_name=civ_name,
+            period=period, attire=attire
+        )
+
+        print(f"  Generating {expression} icon (#{variant_num:02d})...")
+        img = client.generate_image(prompt, ref_images=icon_ref_images)
 
         if img:
             save_path = os.path.join(out_dir, filename)

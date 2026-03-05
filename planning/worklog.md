@@ -1,6 +1,6 @@
 # Authentic Leaders Mod - Work Log
 
-## Current Status (2026-03-04)
+## Current Status (2026-03-05)
 
 ### What Works
 - **Full mod infrastructure**: All 28 leaders (+ 5 persona alts) × 43 civilizations wired up with SQL, XML, JS, UIScript
@@ -98,12 +98,22 @@
 ### Symlink
 `~/Library/Application Support/Civilization VII/Mods/authentic-leaders` → `/Users/admin/work/civ7mod/authentic-leaders`
 
+### AI Art Generation Pipeline (Phase 3A — Built)
+- **Pipeline code complete**: `ai_generator/` package with config, client, prompts, generate, postprocess, status modules
+- **Config**: `config/ai-generation.json` — 43 civs × 2 genders attire descriptors, native pairings, costume references
+- **API**: OpenRouter → Gemini image editing (currently `google/gemini-3-pro-image-preview` aka Nano Banana Pro)
+- **Approach**: Pass original game image + edit prompt ("change only clothing/headwear/accessories to X attire")
+- **Each request is independent** (no multi-turn chat) — loading screen + 3 icon expressions = 4 API calls per pair
+- **Variant tracking**: Status JSON tracks all generated variants with `_00`, `_01` numbering; never overwrites
+- **Pipeline works in principle** — tested with Augustus × Egypt, all 4 assets generated successfully
+- **Open questions**:
+  - Prompt engineering still in progress — wording, level of detail, and constraints need iteration
+  - Whether single vs multi-turn requests produce better consistency (currently using independent)
+  - Output quality varies — need more test pairs across different leaders/genders/civs to evaluate
+  - Post-processing pipeline (`ai_generator/postprocess.py`) not yet tested end-to-end
+
 ### Next Steps
-1. **BUILD AI ART GENERATION PIPELINE** ← NEXT
-   - Design prompt templates per leader × civ (attire, setting, architecture, era)
-   - API integration (DALL-E / Midjourney / Stable Diffusion / Flux)
-   - Batch generation script: reads config, generates prompts, calls API, saves outputs
-   - Post-processing: resize to 800×1060 loading screens, crop to icon variants (hex + circ)
-   - Maintain consistent art style matching Civ7 painterly aesthetic
-2. **Replace stubs with real artwork** — Swap generated art into mod, regenerate icons from new loading screens
-3. **Quality review and curation** — Manual review of generated images, re-generate poor results, verify in-game
+1. **Iterate on prompts** — Test more leader × civ pairs, refine prompt wording for best quality
+2. **Test postprocess pipeline** — Run postprocessing on generated images, verify icon masking/sizing
+3. **Batch generation** — Once prompts are solid, run across all ~1,394 non-native pairs
+4. **Quality review and curation** — Manual review, re-generate poor results, verify in-game

@@ -94,7 +94,7 @@ class StatusTracker:
         """Get the next variant number for a new generation attempt."""
         pair = self.get_pair_status(leader_key, civ_key)
         variants = pair.get(asset_type, {}).get("variants", [])
-        return len(variants) + 1
+        return len(variants)
 
     def mark_failed(self, leader_key: str, civ_key: str, asset_type: str):
         """Mark an asset as failed."""

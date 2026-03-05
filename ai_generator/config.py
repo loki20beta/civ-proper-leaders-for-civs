@@ -157,6 +157,24 @@ class Config:
         """Get path to civilization background scene image."""
         return os.path.join(ASSETS_DIR, "civilizations", civ_key, "background_1080.png")
 
+    def get_icon_ref_path(self, leader_key: str, expression: str) -> str:
+        """Get path to original game icon for a leader and expression.
+
+        Args:
+            leader_key: Leader icon key
+            expression: "neutral", "happy", or "angry"
+
+        Returns:
+            Path to the 128px icon PNG (hex shape)
+        """
+        base_key = self.get_base_leader_key(leader_key)
+        suffix_map = {"neutral": "", "happy": "_h", "angry": "_a"}
+        suffix = suffix_map.get(expression, "")
+        return os.path.join(
+            ASSETS_DIR, "leaders", base_key, "icons",
+            f"lp_hex_{base_key}_128{suffix}.png"
+        )
+
     def get_generated_dir(self, leader_key: str, civ_key: str) -> str:
         """Get output directory for generated images."""
         return os.path.join(GENERATED_DIR, leader_key, civ_key)
