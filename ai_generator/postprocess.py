@@ -1,8 +1,11 @@
 """Post-processing pipeline for AI-generated images.
 
-Takes full-body images with white backgrounds (loading.png, happy.png,
-angry.png) and produces all final mod assets: loading screens, hex icons,
-circle icons, and extensionless copies.
+Two source modes:
+  --mode fullbody (default): 3 full-body images with white backgrounds
+    (loading.png, happy.png, angry.png). Removes background, crops heads.
+  --mode portrait: loading.png (full-body, transparent bg) + separate
+    neutral.png, happy.png, angry.png (pre-cropped head portraits,
+    transparent bg). Just resize + mask.
 """
 
 from __future__ import annotations
@@ -174,6 +177,47 @@ def crop_head_region(img: Image.Image, aspect_w: int, aspect_h: int) -> Image.Im
     if crop_bottom > img_h:
         crop_bottom = img_h
         crop_top = max(0, img_h - crop_h)
+
+    return img.crop((crop_left, crop_top, crop_right, crop_bottom))
+
+
+def crop_to_content(img: Image.Image, padding: float = 0.05,
+                    vertical_bias: float = 0.0) -> Image.Image:
+    """Crop to non-transparent content bounding box with padding.
+
+    Args:
+        img: RGBA image with transparent background
+        padding: Fraction of content size to add as padding on each side
+        vertical_bias: Shift crop window up (negative) or down (positive).
+            Expressed as fraction of content height. E.g., -0.1 shifts up
+            by 10% of content height (more top padding, less bottom).
+
+    Returns:
+        Tightly cropped RGBA image
+    """
+    arr = np.array(img.convert("RGBA"))
+    alpha = arr[:, :, 3]
+
+    rows = np.any(alpha > 0, axis=1)
+    cols = np.any(alpha > 0, axis=0)
+    if not rows.any():
+        return img
+
+    top = int(np.argmax(rows))
+    bottom = int(len(rows) - np.argmax(rows[::-1]))
+    left = int(np.argmax(cols))
+    right = int(len(cols) - np.argmax(cols[::-1]))
+
+    content_h = bottom - top
+    h_pad = int(content_h * padding)
+    w_pad = int((right - left) * padding)
+    v_shift = int(content_h * vertical_bias)
+
+    img_w, img_h = img.size
+    crop_top = max(0, top - h_pad + v_shift)
+    crop_bottom = min(img_h, bottom + h_pad + v_shift)
+    crop_left = max(0, left - w_pad)
+    crop_right = min(img_w, right + w_pad)
 
     return img.crop((crop_left, crop_top, crop_right, crop_bottom))
 
@@ -357,67 +401,102 @@ def discover_pairs(leader: str | None = None, civ: str | None = None) -> list[tu
     return pairs
 
 
-def postprocess_pair(leader_key: str, civ_key: str,
+def postprocess_pair(leader_key: str, civ_key: str, mode: str = "fullbody",
                      dry_run: bool = False) -> tuple[int, int]:
     """Post-process a single leader x civ pair.
 
-    Loads loading.png, happy.png, angry.png from the generated directory,
-    removes white backgrounds, and produces all final mod assets.
+    Args:
+        leader_key: Leader identifier
+        civ_key: Civilization identifier
+        mode: "fullbody" or "portrait"
+        dry_run: Preview without writing
+
     Returns (loading_count, icon_count).
     """
     gen_dir = os.path.join(GENERATED_DIR, leader_key, civ_key)
-    loading_count = 0
-    icon_count = 0
 
-    # Load input images
     loading_path = os.path.join(gen_dir, "loading.png")
-    happy_path = os.path.join(gen_dir, "happy.png")
-    angry_path = os.path.join(gen_dir, "angry.png")
-
     if not os.path.isfile(loading_path):
         print(f"  Skipping {leader_key} x {civ_key}: no loading.png")
         return 0, 0
 
-    print(f"  Loading images...")
-    loading_img = Image.open(loading_path).convert("RGBA")
+    if mode == "portrait":
+        return _postprocess_portrait(gen_dir, leader_key, civ_key, dry_run)
+    else:
+        return _postprocess_fullbody(gen_dir, leader_key, civ_key, dry_run)
+
+
+def _postprocess_fullbody(gen_dir: str, leader_key: str, civ_key: str,
+                          dry_run: bool) -> tuple[int, int]:
+    """Fullbody mode: 3 full-body white-background images.
+
+    Removes background, crops heads for icons.
+    """
+    loading_img = Image.open(os.path.join(gen_dir, "loading.png")).convert("RGBA")
+    happy_path = os.path.join(gen_dir, "happy.png")
+    angry_path = os.path.join(gen_dir, "angry.png")
     happy_img = Image.open(happy_path).convert("RGBA") if os.path.isfile(happy_path) else None
     angry_img = Image.open(angry_path).convert("RGBA") if os.path.isfile(angry_path) else None
 
-    # Remove white background from all images
     print(f"  Removing backgrounds...")
     loading_trans = remove_white_background(loading_img)
     happy_trans = remove_white_background(happy_img) if happy_img else None
     angry_trans = remove_white_background(angry_img) if angry_img else None
 
-    # Loading screen: from loading.png with transparent background
     loading_count = process_loading_screen(loading_trans, leader_key, civ_key, dry_run)
 
-    # Icons: crop head region from each expression, then mask
     print(f"  Cropping head regions...")
     hex_aspect = (32, 45)
-    circ_aspect = (1, 1)
+    neutral_head = crop_head_region(loading_trans, *hex_aspect)
+    happy_head = crop_head_region(happy_trans, *hex_aspect) if happy_trans else None
+    angry_head = crop_head_region(angry_trans, *hex_aspect) if angry_trans else None
 
-    # Crop heads for neutral (used for all standard icons)
-    neutral_head_hex = crop_head_region(loading_trans, *hex_aspect)
-    neutral_head_circ = crop_head_region(loading_trans, *circ_aspect)
-
-    # Crop heads for expressions (hex only, 128px)
-    happy_head_hex = crop_head_region(happy_trans, *hex_aspect) if happy_trans else None
-    angry_head_hex = crop_head_region(angry_trans, *hex_aspect) if angry_trans else None
-
-    # For process_icons, we need to provide pre-cropped head images
-    # The neutral images need to work for both hex and circ shapes
-    # Since make_masked_icon does its own aspect ratio crop, pass the hex crop
-    # (wider) and let it re-crop for circ internally
     icon_count = process_icons(
-        neutral_img=neutral_head_hex,
-        happy_img=happy_head_hex,
-        angry_img=angry_head_hex,
-        leader_key=leader_key,
-        civ_key=civ_key,
-        dry_run=dry_run
+        neutral_img=neutral_head,
+        happy_img=happy_head,
+        angry_img=angry_head,
+        leader_key=leader_key, civ_key=civ_key, dry_run=dry_run
     )
+    return loading_count, icon_count
 
+
+def _postprocess_portrait(gen_dir: str, leader_key: str, civ_key: str,
+                          dry_run: bool) -> tuple[int, int]:
+    """Portrait mode: full-body loading + pre-cropped head portraits.
+
+    Loading screen already has transparent background.
+    Icon sources (neutral.png, happy.png, angry.png) are pre-cropped
+    head portraits — just resize and mask.
+    """
+    loading_img = Image.open(os.path.join(gen_dir, "loading.png")).convert("RGBA")
+    loading_count = process_loading_screen(loading_img, leader_key, civ_key, dry_run)
+
+    neutral_path = os.path.join(gen_dir, "neutral.png")
+    happy_path = os.path.join(gen_dir, "happy.png")
+    angry_path = os.path.join(gen_dir, "angry.png")
+
+    neutral_img = Image.open(neutral_path).convert("RGBA") if os.path.isfile(neutral_path) else None
+    happy_img = Image.open(happy_path).convert("RGBA") if os.path.isfile(happy_path) else None
+    angry_img = Image.open(angry_path).convert("RGBA") if os.path.isfile(angry_path) else None
+
+    if neutral_img is None:
+        print(f"  No neutral.png for icons, skipping icons")
+        return loading_count, 0
+
+    # Crop to content bounding box so face fills the icon
+    # Bias upward so headdress/crown tops aren't clipped
+    neutral_img = crop_to_content(neutral_img, padding=0.10, vertical_bias=-0.12)
+    if happy_img:
+        happy_img = crop_to_content(happy_img, padding=0.10, vertical_bias=-0.12)
+    if angry_img:
+        angry_img = crop_to_content(angry_img, padding=0.10, vertical_bias=-0.12)
+
+    icon_count = process_icons(
+        neutral_img=neutral_img,
+        happy_img=happy_img,
+        angry_img=angry_img,
+        leader_key=leader_key, civ_key=civ_key, dry_run=dry_run
+    )
     return loading_count, icon_count
 
 
@@ -429,6 +508,8 @@ def main():
                         help="Process all pairs with generated images")
     parser.add_argument("--leader", help="Process one leader only")
     parser.add_argument("--civ", help="Process one civ only")
+    parser.add_argument("--mode", choices=["fullbody", "portrait"], default="fullbody",
+                        help="Source type: fullbody (white bg, crop heads) or portrait (transparent bg, pre-cropped icons)")
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing")
 
     args = parser.parse_args()
@@ -458,8 +539,8 @@ def main():
     total_icons = 0
 
     for i, (leader_key, civ_key) in enumerate(pairs, 1):
-        print(f"\n[{i}/{len(pairs)}] {leader_key} x {civ_key}")
-        lc, ic = postprocess_pair(leader_key, civ_key, dry_run=args.dry_run)
+        print(f"\n[{i}/{len(pairs)}] {leader_key} x {civ_key} ({args.mode})")
+        lc, ic = postprocess_pair(leader_key, civ_key, mode=args.mode, dry_run=args.dry_run)
         if lc or ic:
             action = "Would create" if args.dry_run else "Created"
             print(f"  {action} {lc} loading + {ic} icon files")
