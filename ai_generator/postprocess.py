@@ -1,11 +1,13 @@
 """Post-processing pipeline for AI-generated images.
 
-Two source modes:
+Three source modes:
   --mode fullbody (default): 3 full-body images with white backgrounds
     (loading.png, happy.png, angry.png). Removes background, crops heads.
   --mode portrait: loading.png (full-body, transparent bg) + separate
     neutral.png, happy.png, angry.png (pre-cropped head portraits,
     transparent bg). Just resize + mask.
+  --mode chromakey: Same layout as portrait but with chromakey green
+    background. Removes green, then processes like portrait mode.
 """
 
 from __future__ import annotations
@@ -26,6 +28,59 @@ LOADING_SCREEN_SIZE = (800, 1060)
 INPUT_FILES = ("loading.png", "happy.png", "angry.png")
 # Head region: top portion of character bounding box
 HEAD_FRACTION = 0.20
+
+
+def load_crop_meta(leader_key: str, civ_key: str, expression: str) -> dict | None:
+    """Load crop meta using cascade: civ/expression -> civ/default -> leader/expression -> leader/default."""
+    import json
+
+    # Level 1: civ-specific
+    civ_meta_path = os.path.join(GENERATED_DIR, leader_key, civ_key, "crop_meta.json")
+    if os.path.isfile(civ_meta_path):
+        with open(civ_meta_path) as f:
+            meta = json.load(f)
+        if expression in meta:
+            return meta[expression]
+        if "default" in meta:
+            return meta["default"]
+
+    # Level 2: leader default
+    leader_meta_path = os.path.join(GENERATED_DIR, leader_key, "crop_meta.json")
+    if os.path.isfile(leader_meta_path):
+        with open(leader_meta_path) as f:
+            meta = json.load(f)
+        if expression in meta:
+            return meta[expression]
+        if "default" in meta:
+            return meta["default"]
+
+    return None
+
+
+def crop_from_meta(img: Image.Image, crop_meta: dict) -> Image.Image:
+    """Crop image using saved crop_meta {x, y, size}."""
+    x = crop_meta["x"]
+    y = crop_meta["y"]
+    size = crop_meta["size"]
+    height = int(size * 45 / 32)
+
+    img = img.convert("RGBA")
+    img_w, img_h = img.size
+    x = max(0, min(x, img_w - size))
+    y = max(0, min(y, img_h - height))
+
+    return img.crop((x, y, x + size, y + height))
+
+
+def _apply_icon_crop(img: Image.Image | None, leader_key: str, civ_key: str,
+                     expression: str, fallback_fn) -> Image.Image | None:
+    """Apply crop_meta if available, else use fallback function."""
+    if img is None:
+        return None
+    meta = load_crop_meta(leader_key, civ_key, expression)
+    if meta:
+        return crop_from_meta(img, meta)
+    return fallback_fn(img)
 
 
 def remove_white_background(img: Image.Image, tolerance: int = 35) -> Image.Image:
@@ -103,6 +158,52 @@ def remove_white_background(img: Image.Image, tolerance: int = 35) -> Image.Imag
             result[y, x, 3] = min(result[y, x, 3], alpha)
 
     return Image.fromarray(result)
+
+
+def remove_green_background(img: Image.Image, tolerance: int = 60) -> Image.Image:
+    """Replace chromakey green background with transparency.
+
+    Per-pixel color test — no flood fill, so closed areas are handled.
+    Pixels where green dominates and R/B are low become transparent.
+    Edge pixels get partial transparency for anti-aliasing.
+
+    Args:
+        img: RGBA image with green-screen background
+        tolerance: Controls edge softness (higher = more aggressive removal)
+
+    Returns:
+        RGBA image with green replaced by transparency
+    """
+    img = img.convert("RGBA")
+    arr = np.array(img, dtype=np.float32)
+    r, g, b, a = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2], arr[:, :, 3]
+
+    # "Greenness" — how much G exceeds R and B
+    green_excess = g - np.maximum(r, b)
+
+    # Hard green: clearly chromakey (G dominant, R and B low)
+    is_hard_green = (green_excess > tolerance) & (g > 100)
+
+    # Soft edge: partially green (for anti-aliasing)
+    is_soft_green = (green_excess > 10) & (g > 80) & ~is_hard_green
+
+    result = arr.copy()
+
+    # Hard green → fully transparent
+    result[is_hard_green, 3] = 0
+
+    # Soft edge → partial transparency based on greenness
+    soft_alpha = 1.0 - (green_excess[is_soft_green] - 10) / max(tolerance - 10, 1)
+    soft_alpha = np.clip(soft_alpha, 0.0, 1.0)
+    result[is_soft_green, 3] = soft_alpha * a[is_soft_green]
+
+    # Despill: remove green tint from semi-transparent edge pixels
+    spill_mask = is_soft_green & (result[:, :, 3] > 0)
+    if np.any(spill_mask):
+        avg_rb = (result[spill_mask, 0] + result[spill_mask, 2]) / 2
+        result[spill_mask, 1] = np.minimum(result[spill_mask, 1], avg_rb + 10)
+
+    return Image.fromarray(result.astype(np.uint8))
 
 
 def crop_head_region(img: Image.Image, aspect_w: int, aspect_h: int) -> Image.Image:
@@ -245,6 +346,26 @@ def create_circle_mask(size):
     draw = ImageDraw.Draw(mask)
     draw.ellipse([2, 2, size - 3, size - 3], fill=255)
     return mask
+
+
+def _pad_on_canvas(img: Image.Image, scale: float = 1.8) -> Image.Image:
+    """Place image centered on a larger transparent canvas.
+
+    Args:
+        img: RGBA image (tightly cropped content)
+        scale: Canvas size multiplier (1.8 = 80% larger than content)
+
+    Returns:
+        RGBA image with content centered on larger transparent canvas
+    """
+    w, h = img.size
+    new_w = int(w * scale)
+    new_h = int(h * scale)
+    canvas = Image.new("RGBA", (new_w, new_h), (0, 0, 0, 0))
+    paste_x = (new_w - w) // 2
+    paste_y = (new_h - h) // 2
+    canvas.paste(img, (paste_x, paste_y), img)
+    return canvas
 
 
 def crop_center_rect(img, target_w, target_h):
@@ -420,7 +541,9 @@ def postprocess_pair(leader_key: str, civ_key: str, mode: str = "fullbody",
         print(f"  Skipping {leader_key} x {civ_key}: no loading.png")
         return 0, 0
 
-    if mode == "portrait":
+    if mode == "chromakey":
+        return _postprocess_chromakey(gen_dir, leader_key, civ_key, dry_run)
+    elif mode == "portrait":
         return _postprocess_portrait(gen_dir, leader_key, civ_key, dry_run)
     else:
         return _postprocess_fullbody(gen_dir, leader_key, civ_key, dry_run)
@@ -447,9 +570,12 @@ def _postprocess_fullbody(gen_dir: str, leader_key: str, civ_key: str,
 
     print(f"  Cropping head regions...")
     hex_aspect = (32, 45)
-    neutral_head = crop_head_region(loading_trans, *hex_aspect)
-    happy_head = crop_head_region(happy_trans, *hex_aspect) if happy_trans else None
-    angry_head = crop_head_region(angry_trans, *hex_aspect) if angry_trans else None
+    def auto_crop_head(img):
+        return crop_head_region(img, *hex_aspect)
+
+    neutral_head = _apply_icon_crop(loading_trans, leader_key, civ_key, "neutral", auto_crop_head)
+    happy_head = _apply_icon_crop(happy_trans, leader_key, civ_key, "happy", auto_crop_head)
+    angry_head = _apply_icon_crop(angry_trans, leader_key, civ_key, "angry", auto_crop_head)
 
     icon_count = process_icons(
         neutral_img=neutral_head,
@@ -483,13 +609,54 @@ def _postprocess_portrait(gen_dir: str, leader_key: str, civ_key: str,
         print(f"  No neutral.png for icons, skipping icons")
         return loading_count, 0
 
-    # Crop to content bounding box so face fills the icon
-    # Bias upward so headdress/crown tops aren't clipped
-    neutral_img = crop_to_content(neutral_img, padding=0.10, vertical_bias=-0.12)
-    if happy_img:
-        happy_img = crop_to_content(happy_img, padding=0.10, vertical_bias=-0.12)
-    if angry_img:
-        angry_img = crop_to_content(angry_img, padding=0.10, vertical_bias=-0.12)
+    # Apply crop: use crop_meta if available, else auto-crop
+    def auto_crop(img):
+        return crop_to_content(img, padding=0.10, vertical_bias=-0.12)
+
+    neutral_img = _apply_icon_crop(neutral_img, leader_key, civ_key, "neutral", auto_crop)
+    happy_img = _apply_icon_crop(happy_img, leader_key, civ_key, "happy", auto_crop)
+    angry_img = _apply_icon_crop(angry_img, leader_key, civ_key, "angry", auto_crop)
+
+    icon_count = process_icons(
+        neutral_img=neutral_img,
+        happy_img=happy_img,
+        angry_img=angry_img,
+        leader_key=leader_key, civ_key=civ_key, dry_run=dry_run
+    )
+    return loading_count, icon_count
+
+
+def _postprocess_chromakey(gen_dir: str, leader_key: str, civ_key: str,
+                           dry_run: bool) -> tuple[int, int]:
+    """Chromakey mode: green-screen background on all images.
+
+    Same layout as portrait mode (loading.png full-body + neutral/happy/angry
+    pre-cropped portraits) but with chromakey green background instead of
+    transparent. Remove green, then process like portrait mode.
+    """
+    loading_img = Image.open(os.path.join(gen_dir, "loading.png")).convert("RGBA")
+    loading_trans = remove_green_background(loading_img)
+    loading_count = process_loading_screen(loading_trans, leader_key, civ_key, dry_run)
+
+    neutral_path = os.path.join(gen_dir, "neutral.png")
+    happy_path = os.path.join(gen_dir, "happy.png")
+    angry_path = os.path.join(gen_dir, "angry.png")
+
+    neutral_img = remove_green_background(Image.open(neutral_path)) if os.path.isfile(neutral_path) else None
+    happy_img = remove_green_background(Image.open(happy_path)) if os.path.isfile(happy_path) else None
+    angry_img = remove_green_background(Image.open(angry_path)) if os.path.isfile(angry_path) else None
+
+    if neutral_img is None:
+        print(f"  No neutral.png for icons, skipping icons")
+        return loading_count, 0
+
+    # Apply crop: use crop_meta if available, else auto-crop
+    def auto_crop(img):
+        return _pad_on_canvas(crop_to_content(img, padding=0.02, vertical_bias=0.05), scale=1.25)
+
+    neutral_img = _apply_icon_crop(neutral_img, leader_key, civ_key, "neutral", auto_crop)
+    happy_img = _apply_icon_crop(happy_img, leader_key, civ_key, "happy", auto_crop)
+    angry_img = _apply_icon_crop(angry_img, leader_key, civ_key, "angry", auto_crop)
 
     icon_count = process_icons(
         neutral_img=neutral_img,
@@ -508,8 +675,8 @@ def main():
                         help="Process all pairs with generated images")
     parser.add_argument("--leader", help="Process one leader only")
     parser.add_argument("--civ", help="Process one civ only")
-    parser.add_argument("--mode", choices=["fullbody", "portrait"], default="fullbody",
-                        help="Source type: fullbody (white bg, crop heads) or portrait (transparent bg, pre-cropped icons)")
+    parser.add_argument("--mode", choices=["fullbody", "portrait", "chromakey"], default="fullbody",
+                        help="Source type: fullbody (white bg, crop heads), portrait (transparent bg, pre-cropped), or chromakey (green bg, pre-cropped)")
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing")
 
     args = parser.parse_args()
