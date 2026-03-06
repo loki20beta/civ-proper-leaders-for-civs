@@ -58,18 +58,30 @@ def load_crop_meta(leader_key: str, civ_key: str, expression: str) -> dict | Non
 
 
 def crop_from_meta(img: Image.Image, crop_meta: dict) -> Image.Image:
-    """Crop image using saved crop_meta {x, y, size}."""
+    """Crop image using saved crop_meta {x, y, size}.
+
+    The crop tool saves {x, y} as the top-left of the equilateral hex overlay
+    (height/width = 2/sqrt(3)). We crop at the canvas ratio (45/32) centered
+    on the hex center so the hex maps to the equilateral mask in the icon.
+    """
     x = crop_meta["x"]
     y = crop_meta["y"]
     size = crop_meta["size"]
-    height = int(size * 45 / 32)
+
+    # Hex center from equilateral overlay
+    hex_h = size * 2 / math.sqrt(3)
+    hex_cy = y + hex_h / 2
+
+    # Canvas crop: 45/32 ratio centered on hex center
+    canvas_h = int(size * 45 / 32)
+    crop_y = int(hex_cy - canvas_h / 2)
 
     img = img.convert("RGBA")
     img_w, img_h = img.size
-    x = max(0, min(x, img_w - size))
-    y = max(0, min(y, img_h - height))
+    crop_x = max(0, min(int(x), img_w - size))
+    crop_y = max(0, min(crop_y, img_h - canvas_h))
 
-    return img.crop((x, y, x + size, y + height))
+    return img.crop((crop_x, crop_y, crop_x + size, crop_y + canvas_h))
 
 
 def _apply_icon_crop(img: Image.Image | None, leader_key: str, civ_key: str,
@@ -324,19 +336,36 @@ def crop_to_content(img: Image.Image, padding: float = 0.05,
 
 
 def create_hex_mask(width, height):
-    """Create a hexagonal mask for a rectangular canvas."""
+    """Create a hex mask that clips only at the bottom two edges.
+
+    Game behavior: content overflows above and to the sides of the hex,
+    but is clipped by the bottom two converging edges. The mask is a
+    rectangle from canvas top down to the hex equator, then follows the
+    bottom two hex edges to the bottom vertex.
+    """
     mask = Image.new("L", (width, height), 0)
     draw = ImageDraw.Draw(mask)
     cx, cy = width // 2, height // 2
-    rx = width // 2 - 2
-    ry = height // 2 - 2
-    points = []
+    R = (width - 4) / math.sqrt(3)  # circumradius for equilateral hex
+
+    # Hex vertices (pointy-top):
+    # 0 (30°): right-middle, 1 (90°): bottom, 2 (150°): left-middle
+    pts = []
     for i in range(6):
         angle = math.pi / 6 + i * math.pi / 3
-        x = cx + rx * math.cos(angle)
-        y = cy + ry * math.sin(angle)
-        points.append((x, y))
-    draw.polygon(points, fill=255)
+        pts.append((cx + R * math.cos(angle), cy + R * math.sin(angle)))
+
+    # Open-top mask: full rectangle above hex equator, hex bottom below
+    polygon = [
+        (0, 0),                # top-left corner
+        (width, 0),            # top-right corner
+        (width, pts[0][1]),    # right edge down to right hex vertex height
+        pts[0],                # right hex vertex (30°)
+        pts[1],                # bottom hex vertex (90°)
+        pts[2],                # left hex vertex (150°)
+        (0, pts[2][1]),        # left edge at left hex vertex height
+    ]
+    draw.polygon(polygon, fill=255)
     return mask
 
 

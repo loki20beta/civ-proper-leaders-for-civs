@@ -2,76 +2,35 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Crop Position Tool</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
     background: #1a1a2e;
     color: #e0d8c8;
     height: 100vh;
-    overflow: hidden;
     display: flex;
+    flex-direction: column;
 }
 
-/* ---- Left: Canvas area ---- */
-#canvas-area {
-    flex: 1;
+/* ---- Top bar ---- */
+.top-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-#main-canvas {
-    cursor: grab;
-}
-
-#main-canvas.dragging { cursor: grabbing; }
-#main-canvas.resize-cursor { cursor: nwse-resize; }
-
-/* ---- Right: Sidebar ---- */
-#sidebar {
-    width: 320px;
-    min-width: 320px;
-    background: #16213e;
-    border-left: 1px solid #333;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    padding: 16px;
-    gap: 16px;
-}
-
-.section {
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 12px;
-}
-
-.section-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #8a7e6b;
-    margin-bottom: 8px;
-}
-
-/* ---- Navigation ---- */
-.nav-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding: 8px 16px;
+    border-bottom: 1px solid #333;
+    flex-shrink: 0;
 }
 
 .nav-btn {
     background: #2a2a4a;
     border: 1px solid #444;
     color: #e0d8c8;
-    padding: 4px 10px;
+    padding: 4px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
@@ -79,164 +38,146 @@ body {
 .nav-btn:hover { background: #3a3a5a; }
 
 .pair-label {
-    flex: 1;
-    text-align: center;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: #c8a86e;
+    min-width: 200px;
+    text-align: center;
 }
 
-.pair-counter {
-    text-align: center;
-    font-size: 11px;
-    color: #8a7e6b;
-    margin-top: 4px;
-}
+.pair-counter { font-size: 11px; color: #8a7e6b; }
 
 .mode-badge {
-    display: inline-block;
     font-size: 10px;
     padding: 2px 6px;
     border-radius: 3px;
     background: #2a2a4a;
     color: #8a7e6b;
-    margin-top: 4px;
-    text-align: center;
 }
 
-/* ---- Expression buttons ---- */
-.expr-row {
-    display: flex;
-    gap: 6px;
+.dirty-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #f0c040;
+    opacity: 0;
+    transition: opacity 0.2s;
 }
+.dirty-dot.visible { opacity: 1; }
 
-.expr-btn {
+/* ---- Banner area ---- */
+.banner-area {
     flex: 1;
-    background: #2a2a4a;
-    border: 1px solid #444;
-    color: #8a7e6b;
-    padding: 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    text-align: center;
-    transition: all 0.15s;
-}
-
-.expr-btn:hover { background: #3a3a5a; }
-
-.expr-btn.active {
-    background: #4a3a2a;
-    border-color: #c8a86e;
-    color: #c8a86e;
-    font-weight: 600;
-}
-
-.expr-btn.unavailable {
-    opacity: 0.35;
-    cursor: not-allowed;
-}
-
-/* ---- Preview ---- */
-.preview-row {
     display: flex;
-    gap: 12px;
+    align-items: center;
     justify-content: center;
-    align-items: flex-end;
+    gap: 20px;
+    padding: 12px;
+    min-height: 0;
 }
 
-.preview-box {
+.banner-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
 }
 
-.preview-box label {
-    font-size: 10px;
-    color: #8a7e6b;
+.banner-wrap {
+    position: relative;
+    width: 128px;
+    height: 180px;
 }
 
-.preview-container {
-    background: #0d0d1a;
-    border: 1px solid #6b5a3e;
-    border-radius: 4px;
+.banner-wrap canvas,
+.banner-wrap img {
+    display: block;
+    width: 128px;
+    height: 180px;
+}
+
+.banner-wrap.interactive { cursor: grab; }
+.banner-wrap.interactive:active { cursor: grabbing; }
+.banner-wrap.locked { opacity: 0.85; }
+
+.banner-label-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.banner-label { font-size: 11px; color: #8a7e6b; }
+
+.lock-btn {
+    background: none;
+    border: 1px solid #444;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 1px 5px;
+    color: #8a7e6b;
+    line-height: 1.2;
+}
+.lock-btn:hover { border-color: #c8a86e; color: #c8a86e; }
+.lock-btn.unlocked { color: #c8a86e; border-color: #c8a86e; }
+
+.banner-ribbon {
+    width: 42px;
+    height: 45px;
+    margin-top: -12px;
+    position: relative;
+    border-left: 1px solid rgba(255,255,255,0.15);
+    border-right: 1px solid rgba(255,255,255,0.15);
+}
+.banner-ribbon-point {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 0; height: 0;
+    border-left: 21px solid transparent;
+    border-right: 21px solid transparent;
+    border-top: 10px solid;
+}
+
+/* ---- Bottom controls ---- */
+.controls {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
+    gap: 20px;
+    padding: 8px 16px;
+    border-top: 1px solid #333;
+    flex-shrink: 0;
 }
 
-/* ---- Crop Info ---- */
-.crop-info-text {
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 12px;
+.crop-info {
+    font-family: 'Consolas', monospace;
+    font-size: 11px;
     color: #c8a86e;
-    line-height: 1.6;
 }
 
-.crop-source {
-    font-size: 11px;
-    color: #8a7e6b;
-    margin-top: 4px;
-    font-style: italic;
+.save-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* ---- Save controls ---- */
-.radio-group {
-    margin-bottom: 8px;
-}
-
-.radio-group label {
-    display: block;
-    font-size: 12px;
-    padding: 3px 0;
-    cursor: pointer;
-}
-
-.radio-group label:hover { color: #c8a86e; }
-
-.radio-group input[type="radio"] {
-    margin-right: 6px;
-}
-
-.radio-group-title {
-    font-size: 11px;
-    color: #8a7e6b;
-    margin-bottom: 4px;
-}
+.save-controls label { font-size: 11px; cursor: pointer; }
 
 #save-btn {
-    width: 100%;
-    padding: 8px;
+    padding: 4px 14px;
     background: #4a3a2a;
     border: 1px solid #c8a86e;
     color: #c8a86e;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     border-radius: 4px;
     cursor: pointer;
-    transition: all 0.15s;
 }
+#save-btn:hover { background: #5a4a3a; }
 
-#save-btn:hover {
-    background: #5a4a3a;
-}
+#save-status { font-size: 11px; color: #8a7e6b; }
 
-#save-status {
-    font-size: 11px;
-    margin-top: 6px;
-    min-height: 16px;
-    color: #8a7e6b;
-}
-
-/* ---- Keyboard shortcuts hint ---- */
-.shortcuts {
-    font-size: 10px;
-    color: #555;
-    line-height: 1.6;
-}
-
+.shortcuts { font-size: 10px; color: #555; }
 .shortcuts kbd {
     background: #2a2a4a;
     padding: 1px 4px;
@@ -244,597 +185,399 @@ body {
     border: 1px solid #444;
     font-size: 10px;
 }
-
-/* ---- Dirty indicator ---- */
-.dirty-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #f0c040;
-    margin-left: 6px;
-    vertical-align: middle;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-.dirty-dot.visible { opacity: 1; }
-
-#unsaved-label {
-    font-size: 11px;
-    color: #f0c040;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-#unsaved-label.visible { opacity: 1; }
 </style>
 </head>
 <body>
 
-<!-- Left: Canvas -->
-<div id="canvas-area">
-    <canvas id="main-canvas"></canvas>
+<div class="top-bar">
+    <button class="nav-btn" id="prev-btn">&larr;</button>
+    <span class="pair-label" id="pair-label">Loading...</span>
+    <span class="dirty-dot" id="dirty-dot"></span>
+    <button class="nav-btn" id="next-btn">&rarr;</button>
+    <span class="pair-counter" id="pair-counter"></span>
+    <span class="mode-badge" id="mode-badge"></span>
 </div>
 
-<!-- Right: Sidebar -->
-<div id="sidebar">
-
-    <!-- Leader / Civ nav -->
-    <div class="section">
-        <div class="section-title">Leader / Civ</div>
-        <div class="nav-row">
-            <button class="nav-btn" id="prev-btn" title="Previous pair">&larr;</button>
-            <span class="pair-label" id="pair-label">Loading...</span><span class="dirty-dot" id="dirty-dot"></span>
-            <button class="nav-btn" id="next-btn" title="Next pair">&rarr;</button>
+<div class="banner-area">
+    <!-- Ada reference -->
+    <div class="banner-item">
+        <div class="banner-wrap">
+            <img src="/api/reference_icon/ada_lovelace/128">
         </div>
-        <div class="pair-counter" id="pair-counter"></div>
-        <div style="text-align:center">
-            <span class="mode-badge" id="mode-badge"></span>
+        <div class="banner-ribbon" style="background:linear-gradient(180deg,#4a6a8a,#2a4a6a)">
+            <div class="banner-ribbon-point" style="border-top-color:#2a4a6a"></div>
+        </div>
+        <div class="banner-label">Ada (ref)</div>
+    </div>
+
+    <!-- Neutral -->
+    <div class="banner-item">
+        <div class="banner-wrap interactive" data-expr="neutral">
+            <canvas id="preview-neutral" width="128" height="180"></canvas>
+        </div>
+        <div class="banner-ribbon" style="background:linear-gradient(180deg,#4a6a8a,#2a4a6a)">
+            <div class="banner-ribbon-point" style="border-top-color:#2a4a6a"></div>
+        </div>
+        <div class="banner-label" style="color:#c8a86e">Neutral</div>
+    </div>
+
+    <!-- Happy -->
+    <div class="banner-item">
+        <div class="banner-wrap interactive" data-expr="happy">
+            <canvas id="preview-happy" width="128" height="180"></canvas>
+        </div>
+        <div class="banner-ribbon" style="background:linear-gradient(180deg,#3a6a3a,#1a4a1a)">
+            <div class="banner-ribbon-point" style="border-top-color:#1a4a1a"></div>
+        </div>
+        <div class="banner-label-row">
+            <span class="banner-label">Happy</span>
+            <button class="lock-btn" data-expr="happy" title="Toggle lock">lock</button>
         </div>
     </div>
 
-    <!-- Expression -->
-    <div class="section">
-        <div class="section-title">Expression</div>
-        <div class="expr-row">
-            <button class="expr-btn active" data-expr="neutral">Neutral</button>
-            <button class="expr-btn" data-expr="happy">Happy</button>
-            <button class="expr-btn" data-expr="angry">Angry</button>
+    <!-- Angry -->
+    <div class="banner-item">
+        <div class="banner-wrap interactive" data-expr="angry">
+            <canvas id="preview-angry" width="128" height="180"></canvas>
+        </div>
+        <div class="banner-ribbon" style="background:linear-gradient(180deg,#6a3a3a,#4a1a1a)">
+            <div class="banner-ribbon-point" style="border-top-color:#4a1a1a"></div>
+        </div>
+        <div class="banner-label-row">
+            <span class="banner-label">Angry</span>
+            <button class="lock-btn" data-expr="angry" title="Toggle lock">lock</button>
         </div>
     </div>
 
-    <!-- Preview -->
-    <div class="section">
-        <div class="section-title">Preview (game size)</div>
-        <div class="preview-row">
-            <div class="preview-box">
-                <label>128 x 180</label>
-                <div class="preview-container">
-                    <canvas id="preview-128" width="128" height="180"></canvas>
-                </div>
-            </div>
-            <div class="preview-box">
-                <label>64 x 90</label>
-                <div class="preview-container">
-                    <canvas id="preview-64" width="64" height="90"></canvas>
-                </div>
-            </div>
+    <!-- Genghis reference -->
+    <div class="banner-item">
+        <div class="banner-wrap">
+            <img src="/api/reference_icon/genghis_khan/128">
         </div>
+        <div class="banner-ribbon" style="background:linear-gradient(180deg,#7a6a3a,#5a4a1a)">
+            <div class="banner-ribbon-point" style="border-top-color:#5a4a1a"></div>
+        </div>
+        <div class="banner-label">Genghis (ref)</div>
     </div>
+</div>
 
-    <!-- Crop Info -->
-    <div class="section">
-        <div class="section-title">Crop Info</div>
-        <div class="crop-info-text" id="crop-info">No crop set</div>
-        <div class="crop-source" id="crop-source"></div>
-    </div>
-
-    <!-- Save -->
-    <div class="section">
-        <div class="section-title">Save</div>
-        <div class="radio-group">
-            <div class="radio-group-title">Level</div>
-            <label><input type="radio" name="save-level" value="civ" checked> Civ override</label>
-            <label><input type="radio" name="save-level" value="leader"> Leader default</label>
-        </div>
-        <div class="radio-group">
-            <div class="radio-group-title">Expression scope</div>
-            <label><input type="radio" name="save-expr" value="default" checked> Default (all expressions)</label>
-            <label><input type="radio" name="save-expr" value="current"> Current expression only</label>
-        </div>
+<div class="controls">
+    <span class="crop-info" id="crop-info">x:0 y:0 size:200</span>
+    <div class="save-controls">
+        <label><input type="radio" name="save-level" value="civ" checked> Civ</label>
+        <label><input type="radio" name="save-level" value="leader"> Leader</label>
         <button id="save-btn">Save Crop</button>
-        <span id="unsaved-label">unsaved</span>
-        <div id="save-status"></div>
+        <span id="save-status"></span>
     </div>
-
-    <!-- Shortcuts -->
-    <div class="section shortcuts">
-        <div class="section-title">Shortcuts</div>
-        <kbd>&larr;</kbd> <kbd>&rarr;</kbd> Prev / Next pair<br>
-        <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Neutral / Happy / Angry<br>
-        <kbd>S</kbd> Save<br>
-        <kbd>R</kbd> Reset to auto-center<br>
-        <kbd>+</kbd> <kbd>-</kbd> Resize hex &plusmn;10px<br>
-        <kbd>Scroll</kbd> Resize hex
+    <div class="shortcuts">
+        <kbd>&larr;</kbd><kbd>&rarr;</kbd> nav &nbsp;
+        <kbd>R</kbd> reset &nbsp;
+        <kbd>S</kbd> save &nbsp;
+        <kbd>scroll</kbd> zoom &nbsp;
+        <kbd>drag</kbd> pan
     </div>
 </div>
 
 <script>
-// ===========================================================================
+// ================================================================
 // Constants
-// ===========================================================================
-const HEX_ASPECT = 45 / 32; // height / width
-const CANVAS_PADDING = 40;
-const HANDLE_RADIUS = 8;
-const MIN_HEX_SIZE = 40;
+// ================================================================
+const HEX_ASPECT = 2 / Math.sqrt(3); // equilateral hex height/width
+const EXPRESSIONS = ["neutral", "happy", "angry"];
 
-// ===========================================================================
+// ================================================================
 // State
-// ===========================================================================
+// ================================================================
 let pairs = [];
 let pairIdx = 0;
-let currentExpr = "neutral";
 
-// Hex in source image pixel coordinates: {x, y, size}
-// x,y = top-left of bounding box, size = width, height = size * HEX_ASPECT
-let hex = { x: 0, y: 0, size: 200 };
+// Crops: neutral always set; happy/angry null when locked (follows neutral)
+let crops = {
+    neutral: { x: 0, y: 0, size: 200 },
+    happy: null,
+    angry: null
+};
 
-// Display transform: canvas coords = imgOffset + srcCoord * imgScale
-let imgScale = 1;
-let imgOffsetX = 0;
-let imgOffsetY = 0;
+let locks = { happy: true, angry: true };
 
-// Images
-let rawImg = null;        // raw source image (for canvas display)
-let bgRemovedImg = null;  // bg-removed image (for preview, cached)
+// Images per expression: { raw: Image|null, bg: Image|null }
+let images = {
+    neutral: { raw: null, bg: null },
+    happy: { raw: null, bg: null },
+    angry: { raw: null, bg: null }
+};
 
-// Drag state
-let dragging = false;
-let resizing = false;
-let dragStartX = 0, dragStartY = 0;
-let dragHexStartX = 0, dragHexStartY = 0, dragHexStartSize = 0;
-
-// Crop metadata from server
-let cropMeta = {};
-
-// Dirty (unsaved changes) tracking
 let dirty = false;
+let dragState = null;
 
-// ===========================================================================
+// ================================================================
 // DOM refs
-// ===========================================================================
-const canvas = document.getElementById("main-canvas");
-const ctx = canvas.getContext("2d");
+// ================================================================
 const pairLabel = document.getElementById("pair-label");
 const pairCounter = document.getElementById("pair-counter");
 const modeBadge = document.getElementById("mode-badge");
 const cropInfoEl = document.getElementById("crop-info");
-const cropSourceEl = document.getElementById("crop-source");
 const saveStatus = document.getElementById("save-status");
 const dirtyDot = document.getElementById("dirty-dot");
-const unsavedLabel = document.getElementById("unsaved-label");
-const exprBtns = document.querySelectorAll(".expr-btn");
 
-// ===========================================================================
-// Hex geometry helpers
-// ===========================================================================
+// ================================================================
+// Hex geometry
+// ================================================================
 
-/** Get 6 vertices of a pointy-top hexagon given center and radii. */
-function getHexPoints(cx, cy, rx, ry) {
+/** 6 vertices of an equilateral pointy-top hex with circumradius R. */
+function getHexPoints(cx, cy, R) {
     const pts = [];
     for (let i = 0; i < 6; i++) {
         const angle = Math.PI / 6 + i * Math.PI / 3;
-        pts.push([cx + rx * Math.cos(angle), cy + ry * Math.sin(angle)]);
+        pts.push([cx + R * Math.cos(angle), cy + R * Math.sin(angle)]);
     }
     return pts;
 }
 
-/** Build a hex path on a canvas context from center and radii. */
-function hexPath(c, cx, cy, rx, ry) {
-    const pts = getHexPoints(cx, cy, rx, ry);
+/** Trace hex path on a canvas context. */
+function hexPath(c, cx, cy, R) {
+    const pts = getHexPoints(cx, cy, R);
     c.beginPath();
     c.moveTo(pts[0][0], pts[0][1]);
     for (let i = 1; i < 6; i++) c.lineTo(pts[i][0], pts[i][1]);
     c.closePath();
 }
 
-/** Convert hex {x, y, size} to center + radii in source coords. */
-function hexCenter() {
-    const w = hex.size;
-    const h = w * HEX_ASPECT;
+// ================================================================
+// Crop helpers
+// ================================================================
+
+function getCrop(expr) {
+    if (expr === "neutral") return crops.neutral;
+    return crops[expr] || crops.neutral;
+}
+
+/** Which crop is actually modified when interacting with this expression? */
+function getEffectiveExpr(expr) {
+    if (expr === "neutral") return "neutral";
+    return locks[expr] ? "neutral" : expr;
+}
+
+function setCropForExpr(expr, crop) {
+    if (expr === "neutral") crops.neutral = crop;
+    else crops[expr] = crop;
+}
+
+function clampCrop(crop) {
+    const img = images.neutral.raw;
+    if (!img) return;
+    const h = crop.size * HEX_ASPECT;
+    crop.size = Math.max(40, crop.size);
+    crop.x = Math.max(0, Math.min(crop.x, img.width - crop.size));
+    crop.y = Math.max(-h * 0.3, Math.min(crop.y, img.height - h * 0.7));
+}
+
+function autoCenterCrop() {
+    const img = images.neutral.raw;
+    if (!img) return { x: 0, y: 0, size: 200 };
+    const size = img.width * 0.8;
+    const h = size * HEX_ASPECT;
     return {
-        cx: hex.x + w / 2,
-        cy: hex.y + h / 2,
-        rx: w / 2,
-        ry: h / 2
+        size,
+        x: img.width * 0.1,
+        y: Math.max(0, (img.height - h) * 0.3)
     };
 }
 
-/** Convert source image coords to canvas coords. */
-function srcToCanvas(sx, sy) {
-    return [imgOffsetX + sx * imgScale, imgOffsetY + sy * imgScale];
-}
+// ================================================================
+// Preview rendering
+// ================================================================
 
-/** Convert canvas coords to source image coords. */
-function canvasToSrc(cx, cy) {
-    return [(cx - imgOffsetX) / imgScale, (cy - imgOffsetY) / imgScale];
-}
+function drawPreview(expr) {
+    const canvas = document.getElementById(`preview-${expr}`);
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
 
-// ===========================================================================
-// Canvas rendering
-// ===========================================================================
+    const img = images[expr].bg || images[expr].raw;
+    if (!img) return;
 
-function resizeCanvas() {
-    const area = document.getElementById("canvas-area");
-    canvas.width = area.clientWidth;
-    canvas.height = area.clientHeight;
-    computeImageTransform();
-    draw();
-}
+    const crop = getCrop(expr);
 
-function computeImageTransform() {
-    if (!rawImg) return;
-    const availW = canvas.width - CANVAS_PADDING * 2;
-    const availH = canvas.height - CANVAS_PADDING * 2;
-    imgScale = Math.min(availW / rawImg.width, availH / rawImg.height);
-    const dispW = rawImg.width * imgScale;
-    const dispH = rawImg.height * imgScale;
-    imgOffsetX = (canvas.width - dispW) / 2;
-    imgOffsetY = (canvas.height - dispH) / 2;
-}
+    // Equilateral hex centered in preview canvas
+    const hexW = w - 4;
+    const R = hexW / Math.sqrt(3);
+    const hexCX = w / 2;
+    const hexCY = h / 2;
 
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Scale: preview hex width / source crop width
+    const scale = hexW / crop.size;
 
-    if (!rawImg) return;
+    // Source hex center -> preview hex center
+    const srcCX = crop.x + crop.size / 2;
+    const srcCY = crop.y + crop.size * HEX_ASPECT / 2;
+    const srcViewW = w / scale;
+    const srcViewH = h / scale;
+    const srcViewX = srcCX - srcViewW / 2;
+    const srcViewY = srcCY - srcViewH / 2;
 
-    // Draw image
-    const dispW = rawImg.width * imgScale;
-    const dispH = rawImg.height * imgScale;
-    ctx.drawImage(rawImg, imgOffsetX, imgOffsetY, dispW, dispH);
-
-    // Hex overlay in canvas coords
-    const hc = hexCenter();
-    const [ccx, ccy] = srcToCanvas(hc.cx, hc.cy);
-    const crx = hc.rx * imgScale;
-    const cry = hc.ry * imgScale;
-
-    // Dim outside hex
+    // Clip: open at top, follows hex at bottom (game behavior)
     ctx.save();
-    ctx.fillStyle = "rgba(10, 10, 30, 0.6)";
+    const pts = getHexPoints(hexCX, hexCY, R);
     ctx.beginPath();
-    ctx.rect(0, 0, canvas.width, canvas.height);
-    hexPath(ctx, ccx, ccy, crx, cry);
-    ctx.fill("evenodd");
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(w, pts[0][1]);
+    ctx.lineTo(pts[0][0], pts[0][1]);
+    ctx.lineTo(pts[1][0], pts[1][1]);
+    ctx.lineTo(pts[2][0], pts[2][1]);
+    ctx.lineTo(0, pts[2][1]);
+    ctx.lineTo(0, 0);
+    ctx.closePath();
+    ctx.clip();
+
+    ctx.drawImage(img, srcViewX, srcViewY, srcViewW, srcViewH, 0, 0, w, h);
     ctx.restore();
 
-    // Gold border
+    // Hex border
     ctx.save();
-    hexPath(ctx, ccx, ccy, crx, cry);
+    hexPath(ctx, hexCX, hexCY, R);
+    ctx.strokeStyle = "#8b7346";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    hexPath(ctx, hexCX, hexCY, R);
     ctx.strokeStyle = "#c8a86e";
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.restore();
-
-    // Resize handle (bottom-right vertex = index 1 in pointy-top)
-    // Actually, let's find the bottom vertex (index 2 at angle = PI/6 + 2*PI/3 = 5PI/6 ...
-    // pointy-top: vertices at angles PI/6 + i*PI/3 for i=0..5
-    // i=0: PI/6 (30 deg) -> top-right
-    // i=1: PI/6 + PI/3 = PI/2 (90 deg) -> right ... wait, cos(PI/2)=0, sin(PI/2)=1 -> bottom center
-    // Actually let me compute: i=0: 30deg -> right-top, i=1: 90deg -> bottom, i=2: 150deg -> left-bottom
-    // For pointy-top, bottom vertex is at i=1 (90 deg down), but we want bottom-right.
-    // Bottom-right is vertex i=0 (30 deg): cos(30)=0.866, sin(30)=0.5 -> that's right-middle-ish
-    // Let's just use the bottom vertex (i=1) as the resize handle.
-    const pts = getHexPoints(ccx, ccy, crx, cry);
-    // i=1 is bottom vertex for pointy-top
-    const handlePt = pts[1]; // bottom vertex
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(handlePt[0], handlePt[1], HANDLE_RADIUS, 0, Math.PI * 2);
-    ctx.fillStyle = "#c8a86e";
-    ctx.fill();
-    ctx.strokeStyle = "#1a1a2e";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.restore();
 }
 
-// ===========================================================================
-// Preview rendering
-// ===========================================================================
-
-function updatePreviews() {
-    drawPreviewIcon("preview-128", 128, 180);
-    drawPreviewIcon("preview-64", 64, 90);
+function drawAllPreviews() {
+    EXPRESSIONS.forEach(drawPreview);
 }
 
-function drawPreviewIcon(canvasId, w, h) {
-    const c = document.getElementById(canvasId);
-    const pctx = c.getContext("2d");
-    pctx.clearRect(0, 0, w, h);
-
-    const img = bgRemovedImg || rawImg;
-    if (!img) return;
-
-    const srcH = hex.size * HEX_ASPECT;
-
-    // Draw the cropped region
-    pctx.save();
-    pctx.drawImage(img, hex.x, hex.y, hex.size, srcH, 0, 0, w, h);
-
-    // Apply hex mask via destination-in
-    pctx.globalCompositeOperation = "destination-in";
-    hexPath(pctx, w / 2, h / 2, w / 2, h / 2);
-    pctx.fill();
-    pctx.globalCompositeOperation = "source-over";
-    pctx.restore();
-}
-
-// ===========================================================================
-// Crop info display
-// ===========================================================================
+// ================================================================
+// UI updates
+// ================================================================
 
 function updateCropInfo() {
-    const h = Math.round(hex.size * HEX_ASPECT);
-    cropInfoEl.textContent = `x: ${Math.round(hex.x)}  y: ${Math.round(hex.y)}  size: ${Math.round(hex.size)}  (${Math.round(hex.size)}x${h})`;
+    const crop = crops.neutral;
+    const h = Math.round(crop.size * HEX_ASPECT);
+    cropInfoEl.textContent = `x:${Math.round(crop.x)} y:${Math.round(crop.y)} size:${Math.round(crop.size)} (${Math.round(crop.size)}\u00d7${h})`;
 }
-
-function updateCropSource() {
-    if (!cropMeta) {
-        cropSourceEl.textContent = "No saved crop data";
-        return;
-    }
-
-    const pair = pairs[pairIdx];
-    const civMeta = cropMeta._civMeta || {};
-    const leaderMeta = cropMeta._leaderMeta || {};
-
-    // Determine which source we're using
-    if (civMeta[currentExpr]) {
-        cropSourceEl.textContent = `Source: civ/${pair.civ}/${currentExpr}`;
-    } else if (civMeta["default"]) {
-        cropSourceEl.textContent = `Source: civ/${pair.civ}/default`;
-    } else if (leaderMeta[currentExpr]) {
-        cropSourceEl.textContent = `Source: leader/${pair.leader}/${currentExpr}`;
-    } else if (leaderMeta["default"]) {
-        cropSourceEl.textContent = `Source: leader/${pair.leader}/default`;
-    } else {
-        cropSourceEl.textContent = "Auto-centered (no saved data)";
-    }
-}
-
-// ===========================================================================
-// Mouse interaction
-// ===========================================================================
-
-function isInsideHex(canvasX, canvasY) {
-    const hc = hexCenter();
-    const [ccx, ccy] = srcToCanvas(hc.cx, hc.cy);
-    const crx = hc.rx * imgScale;
-    const cry = hc.ry * imgScale;
-
-    // Point-in-hex test using canvas path
-    hexPath(ctx, ccx, ccy, crx, cry);
-    return ctx.isPointInPath(canvasX, canvasY);
-}
-
-function isOnHandle(canvasX, canvasY) {
-    const hc = hexCenter();
-    const [ccx, ccy] = srcToCanvas(hc.cx, hc.cy);
-    const crx = hc.rx * imgScale;
-    const cry = hc.ry * imgScale;
-    const pts = getHexPoints(ccx, ccy, crx, cry);
-    const hp = pts[1]; // bottom vertex
-    const dx = canvasX - hp[0];
-    const dy = canvasY - hp[1];
-    return Math.sqrt(dx * dx + dy * dy) <= HANDLE_RADIUS + 4;
-}
-
-canvas.addEventListener("mousedown", (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-
-    if (isOnHandle(mx, my)) {
-        resizing = true;
-        dragStartX = mx;
-        dragStartY = my;
-        dragHexStartSize = hex.size;
-        canvas.classList.add("resize-cursor");
-        e.preventDefault();
-        return;
-    }
-
-    if (isInsideHex(mx, my)) {
-        dragging = true;
-        dragStartX = mx;
-        dragStartY = my;
-        dragHexStartX = hex.x;
-        dragHexStartY = hex.y;
-        canvas.classList.add("dragging");
-        e.preventDefault();
-    }
-});
-
-canvas.addEventListener("mousemove", (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-
-    if (dragging) {
-        const dx = (mx - dragStartX) / imgScale;
-        const dy = (my - dragStartY) / imgScale;
-        hex.x = dragHexStartX + dx;
-        hex.y = dragHexStartY + dy;
-        clampHex();
-        setDirty(true);
-        draw();
-        updateCropInfo();
-        updatePreviews();
-        return;
-    }
-
-    if (resizing) {
-        // Use vertical movement to control size (drag down = bigger)
-        const dy = (my - dragStartY) / imgScale;
-        // The bottom vertex is at cy + ry = cy + size*HEX_ASPECT/2
-        // Moving it down by dy means ry grows by dy, so size grows by dy * 2 / HEX_ASPECT
-        const newSize = Math.max(MIN_HEX_SIZE, dragHexStartSize + dy * 2 / HEX_ASPECT);
-        hex.size = newSize;
-        clampHex();
-        setDirty(true);
-        draw();
-        updateCropInfo();
-        updatePreviews();
-        return;
-    }
-
-    // Update cursor
-    if (isOnHandle(mx, my)) {
-        canvas.style.cursor = "nwse-resize";
-    } else if (isInsideHex(mx, my)) {
-        canvas.style.cursor = "grab";
-    } else {
-        canvas.style.cursor = "default";
-    }
-});
-
-window.addEventListener("mouseup", () => {
-    dragging = false;
-    resizing = false;
-    canvas.classList.remove("dragging");
-    canvas.classList.remove("resize-cursor");
-});
-
-/** Clamp hex so it stays within image bounds (best effort). */
-function clampHex() {
-    if (!rawImg) return;
-    const h = hex.size * HEX_ASPECT;
-    hex.x = Math.max(0, Math.min(hex.x, rawImg.width - hex.size));
-    hex.y = Math.max(0, Math.min(hex.y, rawImg.height - h));
-    hex.size = Math.max(MIN_HEX_SIZE, hex.size);
-}
-
-// ===========================================================================
-// Dirty (unsaved) tracking
-// ===========================================================================
 
 function setDirty(val) {
     dirty = val;
     dirtyDot.classList.toggle("visible", dirty);
-    unsavedLabel.classList.toggle("visible", dirty);
 }
 
-// ===========================================================================
-// Data loading
-// ===========================================================================
-
-async function loadPairs() {
-    const resp = await fetch("/api/pairs");
-    pairs = await resp.json();
-
-    if (pairs.length === 0) {
-        pairLabel.textContent = "No pairs found";
-        return;
-    }
-
-    // Try to find friedrich/egypt as default
-    const defaultIdx = pairs.findIndex(p => p.leader === "friedrich" && p.civ === "egypt");
-    pairIdx = defaultIdx >= 0 ? defaultIdx : 0;
-
-    loadCurrentPair();
-}
-
-async function loadCurrentPair() {
-    if (pairs.length === 0) return;
-
-    const pair = pairs[pairIdx];
-    pairLabel.textContent = `${pair.leader} / ${pair.civ}`;
-    setDirty(false);
-    pairCounter.textContent = `${pairIdx + 1} / ${pairs.length}`;
-    modeBadge.textContent = pair.mode;
-
-    // Update expression button availability
-    exprBtns.forEach(btn => {
+function updateLockUI() {
+    document.querySelectorAll(".lock-btn").forEach(btn => {
         const expr = btn.dataset.expr;
-        if (pair.expressions && !pair.expressions.includes(expr)) {
-            btn.classList.add("unavailable");
+        const locked = locks[expr];
+        btn.textContent = locked ? "lock" : "free";
+        btn.classList.toggle("unlocked", !locked);
+
+        const wrap = document.querySelector(`.banner-wrap[data-expr="${expr}"]`);
+        wrap.classList.toggle("locked", locked);
+    });
+}
+
+// ================================================================
+// Lock toggle
+// ================================================================
+
+document.querySelectorAll(".lock-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const expr = btn.dataset.expr;
+        locks[expr] = !locks[expr];
+
+        if (!locks[expr]) {
+            // Unlocking: copy neutral crop as starting point
+            crops[expr] = { ...crops.neutral };
         } else {
-            btn.classList.remove("unavailable");
+            // Locking: discard individual crop
+            crops[expr] = null;
         }
+
+        updateLockUI();
+        drawAllPreviews();
+        setDirty(true);
+    });
+});
+
+// ================================================================
+// Mouse interaction on previews
+// ================================================================
+
+document.querySelectorAll(".banner-wrap.interactive").forEach(wrap => {
+    const expr = wrap.dataset.expr;
+
+    wrap.addEventListener("mousedown", (e) => {
+        const targetExpr = getEffectiveExpr(expr);
+        const crop = getCrop(targetExpr);
+        const canvas = wrap.querySelector("canvas");
+        const hexW = canvas.width - 4;
+        const scale = hexW / crop.size;
+
+        dragState = {
+            expr: targetExpr,
+            startMX: e.clientX,
+            startMY: e.clientY,
+            startCrop: { ...crop },
+            scale
+        };
+        e.preventDefault();
     });
 
-    // If current expression not available, switch to neutral
-    if (pair.expressions && !pair.expressions.includes(currentExpr)) {
-        currentExpr = "neutral";
-        updateExprButtons();
-    }
+    wrap.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const targetExpr = getEffectiveExpr(expr);
+        const crop = { ...getCrop(targetExpr) };
 
-    // Fetch crop meta
-    await loadCropMeta();
+        // Zoom centered on hex center
+        const oldCX = crop.x + crop.size / 2;
+        const oldCY = crop.y + crop.size * HEX_ASPECT / 2;
 
-    // Load images
-    await loadImages();
-}
+        const factor = e.deltaY > 0 ? 1.06 : 0.94;
+        crop.size = Math.max(40, crop.size * factor);
 
-async function loadCropMeta() {
-    const pair = pairs[pairIdx];
-    try {
-        const resp = await fetch(`/api/crop/${pair.leader}/${pair.civ}`);
-        cropMeta = await resp.json();
+        crop.x = oldCX - crop.size / 2;
+        crop.y = oldCY - crop.size * HEX_ASPECT / 2;
 
-        // Also fetch raw meta for source display (we'll infer from the resolved data)
-        // Store raw civ and leader meta for source display
-        cropMeta._civMeta = {};
-        cropMeta._leaderMeta = {};
+        clampCrop(crop);
+        setCropForExpr(targetExpr, crop);
 
-        // We don't have separate endpoints for raw meta, so we'll display based on resolved
-    } catch (e) {
-        cropMeta = {};
-    }
-
-    // Set hex from crop meta
-    const crop = cropMeta[currentExpr] || cropMeta["neutral"];
-    if (crop) {
-        hex.x = crop.x;
-        hex.y = crop.y;
-        hex.size = crop.size;
-    } else {
-        // Auto-center will happen after image loads
-        hex.x = 0;
-        hex.y = 0;
-        hex.size = 200;
-    }
-
-    updateCropSource();
-}
-
-async function loadImages() {
-    const pair = pairs[pairIdx];
-
-    // Load raw image for display
-    rawImg = await loadImage(`/api/image_raw/${pair.leader}/${pair.civ}/${currentExpr}`);
-
-    if (rawImg) {
-        // Auto-center hex if no crop data
-        const crop = cropMeta[currentExpr] || cropMeta["neutral"];
-        if (!crop) {
-            autoCenterHex();
-        }
-
-        computeImageTransform();
-        clampHex();
-        draw();
+        setDirty(true);
+        drawAllPreviews();
         updateCropInfo();
-    }
+    }, { passive: false });
+});
 
-    // Load bg-removed image for preview (cached)
-    bgRemovedImg = await loadImage(`/api/image/${pair.leader}/${pair.civ}/${currentExpr}`);
+window.addEventListener("mousemove", (e) => {
+    if (!dragState) return;
 
-    updatePreviews();
-}
+    const dx = e.clientX - dragState.startMX;
+    const dy = e.clientY - dragState.startMY;
+
+    // Dragging right moves the view right = crop moves left in source
+    const crop = {
+        x: dragState.startCrop.x - dx / dragState.scale,
+        y: dragState.startCrop.y - dy / dragState.scale,
+        size: dragState.startCrop.size
+    };
+
+    clampCrop(crop);
+    setCropForExpr(dragState.expr, crop);
+
+    setDirty(true);
+    drawAllPreviews();
+    updateCropInfo();
+});
+
+window.addEventListener("mouseup", () => { dragState = null; });
+
+// ================================================================
+// Data loading
+// ================================================================
 
 function loadImage(url) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         const img = new Image();
         img.onload = () => resolve(img);
         img.onerror = () => resolve(null);
@@ -842,52 +585,73 @@ function loadImage(url) {
     });
 }
 
-function autoCenterHex() {
-    if (!rawImg) return;
-    // Default: center horizontally, take full width with some margin
-    const margin = 0.1;
-    hex.size = rawImg.width * (1 - 2 * margin);
-    const h = hex.size * HEX_ASPECT;
-    hex.x = rawImg.width * margin;
-    // Center vertically, biased toward top (face area)
-    hex.y = Math.max(0, (rawImg.height - h) * 0.3);
-    clampHex();
+async function loadPairs() {
+    const resp = await fetch("/api/pairs");
+    pairs = await resp.json();
+    if (pairs.length === 0) {
+        pairLabel.textContent = "No pairs found";
+        return;
+    }
+    const idx = pairs.findIndex(p => p.leader === "friedrich" && p.civ === "egypt");
+    pairIdx = idx >= 0 ? idx : 0;
+    loadCurrentPair();
 }
 
-// ===========================================================================
-// Expression switching
-// ===========================================================================
+async function loadCurrentPair() {
+    if (pairs.length === 0) return;
+    const pair = pairs[pairIdx];
 
-function updateExprButtons() {
-    exprBtns.forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.expr === currentExpr);
-    });
-}
+    pairLabel.textContent = `${pair.leader} / ${pair.civ}`;
+    pairCounter.textContent = `${pairIdx + 1} / ${pairs.length}`;
+    modeBadge.textContent = pair.mode;
+    setDirty(false);
+    saveStatus.textContent = "";
 
-exprBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-        if (btn.classList.contains("unavailable")) return;
-        const newExpr = btn.dataset.expr;
-        if (newExpr === currentExpr) return;
-        currentExpr = newExpr;
-        updateExprButtons();
+    // Reset locks
+    locks = { happy: true, angry: true };
+    crops.happy = null;
+    crops.angry = null;
 
-        // Check if this expression has its own crop
-        const crop = cropMeta[currentExpr];
-        if (crop) {
-            hex.x = crop.x;
-            hex.y = crop.y;
-            hex.size = crop.size;
+    // Load crop meta
+    let cropMeta = {};
+    try {
+        const resp = await fetch(`/api/crop/${pair.leader}/${pair.civ}`);
+        cropMeta = await resp.json();
+    } catch (e) {}
+
+    // Load all images in parallel
+    const pair_key = `${pair.leader}/${pair.civ}`;
+    await Promise.all(EXPRESSIONS.flatMap(expr => [
+        loadImage(`/api/image_raw/${pair_key}/${expr}`).then(img => { images[expr].raw = img; }),
+        loadImage(`/api/image/${pair_key}/${expr}`).then(img => { images[expr].bg = img; })
+    ]));
+
+    // Set neutral crop from meta or auto-center
+    if (cropMeta.neutral) {
+        crops.neutral = { ...cropMeta.neutral };
+    } else {
+        crops.neutral = autoCenterCrop();
+    }
+    clampCrop(crops.neutral);
+
+    // Detect per-expression overrides: if happy/angry differ from neutral, unlock them
+    for (const expr of ["happy", "angry"]) {
+        const meta = cropMeta[expr];
+        const base = cropMeta.neutral;
+        if (meta && base && (meta.x !== base.x || meta.y !== base.y || meta.size !== base.size)) {
+            locks[expr] = false;
+            crops[expr] = { ...meta };
         }
-        // Otherwise keep current hex position (shared across expressions)
+    }
 
-        loadImages();
-    });
-});
+    updateLockUI();
+    drawAllPreviews();
+    updateCropInfo();
+}
 
-// ===========================================================================
+// ================================================================
 // Navigation
-// ===========================================================================
+// ================================================================
 
 document.getElementById("prev-btn").addEventListener("click", () => {
     if (pairs.length === 0) return;
@@ -901,66 +665,61 @@ document.getElementById("next-btn").addEventListener("click", () => {
     loadCurrentPair();
 });
 
-// ===========================================================================
+// ================================================================
 // Save
-// ===========================================================================
+// ================================================================
+
+async function postCrop(pair, level, expression, crop) {
+    const resp = await fetch(`/api/crop/${pair.leader}/${pair.civ}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            level,
+            expression,
+            crop: { x: Math.round(crop.x), y: Math.round(crop.y), size: Math.round(crop.size) }
+        })
+    });
+    if (!resp.ok) throw new Error(await resp.text());
+}
 
 document.getElementById("save-btn").addEventListener("click", async () => {
     const pair = pairs[pairIdx];
     if (!pair) return;
 
     const level = document.querySelector('input[name="save-level"]:checked').value;
-    const exprScope = document.querySelector('input[name="save-expr"]:checked').value;
-    const expression = exprScope === "current" ? currentExpr : "default";
-
-    const body = {
-        level,
-        expression,
-        crop: {
-            x: Math.round(hex.x),
-            y: Math.round(hex.y),
-            size: Math.round(hex.size)
-        }
-    };
-
     saveStatus.textContent = "Saving...";
     saveStatus.style.color = "#8a7e6b";
 
     try {
-        const resp = await fetch(`/api/crop/${pair.leader}/${pair.civ}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body)
-        });
-
-        if (resp.ok) {
-            const data = await resp.json();
-            saveStatus.textContent = `Saved to ${expression}@${level}`;
-            saveStatus.style.color = "#8bc34a";
-            setDirty(false);
-
-            // Refresh crop meta
-            await loadCropMeta();
-            updateCropSource();
+        if (locks.happy && locks.angry) {
+            // All locked: save as "default" (applies to all expressions)
+            await postCrop(pair, level, "default", crops.neutral);
         } else {
-            const text = await resp.text();
-            saveStatus.textContent = `Error: ${text}`;
-            saveStatus.style.color = "#e57373";
+            // Save neutral explicitly
+            await postCrop(pair, level, "neutral", crops.neutral);
+            if (!locks.happy && crops.happy) {
+                await postCrop(pair, level, "happy", crops.happy);
+            }
+            if (!locks.angry && crops.angry) {
+                await postCrop(pair, level, "angry", crops.angry);
+            }
         }
+
+        saveStatus.textContent = "Saved";
+        saveStatus.style.color = "#8bc34a";
+        setDirty(false);
     } catch (e) {
         saveStatus.textContent = `Error: ${e.message}`;
         saveStatus.style.color = "#e57373";
     }
 });
 
-// ===========================================================================
+// ================================================================
 // Keyboard shortcuts
-// ===========================================================================
+// ================================================================
 
 document.addEventListener("keydown", (e) => {
-    // Don't capture if focused on an input
-    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
-
+    if (e.target.tagName === "INPUT") return;
     switch (e.key) {
         case "ArrowLeft":
             document.getElementById("prev-btn").click();
@@ -970,76 +729,28 @@ document.addEventListener("keydown", (e) => {
             document.getElementById("next-btn").click();
             e.preventDefault();
             break;
-        case "1":
-            document.querySelector('.expr-btn[data-expr="neutral"]').click();
-            break;
-        case "2":
-            document.querySelector('.expr-btn[data-expr="happy"]').click();
-            break;
-        case "3":
-            document.querySelector('.expr-btn[data-expr="angry"]').click();
-            break;
-        case "s":
-        case "S":
+        case "s": case "S":
             document.getElementById("save-btn").click();
             break;
-        case "r":
-        case "R":
-            autoCenterHex();
+        case "r": case "R":
+            crops.neutral = autoCenterCrop();
+            clampCrop(crops.neutral);
+            for (const expr of ["happy", "angry"]) {
+                if (!locks[expr] && crops[expr]) {
+                    crops[expr] = { ...crops.neutral };
+                }
+            }
             setDirty(true);
-            draw();
+            drawAllPreviews();
             updateCropInfo();
-            updatePreviews();
-            break;
-        case "+":
-        case "=":
-            hex.size += 10;
-            clampHex();
-            setDirty(true);
-            draw();
-            updateCropInfo();
-            updatePreviews();
-            e.preventDefault();
-            break;
-        case "-":
-        case "_":
-            hex.size = Math.max(MIN_HEX_SIZE, hex.size - 10);
-            clampHex();
-            setDirty(true);
-            draw();
-            updateCropInfo();
-            updatePreviews();
-            e.preventDefault();
             break;
     }
 });
 
-// ===========================================================================
-// Scroll wheel to resize hex
-// ===========================================================================
-
-canvas.addEventListener("wheel", (e) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -15 : 15;
-    hex.size = Math.max(MIN_HEX_SIZE, hex.size + delta);
-    clampHex();
-    setDirty(true);
-    draw();
-    updateCropInfo();
-    updatePreviews();
-}, { passive: false });
-
-// ===========================================================================
-// Window resize
-// ===========================================================================
-
-window.addEventListener("resize", resizeCanvas);
-
-// ===========================================================================
+// ================================================================
 // Init
-// ===========================================================================
-
-resizeCanvas();
+// ================================================================
+updateLockUI();
 loadPairs();
 </script>
 </body>

@@ -219,6 +219,18 @@ def api_image_raw(leader: str, civ: str, expression: str):
     return send_file(path, mimetype="image/png")
 
 
+@app.route("/api/reference_icon/<leader>/<int:size>")
+def api_reference_icon(leader: str, size: int):
+    """Serve original game hex icon for comparison."""
+    icon_path = os.path.join(
+        ASSETS_DIR, "leaders", leader, "icons",
+        f"lp_hex_{leader}_{size}.png"
+    )
+    if not os.path.isfile(icon_path):
+        return "Icon not found", 404
+    return send_file(icon_path, mimetype="image/png")
+
+
 @app.route("/api/crop/<leader>/<civ>", methods=["GET"])
 def api_crop_get(leader: str, civ: str):
     """Return resolved crop metadata for all 3 expressions."""
