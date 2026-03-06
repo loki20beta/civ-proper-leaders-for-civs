@@ -244,6 +244,28 @@ body {
     border: 1px solid #444;
     font-size: 10px;
 }
+
+/* ---- Dirty indicator ---- */
+.dirty-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #f0c040;
+    margin-left: 6px;
+    vertical-align: middle;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.dirty-dot.visible { opacity: 1; }
+
+#unsaved-label {
+    font-size: 11px;
+    color: #f0c040;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+#unsaved-label.visible { opacity: 1; }
 </style>
 </head>
 <body>
@@ -261,7 +283,7 @@ body {
         <div class="section-title">Leader / Civ</div>
         <div class="nav-row">
             <button class="nav-btn" id="prev-btn" title="Previous pair">&larr;</button>
-            <span class="pair-label" id="pair-label">Loading...</span>
+            <span class="pair-label" id="pair-label">Loading...</span><span class="dirty-dot" id="dirty-dot"></span>
             <button class="nav-btn" id="next-btn" title="Next pair">&rarr;</button>
         </div>
         <div class="pair-counter" id="pair-counter"></div>
@@ -320,6 +342,7 @@ body {
             <label><input type="radio" name="save-expr" value="current"> Current expression only</label>
         </div>
         <button id="save-btn">Save Crop</button>
+        <span id="unsaved-label">unsaved</span>
         <div id="save-status"></div>
     </div>
 
@@ -329,7 +352,9 @@ body {
         <kbd>&larr;</kbd> <kbd>&rarr;</kbd> Prev / Next pair<br>
         <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Neutral / Happy / Angry<br>
         <kbd>S</kbd> Save<br>
-        <kbd>R</kbd> Reset to auto-center
+        <kbd>R</kbd> Reset to auto-center<br>
+        <kbd>+</kbd> <kbd>-</kbd> Resize hex &plusmn;10px<br>
+        <kbd>Scroll</kbd> Resize hex
     </div>
 </div>
 
@@ -371,6 +396,9 @@ let dragHexStartX = 0, dragHexStartY = 0, dragHexStartSize = 0;
 // Crop metadata from server
 let cropMeta = {};
 
+// Dirty (unsaved changes) tracking
+let dirty = false;
+
 // ===========================================================================
 // DOM refs
 // ===========================================================================
@@ -382,6 +410,8 @@ const modeBadge = document.getElementById("mode-badge");
 const cropInfoEl = document.getElementById("crop-info");
 const cropSourceEl = document.getElementById("crop-source");
 const saveStatus = document.getElementById("save-status");
+const dirtyDot = document.getElementById("dirty-dot");
+const unsavedLabel = document.getElementById("unsaved-label");
 const exprBtns = document.querySelectorAll(".expr-btn");
 
 // ===========================================================================
@@ -636,6 +666,7 @@ canvas.addEventListener("mousemove", (e) => {
         hex.x = dragHexStartX + dx;
         hex.y = dragHexStartY + dy;
         clampHex();
+        setDirty(true);
         draw();
         updateCropInfo();
         updatePreviews();
@@ -650,6 +681,7 @@ canvas.addEventListener("mousemove", (e) => {
         const newSize = Math.max(MIN_HEX_SIZE, dragHexStartSize + dy * 2 / HEX_ASPECT);
         hex.size = newSize;
         clampHex();
+        setDirty(true);
         draw();
         updateCropInfo();
         updatePreviews();
@@ -683,6 +715,16 @@ function clampHex() {
 }
 
 // ===========================================================================
+// Dirty (unsaved) tracking
+// ===========================================================================
+
+function setDirty(val) {
+    dirty = val;
+    dirtyDot.classList.toggle("visible", dirty);
+    unsavedLabel.classList.toggle("visible", dirty);
+}
+
+// ===========================================================================
 // Data loading
 // ===========================================================================
 
@@ -707,6 +749,7 @@ async function loadCurrentPair() {
 
     const pair = pairs[pairIdx];
     pairLabel.textContent = `${pair.leader} / ${pair.civ}`;
+    setDirty(false);
     pairCounter.textContent = `${pairIdx + 1} / ${pairs.length}`;
     modeBadge.textContent = pair.mode;
 
@@ -894,6 +937,7 @@ document.getElementById("save-btn").addEventListener("click", async () => {
             const data = await resp.json();
             saveStatus.textContent = `Saved to ${expression}@${level}`;
             saveStatus.style.color = "#8bc34a";
+            setDirty(false);
 
             // Refresh crop meta
             await loadCropMeta();
@@ -915,7 +959,7 @@ document.getElementById("save-btn").addEventListener("click", async () => {
 
 document.addEventListener("keydown", (e) => {
     // Don't capture if focused on an input
-    if (e.target.tagName === "INPUT") return;
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
 
     switch (e.key) {
         case "ArrowLeft":
@@ -942,12 +986,48 @@ document.addEventListener("keydown", (e) => {
         case "r":
         case "R":
             autoCenterHex();
+            setDirty(true);
             draw();
             updateCropInfo();
             updatePreviews();
             break;
+        case "+":
+        case "=":
+            hex.size += 10;
+            clampHex();
+            setDirty(true);
+            draw();
+            updateCropInfo();
+            updatePreviews();
+            e.preventDefault();
+            break;
+        case "-":
+        case "_":
+            hex.size = Math.max(MIN_HEX_SIZE, hex.size - 10);
+            clampHex();
+            setDirty(true);
+            draw();
+            updateCropInfo();
+            updatePreviews();
+            e.preventDefault();
+            break;
     }
 });
+
+// ===========================================================================
+// Scroll wheel to resize hex
+// ===========================================================================
+
+canvas.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -15 : 15;
+    hex.size = Math.max(MIN_HEX_SIZE, hex.size + delta);
+    clampHex();
+    setDirty(true);
+    draw();
+    updateCropInfo();
+    updatePreviews();
+}, { passive: false });
 
 // ===========================================================================
 // Window resize
